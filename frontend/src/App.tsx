@@ -1,22 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
 
 function App() {
   const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    const getData = async () => {
-      // fetch example to /api/books but with cors disabled
-      const response = await fetch('/api/books', {
-        credentials: 'include',
-      });
-      const data = await response.json();
-      console.log(data.results);
-    };
-    getData();
-  }, []);
 
   return (
     <>
@@ -28,13 +16,13 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
+      <h1>Vite + ReactXDDDD</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
         <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+          Edit <code>src/App.tsx</code> and save to test HMR XDDD
         </p>
       </div>
       <p className="read-the-docs">
