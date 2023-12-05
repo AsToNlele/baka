@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import django_filters.rest_framework
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = "django-insecure-aam1o7u%1@+=jlz3-l=2ns_elblq!n!^6$8e7ix^jby(2#!4i9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["baka.docker"]
 
 
 # Application definition
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "quickstart",
     "corsheaders",
+    "django_filters",
 ]
 
 MIDDLEWARE = [
@@ -83,7 +85,8 @@ DATABASES = {
         "NAME": "postgres",
         "USER": "postgres",
         "PASSWORD": "postgres",
-        "HOST": "db",  # set in docker-compose.yml
+        # "HOST": "db",  # set in docker-compose.yml
+        "HOST": "localhost",
         "PORT": 5432,  # default postgres port
     }
 }
@@ -93,18 +96,18 @@ DATABASES = {
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    # {
+    #     "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+    # },
+    # {
+    #     "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    # },
+    # {
+    #     "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+    # },
+    # {
+    #     "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    # },
 ]
 
 
@@ -136,7 +139,9 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
     ],
-    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"]
+    # "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsP"],
+    # "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -148,6 +153,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:81",
     "http://localhost:8080",
     "http://127.0.0.1:8080",
+    "http://baka.docker",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -157,4 +163,5 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:81",
     "http://localhost:8080",
     "http://127.0.0.1:8080",
+    "http://baka.docker",
 ]

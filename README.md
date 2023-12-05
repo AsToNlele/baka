@@ -12,7 +12,10 @@
 ### Dev
 1. `docker-compose -f docker-compose.yml up -d --build`
 2. `cd frontend`
-3. `pnpm dev`
+3. `pnpm dev --host`
+4. `cd ../backend`
+5. `pip install -r requirements.txt`
+6. `python manage.py runserver`
 
 
 #### Backend run migrations, superuser etc
