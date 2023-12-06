@@ -10,5 +10,6 @@ router.register(r"books", views.BookViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
+    path("auth/", include("auth.urls"), name="auth"),
     # path("books/", include("quickstart.urls"), name="books"),
 ]
