@@ -3,15 +3,15 @@ import { api } from "../../../utils/api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-const logout = () => {
+const signout = () => {
 	return api.post('/auth/logout')
 }
 
-export const useLogout = () => {
+export const useSignOut = () => {
 	const navigate = useNavigate();
 	const mutation = useMutation(
 		{
-			mutationFn: logout,
+			mutationFn: signout,
 			onSuccess: () => {
 				navigate('/')
 				toast.success('Logged out successfully')

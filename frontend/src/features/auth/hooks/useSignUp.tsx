@@ -8,18 +8,18 @@ type Inputs = {
 	password: string;
 };
 
-const signin = (data: Inputs) => {
-	return api.post('/auth/login', data)
+const signup = (data: Inputs) => {
+	return api.post('/auth/register', data)
 }
 
-export const useSignIn = () => {
+export const useSignUp = () => {
 	const navigate = useNavigate();
 	const mutation = useMutation(
 		{
-			mutationFn: signin,
+			mutationFn: signup,
 			onSuccess: () => {
 				navigate('/app')
-				toast.success('Logged in successfully')
+				toast.success('Signed up successfully')
 			}
 		}
 	)

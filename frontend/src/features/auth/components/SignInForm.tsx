@@ -2,15 +2,15 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useSignIn } from "../hooks/useSignIn";
 import { Button, Input } from "@nextui-org/react";
 
-export const LoginForm = () => {
+export const SignInForm = () => {
 	const signIn = useSignIn();
 	
-	type LoginInputs = {
+	type SignInInputs = {
 		username: string;
 		password: string;
 	};
-	const { register, handleSubmit } = useForm<LoginInputs>();
-	const onSubmit: SubmitHandler<LoginInputs> = (data) => {
+	const { register, handleSubmit } = useForm<SignInInputs>();
+	const onSubmit: SubmitHandler<SignInInputs> = (data) => {
 		signIn.mutate(data);
 	}
 	return (

@@ -52,5 +52,11 @@ class RegisterView(views.APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         if user:
+            serializer = serializers.LoginSerializer(
+                data=self.request.data, context={"request": self.request}
+            )
+            serializer.is_valid(raise_exception=True)
+            user = serializer.validated_data["user"]
+            login(request, user)
             return Response(None, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

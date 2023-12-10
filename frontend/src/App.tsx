@@ -1,13 +1,14 @@
 import { NextUIProvider, Spinner } from '@nextui-org/react';
 import { Outlet, Route, Routes, useNavigate } from 'react-router-dom';
 import { Landing } from './features/landing/routes/Landing';
-import { Login } from './features/auth/routes/Login';
+import { SignIn } from './features/auth/routes/SignIn';
 import { Profile } from './features/auth/routes/Profile';
 import { Toaster, toast } from 'sonner';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useProfile } from './features/auth/hooks/useProfile';
 import { ReactNode, useEffect } from 'react';
+import { SignUp } from './features/auth/routes/SignUp';
 
 function App() {
 	const navigate = useNavigate();
@@ -19,7 +20,7 @@ function App() {
 		useEffect(() => {
 			if (query.error) {
 				toast.error('You must be logged in to access this page')
-				navigate("/login", { replace: true });
+				navigate("/signin", { replace: true });
 			}
 		}, [query.error])
 
@@ -47,8 +48,8 @@ function App() {
 					<Routes>
 						<Route index element={<Landing />} />
 						<Route element={<LoggedInRoute />}>
-							<Route path="/register" element={<h1>Register</h1>} />
-							<Route path="/login" element={<Login />} />
+							<Route path="/signup" element={<SignUp />} />
+							<Route path="/signin" element={<SignIn />} />
 						</Route>
 						<Route element={<ProtectedRoute />}>
 							<Route path="/app" element={<h1>App</h1>} />

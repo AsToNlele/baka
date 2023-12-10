@@ -16,7 +16,7 @@ export const Landing = () => {
             magna mi. Nam et nunc ac metus mollis faucibus quis ac diam.
           </p>
           <Button
-            href="/login"
+            href="/signup"
             as={Link}
             color="primary"
             size="lg"
