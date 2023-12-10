@@ -66,10 +66,10 @@ export default function LandingNavbar() {
 
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
-          <Link href="#">Sign In</Link>
+          <Link href="/signin">Sign In</Link>
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color="warning" href="#" variant="flat">
+          <Button as={Link} color="warning" href="/signup" variant="flat">
             Sign Up
           </Button>
         </NavbarItem>
