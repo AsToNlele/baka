@@ -1,5 +1,5 @@
 # Create your views here.
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.template import context
 from rest_framework import permissions, status
@@ -32,3 +32,11 @@ class UserView(views.APIView):
         permission_classes = [permissions.IsAuthenticated]
         serializer = UserSerializer(request.user, context={"request": request})
         return Response(serializer.data)
+
+class LogoutView(views.APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request, format=None):
+        permission_classes = [permissions.IsAuthenticated]
+        logout(request)
+        return Response(status=status.HTTP_200_OK)
