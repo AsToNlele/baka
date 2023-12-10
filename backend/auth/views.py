@@ -1,14 +1,15 @@
 # Create your views here.
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
+from django.db import IntegrityError
 from django.template import context
 from rest_framework import permissions, status
-from rest_framework import views
+from rest_framework import views, serializers
 from rest_framework.response import Response
 
 from quickstart.serializers import UserSerializer
 
-from . import serializers
+from . import serializers as authSerializers
 
 
 class LoginView(views.APIView):
@@ -16,7 +17,7 @@ class LoginView(views.APIView):
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, format=None):
-        serializer = serializers.LoginSerializer(
+        serializer = authSerializers.LoginSerializer(
             data=self.request.data, context={"request": self.request}
         )
         serializer.is_valid(raise_exception=True)
@@ -46,13 +47,24 @@ class RegisterView(views.APIView):
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, format=None):
-        serializer = serializers.RegisterSerializer(
+        serializer = authSerializers.RegisterSerializer(
             data=self.request.data, context={"request": self.request}
         )
         serializer.is_valid(raise_exception=True)
-        user = serializer.save()
+
+
+        try:
+            user = User.objects.get(username=serializer.validated_data["username"])
+        except User.DoesNotExist:
+            user = None
+        
         if user:
-            serializer = serializers.LoginSerializer(
+            raise serializers.ValidationError({"message": "User already exists"}, code="authorization")
+            
+        user = serializer.save()
+        
+        if user:
+            serializer = authSerializers.LoginSerializer(
                 data=self.request.data, context={"request": self.request}
             )
             serializer.is_valid(raise_exception=True)
