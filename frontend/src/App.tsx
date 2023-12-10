@@ -10,11 +10,12 @@ import { useProfile } from './features/auth/hooks/useProfile';
 import { ReactNode, useEffect } from 'react';
 import { SignUp } from './features/auth/routes/SignUp';
 import { Loading } from './components/Loading';
+import { AppNavbar } from './features/app/components/Navbar';
+import { Menu } from './features/app/routes/Menu';
 
 function App() {
 	const navigate = useNavigate();
 	const queryClient = new QueryClient();
-
 	const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
 		const navigate = useNavigate();
 		const query = useProfile();
@@ -25,7 +26,12 @@ function App() {
 			}
 		}, [query.error])
 
-		return query.isLoading ? <Loading /> : children ? children : <Outlet />;
+		return (
+			<>
+				<AppNavbar />
+				{query.isLoading ? <Loading /> : children ? children : <Outlet />}
+			</>
+		)
 	}
 
 	const LoggedInRoute = ({ children }: { children?: ReactNode }) => {
@@ -53,8 +59,8 @@ function App() {
 							<Route path="/signin" element={<SignIn />} />
 						</Route>
 						<Route element={<ProtectedRoute />}>
-							<Route path="/app" element={<h1>App</h1>} />
-							<Route path="/profile" element={<Profile />} />
+							<Route path="/app" element={<Menu />} />
+							<Route path="/app/profile" element={<Profile />} />
 						</Route>
 						<Route path="*" element={<h1>404</h1>} />
 					</Routes>
