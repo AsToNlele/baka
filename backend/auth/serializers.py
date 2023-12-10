@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 
 from rest_framework import serializers
 
@@ -43,3 +44,20 @@ class LoginSerializer(serializers.Serializer):
         # It will be used in the view.
         attrs["user"] = user
         return attrs
+
+class RegisterSerializer(serializers.Serializer):
+    username = serializers.CharField(label="Username", write_only=True)
+    password = serializers.CharField(
+        label="Password",
+        # This will be used when the DRF browsable API is enabled
+        style={"input_type": "password"},
+        trim_whitespace=False,
+        write_only=True,
+    )
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data["username"],
+            password=validated_data["password"],
+        )
+        return user
