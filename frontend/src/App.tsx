@@ -1,4 +1,4 @@
-import { NextUIProvider, Spinner } from '@nextui-org/react';
+import { NextUIProvider } from '@nextui-org/react';
 import { Outlet, Route, Routes, useNavigate } from 'react-router-dom';
 import { Landing } from './features/landing/routes/Landing';
 import { SignIn } from './features/auth/routes/SignIn';
@@ -9,6 +9,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useProfile } from './features/auth/hooks/useProfile';
 import { ReactNode, useEffect } from 'react';
 import { SignUp } from './features/auth/routes/SignUp';
+import { Loading } from './components/Loading';
 
 function App() {
 	const navigate = useNavigate();
@@ -24,7 +25,7 @@ function App() {
 			}
 		}, [query.error])
 
-		return query.isLoading ? <Spinner /> : children ? children : <Outlet />;
+		return query.isLoading ? <Loading /> : children ? children : <Outlet />;
 	}
 
 	const LoggedInRoute = ({ children }: { children?: ReactNode }) => {
@@ -36,7 +37,7 @@ function App() {
 			}
 		}, [query.error, query.isSuccess])
 
-		return query.isLoading ? <Spinner /> : children ? children : <Outlet />;
+		return query.isLoading ? <Loading /> : children ? children : <Outlet />;
 	}
 
 

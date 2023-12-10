@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardHeader } from '@nextui-org/react';
+import { Button, Card, CardBody, CardHeader, Link } from '@nextui-org/react';
 import { FcGoogle } from 'react-icons/fc';
 import { FaDiscord } from 'react-icons/fa';
 import { SignUpForm } from '../components/SignUpForm';
@@ -14,20 +14,20 @@ export const SignUp = () => {
 						</h1>
 					</CardHeader>
 					<CardBody className="px-8 py-8 gap-4">
-						<div className="flex w-full justify-evenly gap-4">
+						<div className="flex flex-col sm:flex-row w-full justify-evenly gap-4">
 							<Button fullWidth
 								variant='bordered'
 								size='lg'
 							>
+								Sign up with
 								<FcGoogle size={22} />
-								Sign up with Google
 							</Button>
 							<Button fullWidth
 								variant='bordered'
 								size='lg'
 							>
+								Sign up with
 								<FaDiscord size={22} />
-								Sign up with Discord
 							</Button>
 						</div>
 						<div className="flex justify-center items-center">
@@ -37,6 +37,9 @@ export const SignUp = () => {
 						</div>
 						<div className="flex flex-col">
 							<SignUpForm />
+						</div>
+						<div>
+							<Link href="/signin">Already have an account? Sign in!</Link>
 						</div>
 					</CardBody>
 				</Card>
