@@ -1,19 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { LogoutButton } from '../components/LogoutButton';
+import { useProfile } from '../hooks/useProfile';
 
 export const Profile = () => {
-  const [data, setData] = useState({});
-  const getProfile = () =>
-    fetch('/api/auth/profile')
-      .then((res) => res.json())
-      .then((data) => setData(data));
-
-  useEffect(() => {
-    getProfile();
-  }, []);
-  return (
-    <>
-      Profile
-      {JSON.stringify(data)}
-    </>
-  );
+	const profile = useProfile();
+	return (
+		<>
+			Profile
+			{JSON.stringify(profile.data)}
+			<LogoutButton />
+		</>
+	);
 };
