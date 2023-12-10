@@ -8,8 +8,8 @@ type Inputs = {
 	password: string;
 };
 
-const signup = (data: Inputs) => {
-	return api.post('/auth/register', data)
+const signup = (input: Inputs) => {
+	return api.post('/auth/register', input)
 }
 
 export const useSignUp = () => {
@@ -20,7 +20,7 @@ export const useSignUp = () => {
 			onSuccess: () => {
 				navigate('/app')
 				toast.success('Signed up successfully')
-			}
+			},
 		}
 	)
 	return mutation;

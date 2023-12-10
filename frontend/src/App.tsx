@@ -4,7 +4,7 @@ import { Landing } from './features/landing/routes/Landing';
 import { SignIn } from './features/auth/routes/SignIn';
 import { Profile } from './features/auth/routes/Profile';
 import { Toaster, toast } from 'sonner';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useProfile } from './features/auth/hooks/useProfile';
 import { ReactNode, useEffect } from 'react';
@@ -12,10 +12,35 @@ import { SignUp } from './features/auth/routes/SignUp';
 import { Loading } from './components/Loading';
 import { AppNavbar } from './features/app/components/Navbar';
 import { Menu } from './features/app/routes/Menu';
+import axios from 'axios';
 
 function App() {
 	const navigate = useNavigate();
-	const queryClient = new QueryClient();
+	const queryClient = new QueryClient({
+		queryCache: new QueryCache({
+			onError: (error) => {
+				console.log(error)
+				if (axios.isAxiosError(error)) {
+					if (!error?.request?.responseURL?.includes('/auth/profile')) {
+						if (error && error?.message) {
+							toast.error(error.message)
+						}
+					}
+				}
+			}
+		}),
+		mutationCache: new MutationCache({
+			onError: (error) => {
+				console.log(error)
+				if (axios.isAxiosError(error)) {
+					if (error && error?.response?.data?.message) {
+						toast.error(error.response.data.message)
+					}
+				}
+			}
+		})
+	});
+
 	const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
 		const navigate = useNavigate();
 		const query = useProfile();
