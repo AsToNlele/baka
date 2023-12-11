@@ -19,7 +19,7 @@ export const useSignIn = () => {
 			mutationFn: signin,
 			onSuccess: () => {
 				navigate('/app')
-				toast.success('Logged in successfully')
+				toast.success('Signed in successfully')
 			}
 		}
 	)
