@@ -1,7 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
 import { api } from "../../../utils/api";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 
 type Inputs = {
 	username: string;
@@ -19,7 +18,6 @@ export const useSignIn = () => {
 			mutationFn: signin,
 			onSuccess: () => {
 				navigate('/app')
-				toast.success('Signed in successfully')
 			}
 		}
 	)
