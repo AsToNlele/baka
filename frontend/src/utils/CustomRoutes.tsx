@@ -1,7 +1,6 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { useProfile } from "../features/auth/hooks/useProfile";
 import { toast } from "sonner";
-import { AppNavbar } from "../features/app/components/Navbar";
 import { Layout } from "../features/app/components/Layout";
 import { Loading } from "../components/Loading";
 import { useEffect, type ReactNode } from "react";
@@ -19,7 +18,6 @@ export const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
 
 	return (
 		<>
-			<AppNavbar />
 			<Layout>
 				{query.isLoading ? <Loading /> : children ? children : <Outlet />}
 			</Layout>
