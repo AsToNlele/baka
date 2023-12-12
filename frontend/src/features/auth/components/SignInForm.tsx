@@ -18,6 +18,7 @@ export const SignInForm = () => {
 			<Input
 				label="Username"
 				placeholder="Login"
+				autoFocus
 				{...register('username', { required: true })}
 			/>
 			<Input

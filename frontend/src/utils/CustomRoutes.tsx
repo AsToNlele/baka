@@ -9,8 +9,9 @@ import { useEffect, type ReactNode } from "react";
 export const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
 	const navigate = useNavigate();
 	const query = useProfile();
+	console.log(query)
 	useEffect(() => {
-		if (query.error) {
+		if (!query.isFetching && query.error) {
 			toast.error('You must be signed in to access this page')
 			navigate("/signin", { replace: true });
 		}
@@ -31,6 +32,7 @@ export const RedirectRoute = ({ children }: { children?: ReactNode }) => {
 	const query = useProfile();
 	useEffect(() => {
 		if (query.isSuccess && !query.isError) {
+			console.log("REDIRRECT XD")
 			navigate("/app", { replace: true });
 		}
 	}, [query.error, query.isSuccess])

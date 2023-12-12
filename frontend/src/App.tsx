@@ -18,7 +18,7 @@ function App() {
 	return (
 		<NextUIProvider navigate={navigate}>
 			<QueryClientProvider client={queryClient}>
-				<main className="text-foreground bg-background">
+				<main className="dark min-h-screen text-foreground bg-background">
 					<Toaster richColors position='top-right' />
 					<Routes>
 						<Route index element={<Landing />} />
