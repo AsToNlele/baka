@@ -2,12 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { api } from "../../../utils/api";
 
 const profile = async () => {
-	try {
-		const { data } = await api.get('/auth/profile')
-		return data
-	} catch (error) {
-		throw error
-	}
+	return api.get('/auth/profile').then(res => res.data)
 }
 
 export const useProfile = () => {

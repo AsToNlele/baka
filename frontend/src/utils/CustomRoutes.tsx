@@ -30,7 +30,6 @@ export const RedirectRoute = ({ children }: { children?: ReactNode }) => {
 	const query = useProfile();
 	useEffect(() => {
 		if (query.isSuccess && !query.isError) {
-			console.log("REDIRRECT XD")
 			navigate("/app", { replace: true });
 		}
 	}, [query.error, query.isSuccess])
