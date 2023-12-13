@@ -1,11 +1,12 @@
-import { useProfile } from '../hooks/useProfile';
+import { ProfileForm } from '../components/ProfileForm';
 
 export const Profile = () => {
-	const profile = useProfile();
 	return (
 		<>
-			Profile
-			{JSON.stringify(profile.data)}
+			<h1 className="text-2xl font-semibold">
+				Profile
+			</h1>
+			<ProfileForm />
 		</>
 	);
 };

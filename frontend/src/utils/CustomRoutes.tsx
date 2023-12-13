@@ -14,7 +14,7 @@ export const ProtectedRoute = ({ children }: { children?: ReactNode }) => {
 			toast.error('You must be signed in to access this page')
 			navigate("/signin", { replace: true });
 		}
-	}, [query.error])
+	}, [navigate, query.error, query.isFetching])
 
 	return (
 		<>
@@ -32,7 +32,7 @@ export const RedirectRoute = ({ children }: { children?: ReactNode }) => {
 		if (query.isSuccess && !query.isError) {
 			navigate("/app", { replace: true });
 		}
-	}, [query.error, query.isSuccess])
+	}, [navigate, query.isError, query.isSuccess])
 
 	return query.isLoading ? <Loading /> : children ? children : <Outlet />;
 }
