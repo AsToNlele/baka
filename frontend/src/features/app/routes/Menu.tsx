@@ -5,7 +5,7 @@ export const Menu = () => {
 	return (
 		<>
 			<div>Menu</div>
-			<Button as={Link} to="/app/profile">Profile</Button>
+			<Button as={Link} color="primary" to="/app/profile">Profile</Button>
 		</>
 	)
 }
