@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 import django_filters.rest_framework
 
@@ -24,9 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-aam1o7u%1@+=jlz3-l=2ns_elblq!n!^6$8e7ix^jby(2#!4i9"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+PROD = os.environ.get('PROD', False)
+DEBUG = not PROD
+DB_HOST = os.environ.get('DB_HOST', 'localhost')
 
-ALLOWED_HOSTS = ["baka.docker"]
+ALLOWED_HOSTS = ["baka.docker", "localhost"]
 
 
 # Application definition
@@ -86,7 +89,7 @@ DATABASES = {
         "USER": "postgres",
         "PASSWORD": "postgres",
         # "HOST": "db",  # set in docker-compose.yml
-        "HOST": "localhost",
+        "HOST": DB_HOST,
         "PORT": 5432,  # default postgres port
     }
 }
@@ -154,6 +157,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
     "http://127.0.0.1:8080",
     "http://baka.docker",
+    "http://localhost",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -164,4 +168,5 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8080",
     "http://127.0.0.1:8080",
     "http://baka.docker",
+    "http://localhost",
 ]

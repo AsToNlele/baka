@@ -11,6 +11,9 @@ services:
       - 8000
     depends_on:
       - db
+    environment:
+      PROD: 'True'
+      DB_HOST: 'db'
 
   frontend:
     # stdin_open: true
