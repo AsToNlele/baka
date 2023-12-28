@@ -14,7 +14,7 @@ import {
 	DropdownMenu,
 	DropdownTrigger,
 	Skeleton,
-	Button
+	Button,
 } from '@nextui-org/react';
 import { useProfile } from '../../auth/hooks/useProfile';
 import { useSignOut } from '../../auth/hooks/useSignOut';
@@ -23,9 +23,6 @@ import { useLocation } from 'react-router-dom';
 
 export const AppNavbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-	const menuItems = ['Features', 'Customers', 'Integrations'];
-
 	const menuLinks = [
 		{
 			name: "Home",
@@ -59,7 +56,7 @@ export const AppNavbar = () => {
 			name: "Send Newsletter",
 			href: "/app/newsletter"
 		}
-		
+
 	]
 
 	const location = useLocation();
@@ -88,24 +85,21 @@ export const AppNavbar = () => {
 				</NavbarBrand>
 			</NavbarContent>
 			<NavbarMenu>
-				{menuItems.map((item, index) => (
-					<NavbarMenuItem key={`${item}-${index}`}>
-						<Link
-							className="w-full"
-							color={
-								index === 2
-									? 'warning'
-									: index === menuItems.length - 1
-										? 'danger'
-										: 'foreground'
-							}
-							href="#"
-							size="lg"
-						>
-							{item}
-						</Link>
-					</NavbarMenuItem>
-				))}
+				{menuLinks.map((item, index) => {
+					return (
+						<NavbarMenuItem key={`${item}-${index}`}>
+							<Link
+								className="w-full"
+								href={item.href}
+								size="lg"
+								color={location.pathname === item.href || `${location.pathname}/` === item.href ? "secondary" : "foreground"}
+								onClick={() => setIsMenuOpen(false)}
+							>
+								{item.name}
+							</Link>
+						</NavbarMenuItem>
+					)
+				})}
 			</NavbarMenu>
 
 			{/* Lg */}
