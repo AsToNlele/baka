@@ -20,8 +20,8 @@ export default {
 	darkMode: 'class',
 	plugins: [nextui({
 		themes: {
-			"green-yellow": {
-				extend: "yellow", // <- inherit default values from dark theme
+			"landing-theme": {
+				extend: "light", // <- inherit default values from dark theme
 				colors: {
 					// primary: {
 					// 	50: "#3B096C",
@@ -37,9 +37,46 @@ export default {
 					// 	DEFAULT: "#469174",
 					// 	foreground: "#ffffff",
 					// },
-					primary: "#469174",
+					primary: {
+						// DEFAULT: '#469174'
+						// DEFAULT: '#FCA17D',
+						DEFAULT: '#45BA97'
+					},
 					secondary: {
-						DEFAULT:'#F7DF77'
+						// DEFAULT:'#F7DF77'
+						// DEFAULT: '#A97BAA'
+						// DEFAULT: '#104547',
+						DEFAULT: '#5E105C'
+					},
+				},
+			},
+			"main-theme": {
+				extend: "light", // <- inherit default values from dark theme
+				colors: {
+					// primary: {
+					// 	50: "#3B096C",
+					// 	100: "#520F83",
+					// 	200: "#7318A2",
+					// 	300: "#9823C2",
+					// 	400: "#c031e2",
+					// 	500: "#DD62ED",
+					// 	600: "#F182F6",
+					// 	700: "#FCADF9",
+					// 	800: "#FDD5F9",
+					// 	900: "#FEECFE",
+					// 	DEFAULT: "#469174",
+					// 	foreground: "#ffffff",
+					// },
+					primary: {
+						// DEFAULT: '#469174'
+						// DEFAULT: '#FCA17D',
+						DEFAULT: '#45BA97'
+					},
+					secondary: {
+						// DEFAULT:'#F7DF77'
+						// DEFAULT: '#A97BAA'
+						// DEFAULT: '#104547',
+						DEFAULT: '#6E2594'
 					},
 				},
 			},

@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom"
 
 export const NavBreadcrumbs = () => {
 	const location = useLocation()
-	const paths = location.pathname.slice(4).split('/')
+	const paths = location.pathname.slice(4).split('/').slice(1)
 	return (
 		<Breadcrumbs className="pb-4">
 			{paths.map((path, index) => {

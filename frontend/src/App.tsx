@@ -10,6 +10,7 @@ import { SignUp } from './features/auth/routes/SignUp';
 import { Menu } from './features/app/routes/Menu';
 import { queryConfig } from './utils/queryConfig';
 import { ProtectedRoute, RedirectRoute } from './utils/CustomRoutes';
+import { Greenhouses } from './features/greenhouses/routes/Greenhouses';
 
 function App() {
 	const navigate = useNavigate();
@@ -18,7 +19,7 @@ function App() {
 	return (
 		<NextUIProvider navigate={navigate}>
 			<QueryClientProvider client={queryClient}>
-				<main className="green-yellow jkmin-h-screen text-foreground bg-background">
+				<main className="main-theme min-h-screen text-foreground bg-background">
 					<Toaster richColors position='top-right' />
 					<Routes>
 						<Route index element={<Landing />} />
@@ -29,6 +30,7 @@ function App() {
 						<Route element={<ProtectedRoute />}>
 							<Route path="/app" element={<Menu />} />
 							<Route path="/app/profile" element={<Profile />} />
+							<Route path="/app/greenhouses" element={<Greenhouses />} />
 						</Route>
 						<Route path="*" element={<h1>404</h1>} />
 					</Routes>

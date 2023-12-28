@@ -4,13 +4,16 @@ import { NavBreadcrumbs } from "./NavBreadcrumbs";
 
 export const Layout = ({ children }: { children?: ReactNode }) => {
 	return (
-		<>
-			<AppNavbar />
-			<div className="max-w-5xl mx-auto px-6 py-4">
+		<div className="min-h-screen h-full w-full lg:flex">
+
+			<div className="lg:flex lg:shrink-0 lg:h-screen shadow-md">
+				<AppNavbar />
+			</div>
+			<div className="lg:grow mx-auto px-6 py-4">
 				<NavBreadcrumbs />
 				{children}
 			</div>
-		</>
+		</div>
 	)
 }
 
