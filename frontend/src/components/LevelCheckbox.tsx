@@ -33,14 +33,11 @@ export const useLevelCheckbox = (locationOptions: LocationOptions, config?: Leve
 
 	const setLocations = (callback: (prev: Array<string>) => Array<string>) => {
 		const tempLocations = callback(locations)
-		console.log(tempLocations)
 		locationOptions.forEach((parent) => {
 			if (parent.children) {
 				const allChildren = parent.children.map((child) => child.value)
 				let allChildrenChecked = tempLocations.filter((item) => item.includes(`${parent.value}-`))
 				allChildrenChecked = Array.from(new Set(allChildrenChecked))
-				console.log(allChildrenChecked, allChildren)
-				console.log(tempLocations.includes(parent.value), allChildrenChecked.length !== allChildren.length)
 				// If parent has all children checked, add parent
 				if (allChildrenChecked.length === allChildren.length && !tempLocations.includes(parent.value)) {
 					tempLocations.push(parent.value)
@@ -69,9 +66,6 @@ export const useLevelCheckbox = (locationOptions: LocationOptions, config?: Leve
 	const onChangeCapture = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const item = e.target.value
 		const isChecked = e.target.checked
-
-		console.log("LOCS", locations)
-
 
 		if (item.includes("-")) {
 			setLocations(prev => isChecked ? [...prev, item] : prev.filter((prevItem) => prevItem !== item))
