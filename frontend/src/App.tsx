@@ -1,5 +1,5 @@
 import { NextUIProvider } from '@nextui-org/react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Landing } from './features/landing/routes/Landing';
 import { SignIn } from './features/auth/routes/SignIn';
 import { Profile } from './features/auth/routes/Profile';
@@ -11,9 +11,11 @@ import { Menu } from './features/app/routes/Menu';
 import { queryConfig } from './utils/queryConfig';
 import { ProtectedRoute, RedirectRoute } from './utils/CustomRoutes';
 import { Greenhouses } from './features/greenhouses/routes/Greenhouses';
+import { AnimatePresence } from 'framer-motion';
 
 function App() {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const queryClient = new QueryClient(queryConfig);
 
 	return (
@@ -21,19 +23,21 @@ function App() {
 			<QueryClientProvider client={queryClient}>
 				<main className="main-theme min-h-screen text-foreground bg-background">
 					<Toaster richColors position='top-right' />
-					<Routes>
-						<Route index element={<Landing />} />
-						<Route element={<RedirectRoute />}>
-							<Route path="/signup" element={<SignUp />} />
-							<Route path="/signin" element={<SignIn />} />
-						</Route>
-						<Route element={<ProtectedRoute />}>
-							<Route path="/app" element={<Menu />} />
-							<Route path="/app/profile" element={<Profile />} />
-							<Route path="/app/greenhouses" element={<Greenhouses />} />
-						</Route>
-						<Route path="*" element={<h1>404</h1>} />
-					</Routes>
+					<AnimatePresence mode="wait">
+						<Routes location={location} key={location.pathname}>
+							<Route index element={<Landing />} />
+							<Route element={<RedirectRoute />}>
+								<Route path="/signup" element={<SignUp />} />
+								<Route path="/signin" element={<SignIn />} />
+							</Route>
+							<Route element={<ProtectedRoute />}>
+								<Route path="/app" element={<Menu />} />
+								<Route path="/app/profile" element={<Profile />} />
+								<Route path="/app/greenhouses" element={<Greenhouses />} />
+							</Route>
+							<Route path="*" element={<h1>404</h1>} />
+						</Routes>
+					</AnimatePresence>
 				</main>
 				<ReactQueryDevtools initialIsOpen={false} />
 			</QueryClientProvider>
