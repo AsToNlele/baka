@@ -66,7 +66,7 @@ export const AppNavbar = () => {
 	const signOut = useSignOut();
 
 	return (
-		<Navbar isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} className="lg:flex lg:flex-col lg:justify-start lg:h-screen"
+		<Navbar isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} className="lg:flex lg:flex-col lg:justify-start lg:h-full flex-1"
 			classNames={{
 				wrapper: [
 					"lg:flex",

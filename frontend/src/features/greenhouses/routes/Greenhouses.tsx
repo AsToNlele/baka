@@ -48,7 +48,7 @@ export const Greenhouses = () => {
 
 	const { controls, locations } = useLevelCheckbox(locationOptions, {defaultLocations: ["Brno-*"] })
 
-	console.log(locations)
+	const greenhouses = Array(14).fill(0)
 
 	return (
 		<>
@@ -56,11 +56,13 @@ export const Greenhouses = () => {
 			<div className="flex gap-4">
 				<div className="flex flex-col shrink gap-4">
 					<Input placeholder="Search" />
-					<Image src="https://placekitten.com/300/200" isZoomed />
+					<Image src="https://placekitten.com/200/140" isZoomed />
 					<LevelCheckbox controls={controls} />
 				</div>
-				<div className="grow">
-					<Greenhouse item={{ title: "Greenhouse 1" }} />
+				<div className="grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+					{
+						greenhouses.map((_, i) => <Greenhouse item={{ title: `Greenhouse ${i + 1}`, img: `https://placekitten.com/300/200?image=${i % 16 + 1}` }} key={i} />)
+					}
 				</div>
 			</div>
 		</>
