@@ -1,13 +1,40 @@
 from django.db import models
-
 from quickstart.models import Profile
 
-# Create your models here.
-class Greenhouse(models.Model):
-    name = models.CharField(max_length=50)
-    description = models.CharField(max_length=200)
-    location = models.CharField(max_length=200)
-    owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    def __str__(self):
-        return self.name
 
+class GreenhouseAddress(models.Model):
+    country = models.CharField(blank=True, null=True)
+    state = models.CharField(blank=True, null=True)
+    city = models.CharField(blank=True, null=True)
+    city_part = models.CharField(blank=True, null=True)
+    street = models.CharField(blank=True, null=True)
+    zipcode = models.CharField(blank=True, null=True)
+    latitude = models.CharField(blank=True, null=True)
+    longitude = models.CharField(blank=True, null=True)
+
+    class Meta:
+        db_table = "greenhouse_address"
+
+
+class GreenhouseImage(models.Model):
+    greenhouse = models.ForeignKey(
+        "Greenhouse", models.DO_NOTHING, blank=True, null=True
+    )
+    image = models.CharField(blank=True, null=True)
+
+    class Meta:
+        db_table = "greenhouse_images"
+
+
+class Greenhouse(models.Model):
+    title = models.CharField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True, db_comment="Description")
+    owner = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
+    rules = models.CharField(blank=True, null=True)
+    greenhouse_address = models.OneToOneField(
+        GreenhouseAddress, models.DO_NOTHING, blank=True, null=True
+    )
+    published = models.BooleanField(blank=True, null=True)
+
+    class Meta:
+        db_table = "greenhouses"
