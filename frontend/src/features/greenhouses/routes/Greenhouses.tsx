@@ -49,7 +49,9 @@ export const Greenhouses = () => {
         },
     ]
 
-    const { controls, locations } = useLevelCheckbox(locationOptions, {
+    const { controls,
+        // locations 
+    } = useLevelCheckbox(locationOptions, {
         defaultLocations: ["Brno-*"],
     })
 
@@ -68,6 +70,7 @@ export const Greenhouses = () => {
                     {greenhouses.map((_, i) => (
                         <Greenhouse
                             item={{
+                                location: "Brno, Cernovice",
                                 title: `Greenhouse ${i + 1}`,
                                 img: `https://placekitten.com/300/200?image=${
                                     (i % 16) + 1

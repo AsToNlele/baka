@@ -73,14 +73,14 @@ export const useLevelCheckbox = (
             }
         })
 
-        let locationSet = new Set(tempLocations)
+        const locationSet = new Set(tempLocations)
         setLocationsState(Array.from(locationSet))
     }
 
     const allLocations = [
         ...locationOptions.map((item) => item.value),
         ...locationOptions
-            .filter((item) => item.children!!)
+            .filter((item) => item.children!)
             .map((item) => item.children?.map((child) => child.value))
             .flat(),
     ]

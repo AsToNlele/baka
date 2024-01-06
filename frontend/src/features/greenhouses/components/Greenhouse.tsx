@@ -5,7 +5,7 @@ const StarRating = ({ rating }: { rating: number }) => {
     const ratingToArray = Array(5)
         .fill(0)
         .map((_, index) =>
-            rating - index >= 1 ? 1 : rating - index >= 0.5 ? 0.5 : 0
+            rating - index >= 1 ? 1 : rating - index >= 0.5 ? 0.5 : 0,
         )
 
     return (
@@ -34,7 +34,13 @@ const FreePlaces = ({ count }: { count: number }) =>
         <p className="text-default-500">Full</p>
     )
 
-export const Greenhouse = ({ item }: { item: any }) => {
+type Greenhouse = {
+    title: string
+    location: string
+    img: string
+}
+
+export const Greenhouse = ({ item }: { item: Greenhouse }) => {
     const {
         title,
         location,
