@@ -116,12 +116,22 @@ export interface components {
     };
     Greenhouse: {
       url?: string;
+      greenhouse_address: {
+        id?: number;
+        country?: string | null;
+        state?: string | null;
+        city?: string | null;
+        city_part?: string | null;
+        street?: string | null;
+        zipcode?: string | null;
+        latitude?: string | null;
+        longitude?: string | null;
+      };
       title?: string | null;
       description?: string | null;
       rules?: string | null;
       published?: boolean | null;
       owner?: string | null;
-      greenhouse_address?: string | null;
     };
   };
   responses: never;
