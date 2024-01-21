@@ -1,5 +1,6 @@
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react"
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa"
+import { GreenhouseType } from "utils/types"
 
 const StarRating = ({ rating }: { rating: number }) => {
     const ratingToArray = Array(5)
@@ -34,33 +35,29 @@ const FreePlaces = ({ count }: { count: number }) =>
         <p className="text-default-500">Full</p>
     )
 
-type Greenhouse = {
-    title: string
-    location: string
-    img: string
-}
-
-export const Greenhouse = ({ item }: { item: Greenhouse }) => {
+export const Greenhouse = ({ item, i}: { item: GreenhouseType, i: number }) => {
     const {
         title,
-        location,
-        img,
-        // rating, freePlaces
+        greenhouse_address,
     } = item
 
     const rating = Math.round(Math.random() * 5 * 10) / 10 + 1
     const freePlaces = Math.floor(Math.random() * 5)
 
+    const address = greenhouse_address
+        ? `${greenhouse_address.city}, ${greenhouse_address.city_part}`
+        : "Brno, Cernovice"
+
     return (
-        <Card shadow="sm" isPressable>
+        <Card shadow="sm" isPressable className="h-full">
             <CardBody className="overflow-visible p-0">
                 <Image
                     shadow="sm"
                     radius="lg"
                     width="100%"
-                    alt={title}
+                    alt={title!}
                     className="w-full object-cover"
-                    src={img}
+                    src={`https://placedog.net/300/200?id=${i + 1}`}
                 />
             </CardBody>
             <CardFooter className="text-small justify-between flex flex-col">
@@ -69,9 +66,7 @@ export const Greenhouse = ({ item }: { item: Greenhouse }) => {
                     <StarRating rating={rating} />
                 </div>
                 <div className="flex justify-between h-full pt-1 w-full flex-wrap">
-                    <p className="text-default-500">
-                        {location ?? "Brno, Cernovice"}
-                    </p>
+                    <p className="text-default-500">{address}</p>
                     <FreePlaces count={freePlaces} />
                 </div>
             </CardFooter>

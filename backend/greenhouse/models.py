@@ -3,9 +3,9 @@ from quickstart.models import Profile
 
 
 class GreenhouseAddress(models.Model):
-    country = models.CharField(blank=True, null=True)
+    country = models.CharField(blank=True, null=True, default="CZ")
     state = models.CharField(blank=True, null=True)
-    city = models.CharField(blank=True, null=True)
+    city = models.CharField(blank=True, null=True, default="Brno")
     city_part = models.CharField(blank=True, null=True)
     street = models.CharField(blank=True, null=True)
     zipcode = models.CharField(blank=True, null=True)

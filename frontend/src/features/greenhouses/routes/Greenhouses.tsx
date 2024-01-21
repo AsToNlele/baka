@@ -4,8 +4,10 @@ import {
     LevelCheckbox,
     useLevelCheckbox,
 } from "../../../components/LevelCheckbox"
+import { useGreenhouseList } from "../hooks/useGreenhouseList"
 
 export const Greenhouses = () => {
+    const {data: greenhouses, isLoading } = useGreenhouseList()
     const locationOptions = [
         {
             label: "Brno",
@@ -56,32 +58,23 @@ export const Greenhouses = () => {
         defaultLocations: ["Brno-*"],
     })
 
-    const greenhouses = Array(14).fill(0)
+    console.log({ greenhouses, isLoading })
 
     return (
         <>
             <h1 className="text-3xl mb-8">Greenhouses</h1>
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-start">
                 <div className="flex flex-col shrink gap-4">
                     <Input placeholder="Search" />
                     <Image src="https://placekitten.com/200/140" isZoomed />
                     <LevelCheckbox controls={controls} />
                 </div>
-                <div className="grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {greenhouses.map((_, i) => (
+                <div className="grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-start">
+                    {greenhouses?.results?.map((item, i) => (
                         <Greenhouse
-                            item={{
-                                location: "Brno, Cernovice",
-                                title: `Greenhouse ${i + 1}`,
-                                img: `https://placedog.net/300/200?id=${i+1}`,
-                                // img: `https://picsum.photos/300/200`
-                                // img: `https://picsum.photos/id/${i+10}/300/200`,
-                                // img: `https://placekitten.com/300/200`
-                                // img: `https://placekitten.com/300/200?image=${
-                                //     (i % 16) + 1
-                                // }`,
-                            }}
+                            item={item}
                             key={i}
+                            i={i}
                         />
                     ))}
                 </div>
