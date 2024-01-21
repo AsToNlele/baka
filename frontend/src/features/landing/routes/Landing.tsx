@@ -29,7 +29,8 @@ export const Landing = () => {
                 <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
                     <img
                         className="object-contain w-full h-full"
-                        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/hero/phone-mockup.png"
+                        // src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/hero/phone-mockup.png"
+                        src="/plant.png"
                         alt="mockup"
                     />
                 </div>

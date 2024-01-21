@@ -76,7 +76,6 @@ export const Greenhouses = () => {
                                 img: `https://placedog.net/300/200?id=${i+1}`,
                                 // img: `https://picsum.photos/300/200`
                                 // img: `https://picsum.photos/id/${i+10}/300/200`,
-                                
                                 // img: `https://placekitten.com/300/200`
                                 // img: `https://placekitten.com/300/200?image=${
                                 //     (i % 16) + 1
