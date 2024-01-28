@@ -1,4 +1,4 @@
-import { Card, CardBody, CardFooter, Image } from "@nextui-org/react"
+import { Card, CardBody, CardFooter, Image, Link } from "@nextui-org/react"
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa"
 import { GreenhouseType } from "utils/types"
 
@@ -49,7 +49,7 @@ export const Greenhouse = ({ item, i}: { item: GreenhouseType, i: number }) => {
         : "Brno, Cernovice"
 
     return (
-        <Card shadow="sm" isPressable className="h-full">
+        <Card shadow="sm" isPressable className="h-full" as={Link} href={`greenhouses/${item.id}`}>
             <CardBody className="overflow-visible p-0">
                 <Image
                     shadow="sm"

@@ -7,7 +7,7 @@ class GreenhouseAddressSerializer(serializers.ModelSerializer):
         model = GreenhouseAddress
         fields = "__all__"
 
-class GreenhouseSerializer(serializers.HyperlinkedModelSerializer):
+class GreenhouseSerializer(serializers.ModelSerializer):
     greenhouse_address = GreenhouseAddressSerializer()
     
     class Meta:

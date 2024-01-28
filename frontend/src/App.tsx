@@ -12,6 +12,7 @@ import { queryConfig } from "./utils/queryConfig"
 import { ProtectedRoute, RedirectRoute } from "./utils/CustomRoutes"
 import { Greenhouses } from "./features/greenhouses/routes/Greenhouses"
 import { AnimatePresence } from "framer-motion"
+import { GreenhouseDetail } from "@/features/greenhouses/routes/GreenhouseDetail"
 
 function App() {
     const navigate = useNavigate()
@@ -39,6 +40,10 @@ function App() {
                                 <Route
                                     path="/app/greenhouses"
                                     element={<Greenhouses />}
+                                />
+                                <Route
+                                    path="/app/greenhouses/:id"
+                                    element={<GreenhouseDetail />}
                                 />
                             </Route>
                             <Route path="*" element={<h1>404</h1>} />

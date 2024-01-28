@@ -952,8 +952,8 @@ components:
     Greenhouse:
       type: object
       properties:
-        url:
-          type: string
+        id:
+          type: integer
           readOnly: true
         greenhouse_address:
           type: object
@@ -998,7 +998,7 @@ components:
           type: boolean
           nullable: true
         owner:
-          type: string
+          type: integer
           nullable: true
       required:
       - greenhouse_address

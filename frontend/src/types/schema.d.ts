@@ -115,7 +115,7 @@ export interface components {
       profile?: number | null;
     };
     Greenhouse: {
-      url?: string;
+      id?: number;
       greenhouse_address: {
         id?: number;
         country?: string | null;
@@ -131,7 +131,7 @@ export interface components {
       description?: string | null;
       rules?: string | null;
       published?: boolean | null;
-      owner?: string | null;
+      owner?: number | null;
     };
   };
   responses: never;

@@ -10,7 +10,7 @@ export const Layout = ({ children }: { children?: ReactNode }) => {
                 <AppNavbar />
             </div>
             <motion.div
-                className="lg:grow mx-auto px-6 py-4 lg:pl-56"
+                className="lg:grow mx-auto px-[30px] py-4 lg:pl-60"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ type: "tween" }}
