@@ -69,6 +69,16 @@ export interface paths {
     delete: operations["destroyGreenhouse"];
     patch: operations["partialUpdateGreenhouse"];
   };
+  "/api/flowerbeds/": {
+    get: operations["listFlowerbeds"];
+    post: operations["createFlowerbed"];
+  };
+  "/api/flowerbeds/{id}/": {
+    get: operations["retrieveFlowerbed"];
+    put: operations["updateFlowerbed"];
+    delete: operations["destroyFlowerbed"];
+    patch: operations["partialUpdateFlowerbed"];
+  };
   "/api/auth/profile": {
     get: operations["listUsers"];
   };
@@ -127,11 +137,43 @@ export interface components {
         latitude?: string | null;
         longitude?: string | null;
       };
+      flowerbeds?: readonly ({
+          id?: number;
+          leases?: readonly ({
+              id?: number;
+              /** Format: date-time */
+              leased_from?: string | null;
+              /** Format: date-time */
+              leased_to?: string | null;
+              flowerbed?: number | null;
+              user?: number | null;
+            })[];
+          currentLease?: string;
+          name?: string | null;
+          disabled?: boolean | null;
+          greenhouse?: number | null;
+        })[];
       title?: string | null;
       description?: string | null;
       rules?: string | null;
       published?: boolean | null;
       owner?: number | null;
+    };
+    Flowerbed: {
+      id?: number;
+      leases?: readonly ({
+          id?: number;
+          /** Format: date-time */
+          leased_from?: string | null;
+          /** Format: date-time */
+          leased_to?: string | null;
+          flowerbed?: number | null;
+          user?: number | null;
+        })[];
+      currentLease?: string;
+      name?: string | null;
+      disabled?: boolean | null;
+      greenhouse?: number | null;
     };
   };
   responses: never;
@@ -696,6 +738,123 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Greenhouse"];
+        };
+      };
+    };
+  };
+  listFlowerbeds: {
+    parameters: {
+      query?: {
+        /** @description A page number within the paginated result set. */
+        page?: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            /** @example 123 */
+            count?: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results?: components["schemas"]["Flowerbed"][];
+          };
+        };
+      };
+    };
+  };
+  createFlowerbed: {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["Flowerbed"];
+        "application/x-www-form-urlencoded": components["schemas"]["Flowerbed"];
+        "multipart/form-data": components["schemas"]["Flowerbed"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["Flowerbed"];
+        };
+      };
+    };
+  };
+  retrieveFlowerbed: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this flowerbed. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Flowerbed"];
+        };
+      };
+    };
+  };
+  updateFlowerbed: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this flowerbed. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["Flowerbed"];
+        "application/x-www-form-urlencoded": components["schemas"]["Flowerbed"];
+        "multipart/form-data": components["schemas"]["Flowerbed"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Flowerbed"];
+        };
+      };
+    };
+  };
+  destroyFlowerbed: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this flowerbed. */
+        id: string;
+      };
+    };
+    responses: {
+      204: {
+        content: never;
+      };
+    };
+  };
+  partialUpdateFlowerbed: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this flowerbed. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["Flowerbed"];
+        "application/x-www-form-urlencoded": components["schemas"]["Flowerbed"];
+        "multipart/form-data": components["schemas"]["Flowerbed"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Flowerbed"];
         };
       };
     };

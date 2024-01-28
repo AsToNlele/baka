@@ -35,7 +35,7 @@ const FreePlaces = ({ count }: { count: number }) =>
         <p className="text-default-500">Full</p>
     )
 
-export const Greenhouse = ({ item, i}: { item: GreenhouseType, i: number }) => {
+export const Greenhouse = ({ item }: { item: GreenhouseType }) => {
     const {
         title,
         greenhouse_address,
@@ -57,7 +57,7 @@ export const Greenhouse = ({ item, i}: { item: GreenhouseType, i: number }) => {
                     width="100%"
                     alt={title!}
                     className="w-full object-cover"
-                    src={`https://placedog.net/300/200?id=${i + 1}`}
+                    src={`https://placedog.net/300/200?id=${item.id!}`}
                 />
             </CardBody>
             <CardFooter className="text-small justify-between flex flex-col">

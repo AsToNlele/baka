@@ -74,7 +74,6 @@ export const Greenhouses = () => {
                         <Greenhouse
                             item={item}
                             key={i}
-                            i={i}
                         />
                     ))}
                 </div>

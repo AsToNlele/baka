@@ -793,6 +793,163 @@ paths:
           description: ''
       tags:
       - api
+  /api/flowerbeds/:
+    get:
+      operationId: listFlowerbeds
+      description: ''
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Flowerbed'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createFlowerbed
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Flowerbed'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Flowerbed'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Flowerbed'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Flowerbed'
+          description: ''
+      tags:
+      - api
+  /api/flowerbeds/{id}/:
+    get:
+      operationId: retrieveFlowerbed
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this flowerbed.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Flowerbed'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateFlowerbed
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this flowerbed.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Flowerbed'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Flowerbed'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Flowerbed'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Flowerbed'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateFlowerbed
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this flowerbed.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Flowerbed'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Flowerbed'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Flowerbed'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Flowerbed'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyFlowerbed
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this flowerbed.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
   /api/auth/profile:
     get:
       operationId: listUsers
@@ -985,6 +1142,50 @@ components:
             longitude:
               type: string
               nullable: true
+        flowerbeds:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                readOnly: true
+              leases:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    leased_from:
+                      type: string
+                      format: date-time
+                      nullable: true
+                    leased_to:
+                      type: string
+                      format: date-time
+                      nullable: true
+                    flowerbed:
+                      type: integer
+                      nullable: true
+                    user:
+                      type: integer
+                      nullable: true
+                readOnly: true
+              currentLease:
+                type: string
+                readOnly: true
+              name:
+                type: string
+                nullable: true
+              disabled:
+                type: boolean
+                nullable: true
+              greenhouse:
+                type: integer
+                nullable: true
+          readOnly: true
         title:
           type: string
           nullable: true
@@ -1002,3 +1203,44 @@ components:
           nullable: true
       required:
       - greenhouse_address
+    Flowerbed:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        leases:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                readOnly: true
+              leased_from:
+                type: string
+                format: date-time
+                nullable: true
+              leased_to:
+                type: string
+                format: date-time
+                nullable: true
+              flowerbed:
+                type: integer
+                nullable: true
+              user:
+                type: integer
+                nullable: true
+          readOnly: true
+        currentLease:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+        disabled:
+          type: boolean
+          nullable: true
+        greenhouse:
+          type: integer
+          nullable: true

@@ -3,21 +3,24 @@ import { useGreenhouseDetail } from "../hooks/useGreenhouseDetail"
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { Card, CardBody, Image, Tab, Tabs } from "@nextui-org/react"
 import { Key, useEffect } from "react"
+import { FlowerbedList } from "@/features/flowerbeds/components/FlowerbedList"
 
 export const GreenhouseDetail = () => {
     const { id } = useParams()
     const [searchParams, setSearchParams] = useSearchParams()
 
     useEffect(() => {
-       if(!searchParams.get("tab")) {
-           setSearchParams({ tab: "overview" })
-       }
+        if (!searchParams.get("tab")) {
+            setSearchParams({ tab: "flowerbeds" })
+        }
     }, [searchParams, setSearchParams])
+
+    console.log(searchParams.get("tab"))
 
     const setTab = (key: Key) => {
         const tempSearchParams = searchParams
         tempSearchParams.set("tab", key.toString())
-        setSearchParams(tempSearchParams)
+        setSearchParams(tempSearchParams, { replace: true })
     }
 
     const greenhouseId = id ? parseInt(id) : null
@@ -43,7 +46,7 @@ export const GreenhouseDetail = () => {
                             wrapper: "w-full",
                             img: "w-full aspect-4/3",
                         }}
-                        src={`https://placedog.net/800/600`}
+                        src={`https://placedog.net/800/600?id=${data.id!}`}
                         height={160}
                     />
                 </div>
@@ -99,20 +102,31 @@ export const GreenhouseDetail = () => {
                     </div>
                 </div>
             </div>
-            <Tabs selectedKey={searchParams.get("tab")} onSelectionChange={setTab} aria-label="Tabs" className="mt-10">
+            <Tabs
+                selectedKey={searchParams.get("tab")}
+                onSelectionChange={setTab}
+                defaultSelectedKey={"flowerbeds"}
+                aria-label="Tabs"
+                className="mt-10"
+            >
                 <Tab key="overview" title="Overview">
-                    <Card>
+                    <Card className="rounded-t">
                         <CardBody>Hello there</CardBody>
                     </Card>
                 </Tab>
                 <Tab key="marketplace" title="Marketplace">
                     <Card>
-                        <CardBody>Hello there marketplace</CardBody>
+                        <CardBody>Marketplace</CardBody>
                     </Card>
                 </Tab>
                 <Tab key="flowerbeds" title="Flowerbeds">
                     <Card>
-                        <CardBody>Hello there</CardBody>
+                        <CardBody>
+                            <FlowerbedList
+                                flowerbeds={data.flowerbeds!}
+                                greenhouseId={id}
+                            />
+                        </CardBody>
                     </Card>
                 </Tab>
                 <Tab key="rules" title="Rules">

@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from flowerbed.models import Flowerbed
+from flowerbed.serializers import FlowerbedSerializer
 
-# Create your views here.
+
+class FlowerbedViewSet(viewsets.ModelViewSet):
+    queryset = Flowerbed.objects.all()
+    serializer_class = FlowerbedSerializer
