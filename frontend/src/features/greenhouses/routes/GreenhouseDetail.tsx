@@ -1,10 +1,24 @@
-import { useParams } from "react-router-dom"
+import { useParams, useSearchParams } from "react-router-dom"
 import { useGreenhouseDetail } from "../hooks/useGreenhouseDetail"
 import { PageTitle } from "@/features/app/components/PageTitle"
-import { Card, CardBody, Divider, Image, Tab, Tabs } from "@nextui-org/react"
+import { Card, CardBody, Image, Tab, Tabs } from "@nextui-org/react"
+import { Key, useEffect } from "react"
 
 export const GreenhouseDetail = () => {
     const { id } = useParams()
+    const [searchParams, setSearchParams] = useSearchParams()
+
+    useEffect(() => {
+       if(!searchParams.get("tab")) {
+           setSearchParams({ tab: "overview" })
+       }
+    }, [searchParams, setSearchParams])
+
+    const setTab = (key: Key) => {
+        const tempSearchParams = searchParams
+        tempSearchParams.set("tab", key.toString())
+        setSearchParams(tempSearchParams)
+    }
 
     const greenhouseId = id ? parseInt(id) : null
     console.log({ greenhouseId })
@@ -85,8 +99,7 @@ export const GreenhouseDetail = () => {
                     </div>
                 </div>
             </div>
-            {/* <Divider className="my-8" /> */}
-            <Tabs aria-label="Options" className="mt-10">
+            <Tabs selectedKey={searchParams.get("tab")} onSelectionChange={setTab} aria-label="Tabs" className="mt-10">
                 <Tab key="overview" title="Overview">
                     <Card>
                         <CardBody>Hello there</CardBody>
@@ -94,7 +107,7 @@ export const GreenhouseDetail = () => {
                 </Tab>
                 <Tab key="marketplace" title="Marketplace">
                     <Card>
-                        <CardBody>Hello there</CardBody>
+                        <CardBody>Hello there marketplace</CardBody>
                     </Card>
                 </Tab>
                 <Tab key="flowerbeds" title="Flowerbeds">
