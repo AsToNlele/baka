@@ -6,4 +6,9 @@ export type GreenhouseListResponse = paths["/api/greenhouses/"]["get"]["response
 export type GreenhouseDetailResponse = paths["/api/greenhouses/{id}/"]["get"]["responses"][200]["content"]["application/json"]
 
 export type FlowerbedType = components["schemas"]["Flowerbed"]
+export type FlowerbedDetailResponse = paths["/api/flowerbeds/{id}/"]["get"]["responses"][200]["content"]["application/json"] & { currentLease: {
+    leased_from: string,
+    leased_to: string
+}}
+
 

@@ -1,5 +1,5 @@
 import { FlowerbedType } from "@/utils/types"
-import { Card, CardBody, CardFooter, Image } from "@nextui-org/react"
+import { Card, CardBody, CardFooter, Image, Link } from "@nextui-org/react"
 
 type FlowerbedListProps = {
     flowerbeds: readonly FlowerbedType[]
@@ -21,7 +21,8 @@ const Flowerbed = ({ flowerbed }: { flowerbed: FlowerbedType }) => {
         <Card
             shadow="sm"
             isPressable
-            onPress={() => console.log("item pressed")}
+            as={Link}
+            href={`/app/flowerbeds/${flowerbed.id}`}
         >
             <CardBody className="overflow-visible p-0">
                 <Image

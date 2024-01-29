@@ -1176,15 +1176,58 @@ components:
               currentLease:
                 type: string
                 readOnly: true
+              greenhouse:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  title:
+                    type: string
+                    nullable: true
+                  description:
+                    type: string
+                    nullable: true
+                  greenhouse_address:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      country:
+                        type: string
+                        nullable: true
+                      state:
+                        type: string
+                        nullable: true
+                      city:
+                        type: string
+                        nullable: true
+                      city_part:
+                        type: string
+                        nullable: true
+                      street:
+                        type: string
+                        nullable: true
+                      zipcode:
+                        type: string
+                        nullable: true
+                      latitude:
+                        type: string
+                        nullable: true
+                      longitude:
+                        type: string
+                        nullable: true
+                required:
+                - greenhouse_address
               name:
                 type: string
                 nullable: true
               disabled:
                 type: boolean
                 nullable: true
-              greenhouse:
-                type: integer
-                nullable: true
+            required:
+            - greenhouse
           readOnly: true
         title:
           type: string
@@ -1235,12 +1278,55 @@ components:
         currentLease:
           type: string
           readOnly: true
+        greenhouse:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            title:
+              type: string
+              nullable: true
+            description:
+              type: string
+              nullable: true
+            greenhouse_address:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  readOnly: true
+                country:
+                  type: string
+                  nullable: true
+                state:
+                  type: string
+                  nullable: true
+                city:
+                  type: string
+                  nullable: true
+                city_part:
+                  type: string
+                  nullable: true
+                street:
+                  type: string
+                  nullable: true
+                zipcode:
+                  type: string
+                  nullable: true
+                latitude:
+                  type: string
+                  nullable: true
+                longitude:
+                  type: string
+                  nullable: true
+          required:
+          - greenhouse_address
         name:
           type: string
           nullable: true
         disabled:
           type: boolean
           nullable: true
-        greenhouse:
-          type: integer
-          nullable: true
+      required:
+      - greenhouse

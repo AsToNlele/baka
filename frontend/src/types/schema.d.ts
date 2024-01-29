@@ -149,9 +149,24 @@ export interface components {
               user?: number | null;
             })[];
           currentLease?: string;
+          greenhouse: {
+            id?: number;
+            title?: string | null;
+            description?: string | null;
+            greenhouse_address: {
+              id?: number;
+              country?: string | null;
+              state?: string | null;
+              city?: string | null;
+              city_part?: string | null;
+              street?: string | null;
+              zipcode?: string | null;
+              latitude?: string | null;
+              longitude?: string | null;
+            };
+          };
           name?: string | null;
           disabled?: boolean | null;
-          greenhouse?: number | null;
         })[];
       title?: string | null;
       description?: string | null;
@@ -171,9 +186,24 @@ export interface components {
           user?: number | null;
         })[];
       currentLease?: string;
+      greenhouse: {
+        id?: number;
+        title?: string | null;
+        description?: string | null;
+        greenhouse_address: {
+          id?: number;
+          country?: string | null;
+          state?: string | null;
+          city?: string | null;
+          city_part?: string | null;
+          street?: string | null;
+          zipcode?: string | null;
+          latitude?: string | null;
+          longitude?: string | null;
+        };
+      };
       name?: string | null;
       disabled?: boolean | null;
-      greenhouse?: number | null;
     };
   };
   responses: never;

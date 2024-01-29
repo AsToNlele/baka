@@ -49,7 +49,7 @@ export const Greenhouse = ({ item }: { item: GreenhouseType }) => {
         : "Brno, Cernovice"
 
     return (
-        <Card shadow="sm" isPressable className="h-full" as={Link} href={`greenhouses/${item.id}`}>
+        <Card shadow="sm" isPressable className="h-full" as={Link} href={`greenhouses/${item.id}?tab=flowerbeds`}>
             <CardBody className="overflow-visible p-0">
                 <Image
                     shadow="sm"

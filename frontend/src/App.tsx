@@ -13,6 +13,7 @@ import { ProtectedRoute, RedirectRoute } from "./utils/CustomRoutes"
 import { Greenhouses } from "./features/greenhouses/routes/Greenhouses"
 import { AnimatePresence } from "framer-motion"
 import { GreenhouseDetail } from "@/features/greenhouses/routes/GreenhouseDetail"
+import { FlowerbedDetail } from "@/features/flowerbeds/routes/FlowerbedDetail"
 
 function App() {
     const navigate = useNavigate()
@@ -44,6 +45,10 @@ function App() {
                                 <Route
                                     path="/app/greenhouses/:id"
                                     element={<GreenhouseDetail />}
+                                />
+                                <Route
+                                    path="/app/flowerbeds/:id"
+                                    element={<FlowerbedDetail />}
                                 />
                             </Route>
                             <Route path="*" element={<h1>404</h1>} />

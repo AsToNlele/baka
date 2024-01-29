@@ -7,7 +7,7 @@ export const NavBreadcrumbs = () => {
     return (
         <Breadcrumbs className="pb-4">
             {paths.map((path, index) => {
-                const href = `/app${paths.slice(0, index + 1).join("/")}`
+                const href = `/app/${paths.slice(0, index + 1).join("/")}`
                 const title = path
                     ? path.charAt(0).toUpperCase() + path.slice(1)
                     : "Home"

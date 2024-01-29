@@ -10,17 +10,23 @@ export const GreenhouseDetail = () => {
     const [searchParams, setSearchParams] = useSearchParams()
 
     useEffect(() => {
+        console.log("TAB", searchParams.get("tab"))
         if (!searchParams.get("tab")) {
-            setSearchParams({ tab: "flowerbeds" })
+            setSearchParams((prev) => {
+                prev.set("tab", "flowerbeds")
+                return prev
+            })
         }
     }, [searchParams, setSearchParams])
 
-    console.log(searchParams.get("tab"))
+    console.log("AAAAAAAAAAAAAAAAAH", searchParams.get("tab"))
 
     const setTab = (key: Key) => {
-        const tempSearchParams = searchParams
-        tempSearchParams.set("tab", key.toString())
-        setSearchParams(tempSearchParams, { replace: true })
+        console.log("SET TAB")
+        setSearchParams((prev) => {
+            prev.set("tab", key)
+            return prev
+        })
     }
 
     const greenhouseId = id ? parseInt(id) : null
@@ -103,9 +109,9 @@ export const GreenhouseDetail = () => {
                 </div>
             </div>
             <Tabs
+                defaultSelectedKey="flowerbeds"
                 selectedKey={searchParams.get("tab")}
                 onSelectionChange={setTab}
-                defaultSelectedKey={"flowerbeds"}
                 aria-label="Tabs"
                 className="mt-10"
             >
