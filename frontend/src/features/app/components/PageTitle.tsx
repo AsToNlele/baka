@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom"
 type PageTitleProps = {
     title: string
     hideBackButton?: boolean
+    backPath?: string
 }
 
-export const PageTitle = ({ title, hideBackButton = false }: PageTitleProps) => {
+export const PageTitle = ({ title, hideBackButton = false, backPath = ".." }: PageTitleProps) => {
     const navigate = useNavigate()
 
     return (
@@ -15,7 +16,7 @@ export const PageTitle = ({ title, hideBackButton = false }: PageTitleProps) => 
                 {!hideBackButton && (
                     <button
                         className="flex items-center justify-center w-8 h-8 mr-2 text-gray-500 rounded-full hover:bg-gray-100 focus:outline-none"
-                        onClick={() => navigate("..", { relative: "path"})}
+                        onClick={() => navigate(backPath, backPath === ".." ? { relative: "path"} : {})}
                     >
                         <FaArrowLeft className="w-4 h-4" />
                     </button>
