@@ -1,9 +1,10 @@
 from greenhouse.models import Greenhouse, GreenhouseAddress
+from greenhouse.permissions.isOwnerOrCaretaker import IsOwnerOrCaretaker
 from greenhouse.serializers import (EditGreenhouseSerializer,
                                     GreenhouseAddressSerializer,
                                     GreenhouseSerializer)
 from rest_framework import viewsets
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 from rest_framework.generics import get_object_or_404
 from rest_framework.mixins import Response
 
@@ -19,10 +20,12 @@ class GreenhouseViewSet(viewsets.ModelViewSet):
 
     # Edit few fields of the greenhouse
     
-    @action(methods = ["put"], detail=True, serializer_class=EditGreenhouseSerializer, name="Edit greenhouse")
+    @action(methods = ["put"], detail=True, serializer_class=EditGreenhouseSerializer, name="Edit greenhouse", permission_classes=[IsOwnerOrCaretaker])
     def edit_greenhouse(self, request, pk=None):
-        # instance = get_object_or_404(Greenhouse.objects.all(), pk=pk)
-        instance = self.get_object()
+        # Call the permission class
+        self.check_object_permissions(request, self.get_object())
+        
+        instance = get_object_or_404(Greenhouse.objects.all(), pk=pk)
         serializer = self.get_serializer(instance, data=request.data, required=True)
         if not serializer.is_valid():
             return Response(serializer.errors, status=400)

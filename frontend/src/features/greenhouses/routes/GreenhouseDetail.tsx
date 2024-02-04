@@ -1,11 +1,20 @@
 import { useParams, useSearchParams } from "react-router-dom"
 import { useGreenhouseDetail } from "../hooks/useGreenhouseDetail"
 import { PageTitle } from "@/features/app/components/PageTitle"
-import { Button, Card, CardBody, Image, Tab, Tabs, useDisclosure } from "@nextui-org/react"
+import {
+    Button,
+    Card,
+    CardBody,
+    Image,
+    Tab,
+    Tabs,
+    useDisclosure,
+} from "@nextui-org/react"
 import { Key, useEffect } from "react"
 import { FlowerbedList } from "@/features/flowerbeds/components/FlowerbedList"
 import { FaEdit } from "react-icons/fa"
 import { EditGreenhouseModal } from "@/features/greenhouses/components/EditGreenhouseModal"
+import { useProfile } from "@/features/auth/hooks/useProfile"
 
 export const GreenhouseDetail = () => {
     const { id } = useParams()
@@ -20,7 +29,6 @@ export const GreenhouseDetail = () => {
         }
     }, [searchParams, setSearchParams])
 
-
     const setTab = (key: Key) => {
         setSearchParams((prev) => {
             prev.set("tab", key.toString())
@@ -30,7 +38,9 @@ export const GreenhouseDetail = () => {
 
     const greenhouseId = id ? parseInt(id) : null
     const { data, isLoading } = useGreenhouseDetail(greenhouseId)
-    const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure();
+    const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
+
+    const { data: user } = useProfile()
 
     if (isLoading) {
         return <div>Loading...</div>
@@ -40,15 +50,24 @@ export const GreenhouseDetail = () => {
         return <div>Greenhouse not found</div>
     }
 
+    const userIsOwnerOrCareTaker = () => user?.profile?.id === data.owner || user?.profile?.id === data.caretaker
 
     return (
         <>
             <div className="flex gap-2 mb-8">
                 <PageTitle title={data.title!} />
-                <Button color="secondary" isIconOnly onPress={onOpen}><FaEdit /></Button>
+                { userIsOwnerOrCareTaker() && (
+                    <Button color="secondary" isIconOnly onPress={onOpen}>
+                        <FaEdit />
+                    </Button>
+                )}
             </div>
 
-           <EditGreenhouseModal isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose} />
+            <EditGreenhouseModal
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                onClose={onClose}
+            />
 
             <div className="flex gap-8 flex-col md:flex-row">
                 <div className="flex-1 flex justify-center">

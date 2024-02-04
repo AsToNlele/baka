@@ -1,6 +1,8 @@
 // Import schema.d.ts file
 import { components, paths } from "types/schema"
 
+export type ProfileType = paths["/api/users/me/"]["get"]["responses"][200]["content"]["application/json"]
+
 export type GreenhouseType = components["schemas"]["Greenhouse"]
 export type GreenhouseListResponse = paths["/api/greenhouses/"]["get"]["responses"][200]["content"]["application/json"]
 export type GreenhouseDetailResponse = paths["/api/greenhouses/{id}/"]["get"]["responses"][200]["content"]["application/json"]
