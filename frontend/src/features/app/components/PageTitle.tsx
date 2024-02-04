@@ -11,7 +11,6 @@ export const PageTitle = ({ title, hideBackButton = false, backPath = ".." }: Pa
     const navigate = useNavigate()
 
     return (
-        <div className="flex items-center justify-between mb-8">
             <div className="flex items-center">
                 {!hideBackButton && (
                     <button
@@ -23,6 +22,6 @@ export const PageTitle = ({ title, hideBackButton = false, backPath = ".." }: Pa
                 )}
                 <h2 className="text-3xl font-semibold">{title}</h2>
             </div>
-        </div>
+        // </div>
     )
 }

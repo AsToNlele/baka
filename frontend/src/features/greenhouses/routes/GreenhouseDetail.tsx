@@ -1,16 +1,17 @@
 import { useParams, useSearchParams } from "react-router-dom"
 import { useGreenhouseDetail } from "../hooks/useGreenhouseDetail"
 import { PageTitle } from "@/features/app/components/PageTitle"
-import { Card, CardBody, Image, Tab, Tabs } from "@nextui-org/react"
+import { Button, Card, CardBody, Image, Tab, Tabs, useDisclosure } from "@nextui-org/react"
 import { Key, useEffect } from "react"
 import { FlowerbedList } from "@/features/flowerbeds/components/FlowerbedList"
+import { FaEdit } from "react-icons/fa"
+import { EditGreenhouseModal } from "@/features/greenhouses/components/EditGreenhouseModal"
 
 export const GreenhouseDetail = () => {
     const { id } = useParams()
     const [searchParams, setSearchParams] = useSearchParams()
 
     useEffect(() => {
-        console.log("TAB", searchParams.get("tab"))
         if (!searchParams.get("tab")) {
             setSearchParams((prev) => {
                 prev.set("tab", "flowerbeds")
@@ -19,19 +20,17 @@ export const GreenhouseDetail = () => {
         }
     }, [searchParams, setSearchParams])
 
-    console.log("AAAAAAAAAAAAAAAAAH", searchParams.get("tab"))
 
     const setTab = (key: Key) => {
-        console.log("SET TAB")
         setSearchParams((prev) => {
-            prev.set("tab", key)
+            prev.set("tab", key.toString())
             return prev
         })
     }
 
     const greenhouseId = id ? parseInt(id) : null
-    console.log({ greenhouseId })
     const { data, isLoading } = useGreenhouseDetail(greenhouseId)
+    const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure();
 
     if (isLoading) {
         return <div>Loading...</div>
@@ -41,9 +40,15 @@ export const GreenhouseDetail = () => {
         return <div>Greenhouse not found</div>
     }
 
+
     return (
         <>
-            <PageTitle title={data.title!} />
+            <div className="flex gap-2 mb-8">
+                <PageTitle title={data.title!} />
+                <Button color="secondary" isIconOnly onPress={onOpen}><FaEdit /></Button>
+            </div>
+
+           <EditGreenhouseModal isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose} />
 
             <div className="flex gap-8 flex-col md:flex-row">
                 <div className="flex-1 flex justify-center">

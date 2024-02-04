@@ -1028,6 +1028,37 @@ paths:
           description: ''
       tags:
       - api
+  /api/greenhouses/{id}/edit_greenhouse/:
+    put:
+      operationId: editGreenhouseGreenhouse
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this greenhouse.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditGreenhouse'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EditGreenhouse'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EditGreenhouse'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EditGreenhouse'
+          description: ''
+      tags:
+      - api
 components:
   schemas:
     User:
@@ -1226,6 +1257,18 @@ components:
               disabled:
                 type: boolean
                 nullable: true
+              dimension_width:
+                type: number
+              dimension_height:
+                type: number
+              idealPlants:
+                type: string
+                nullable: true
+                maxLength: 100
+              tools:
+                type: string
+                nullable: true
+                maxLength: 100
             required:
             - greenhouse
           readOnly: true
@@ -1240,12 +1283,14 @@ components:
           nullable: true
         published:
           type: boolean
-          nullable: true
         owner:
+          type: integer
+        caretaker:
           type: integer
           nullable: true
       required:
       - greenhouse_address
+      - owner
     Flowerbed:
       type: object
       properties:
@@ -1328,5 +1373,32 @@ components:
         disabled:
           type: boolean
           nullable: true
+        dimension_width:
+          type: number
+        dimension_height:
+          type: number
+        idealPlants:
+          type: string
+          nullable: true
+          maxLength: 100
+        tools:
+          type: string
+          nullable: true
+          maxLength: 100
       required:
       - greenhouse
+    EditGreenhouse:
+      type: object
+      properties:
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        published:
+          type: boolean
+      required:
+      - title
+      - description
+      - published

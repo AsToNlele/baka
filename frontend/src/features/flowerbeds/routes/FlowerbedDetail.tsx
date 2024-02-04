@@ -35,19 +35,18 @@ export const FlowerbedDetail = () => {
                     </div>
                     <div className="">
                         <h2 className="text-xl font-semibold">Dimensions</h2>
-                        <p>Width 50cm</p>
-                        <p>Length 100cm</p>
+                        <p>Width {data?.dimension_width}cm</p>
+                        <p>Length {data?.dimension_height}cm</p>
                     </div>
                     <div className="">
                         <h2 className="text-xl font-semibold">Ideal for</h2>
-                        <p>Tomatoes</p>
-                        <p>Peppers</p>
+                        <p>{data?.idealPlants}</p>
                     </div>
                     <div className="">
                         <h2 className="text-xl font-semibold">
                             Available tools
                         </h2>
-                        <p>Shovel</p>
+                        <p>{data?.tools}</p>
                     </div>
                 </div>
                 <Card className="flex-1">

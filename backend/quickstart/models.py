@@ -3,9 +3,23 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+# from greenhouse.models import Greenhouse
+
+# from greenhouse.models import Greenhouse
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+# Create your models here.
+class Book(models.Model):
+    title = models.CharField(max_length=255)
+    author = models.CharField(max_length=255)
+    # create a relation to Profile
+    profile = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, blank=True, null=True
+    )
+    
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -17,12 +31,3 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
-
-# Create your models here.
-class Book(models.Model):
-    title = models.CharField(max_length=255)
-    author = models.CharField(max_length=255)
-    # create a relation to Profile
-    profile = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, blank=True, null=True
-    )

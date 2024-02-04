@@ -22,7 +22,9 @@
     "baseUrl": "src",
     "paths": {
       "@/*": ["./*"],
-    }
+    },
+    "noErrorTruncation": true,
+    "defaultMaximumTruncationLength": 9999
   },
   "include": ["src", "types"],
   "references": [{ "path": "./tsconfig.node.json" }]

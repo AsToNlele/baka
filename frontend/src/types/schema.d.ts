@@ -91,6 +91,9 @@ export interface paths {
   "/api/auth/logout": {
     post: operations["createLogout"];
   };
+  "/api/greenhouses/{id}/edit_greenhouse/": {
+    put: operations["editGreenhouseGreenhouse"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -167,12 +170,17 @@ export interface components {
           };
           name?: string | null;
           disabled?: boolean | null;
+          dimension_width?: number;
+          dimension_height?: number;
+          idealPlants?: string | null;
+          tools?: string | null;
         })[];
       title?: string | null;
       description?: string | null;
       rules?: string | null;
-      published?: boolean | null;
-      owner?: number | null;
+      published?: boolean;
+      owner: number;
+      caretaker?: number | null;
     };
     Flowerbed: {
       id?: number;
@@ -204,6 +212,15 @@ export interface components {
       };
       name?: string | null;
       disabled?: boolean | null;
+      dimension_width?: number;
+      dimension_height?: number;
+      idealPlants?: string | null;
+      tools?: string | null;
+    };
+    EditGreenhouse: {
+      title: string | null;
+      description: string | null;
+      published: boolean;
     };
   };
   responses: never;
@@ -933,6 +950,28 @@ export interface operations {
       201: {
         content: {
           "application/json": unknown;
+        };
+      };
+    };
+  };
+  editGreenhouseGreenhouse: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this greenhouse. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["EditGreenhouse"];
+        "application/x-www-form-urlencoded": components["schemas"]["EditGreenhouse"];
+        "multipart/form-data": components["schemas"]["EditGreenhouse"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["EditGreenhouse"];
         };
       };
     };
