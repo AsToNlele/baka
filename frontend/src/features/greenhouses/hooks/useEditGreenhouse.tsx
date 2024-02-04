@@ -16,7 +16,7 @@ export const useEditGreenhouse = () => {
     const queryClient = useQueryClient()
     const mutation = useMutation({
         mutationFn: editGreenhouse,
-        onSuccess: (data) => {
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["greenhouseList", 1] })
         },
     })

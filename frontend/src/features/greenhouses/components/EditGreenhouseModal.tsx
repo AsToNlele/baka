@@ -78,8 +78,11 @@ export const EditGreenhouseModal = ({
     }, [data, reset])
 
     const onSubmit: SubmitHandler<EditGreenhouseInputs> = (data) => {
-        console.log(data)
         editGreenhouse.mutate({ id: greenhouseId, data: data })
+    }
+
+    const submit = () => {
+        handleSubmit(onSubmit)()
     }
 
     return (
@@ -133,12 +136,13 @@ export const EditGreenhouseModal = ({
                         </form>
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="danger" variant="flat" onClick={onClose}>
+                        <Button color="danger" variant="flat" onPress={onClose}>
                             Close
                         </Button>
                         <Button
                             color="primary"
-                            onClick={handleSubmit((d) => onSubmit(d))}
+                            onPress={submit}
+                            isDisabled={editGreenhouse.isPending}
                         >
                             Save
                         </Button>
