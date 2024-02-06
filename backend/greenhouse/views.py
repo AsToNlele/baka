@@ -23,7 +23,7 @@ class GreenhouseViewSet(viewsets.ModelViewSet):
     @action(methods = ["put"], detail=True, serializer_class=EditGreenhouseSerializer, name="Edit greenhouse", permission_classes=[IsOwnerOrCaretaker])
     def edit_greenhouse(self, request, pk=None):
         # Call the permission class
-        self.check_object_permissions(request, self.get_object())
+        # self.check_object_permissions(request, self.get_object())
         
         instance = get_object_or_404(Greenhouse.objects.all(), pk=pk)
         serializer = self.get_serializer(instance, data=request.data, required=True)

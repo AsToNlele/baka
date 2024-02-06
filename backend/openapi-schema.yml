@@ -1272,6 +1272,42 @@ components:
             required:
             - greenhouse
           readOnly: true
+        greenhouse_business_hours:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                readOnly: true
+              greenhouse_business_hour_periods:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    open:
+                      type: string
+                    close:
+                      type: string
+                    business_hour:
+                      type: integer
+                      nullable: true
+                  required:
+                  - open
+                  - close
+              day:
+                type: integer
+                maximum: 2147483647
+                minimum: -2147483648
+              greenhouse:
+                type: integer
+                nullable: true
+            required:
+            - greenhouse_business_hour_periods
+            - day
         title:
           type: string
           nullable: true
@@ -1290,6 +1326,7 @@ components:
           nullable: true
       required:
       - greenhouse_address
+      - greenhouse_business_hours
       - owner
     Flowerbed:
       type: object
@@ -1398,7 +1435,75 @@ components:
           nullable: true
         published:
           type: boolean
+        greenhouse_address:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            country:
+              type: string
+              nullable: true
+            state:
+              type: string
+              nullable: true
+            city:
+              type: string
+              nullable: true
+            city_part:
+              type: string
+              nullable: true
+            street:
+              type: string
+              nullable: true
+            zipcode:
+              type: string
+              nullable: true
+            latitude:
+              type: string
+              nullable: true
+            longitude:
+              type: string
+              nullable: true
+        greenhouse_business_hours:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                readOnly: true
+              greenhouse_business_hour_periods:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    open:
+                      type: string
+                    close:
+                      type: string
+                    business_hour:
+                      type: integer
+                      nullable: true
+                  required:
+                  - open
+                  - close
+              day:
+                type: integer
+                maximum: 2147483647
+                minimum: -2147483648
+              greenhouse:
+                type: integer
+                nullable: true
+            required:
+            - greenhouse_business_hour_periods
+            - day
       required:
       - title
       - description
       - published
+      - greenhouse_address
+      - greenhouse_business_hours

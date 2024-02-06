@@ -175,6 +175,17 @@ export interface components {
           idealPlants?: string | null;
           tools?: string | null;
         })[];
+      greenhouse_business_hours: ({
+          id?: number;
+          greenhouse_business_hour_periods: ({
+              id?: number;
+              open: string;
+              close: string;
+              business_hour?: number | null;
+            })[];
+          day: number;
+          greenhouse?: number | null;
+        })[];
       title?: string | null;
       description?: string | null;
       rules?: string | null;
@@ -221,6 +232,28 @@ export interface components {
       title: string | null;
       description: string | null;
       published: boolean;
+      greenhouse_address: {
+        id?: number;
+        country?: string | null;
+        state?: string | null;
+        city?: string | null;
+        city_part?: string | null;
+        street?: string | null;
+        zipcode?: string | null;
+        latitude?: string | null;
+        longitude?: string | null;
+      };
+      greenhouse_business_hours: ({
+          id?: number;
+          greenhouse_business_hour_periods: ({
+              id?: number;
+              open: string;
+              close: string;
+              business_hour?: number | null;
+            })[];
+          day: number;
+          greenhouse?: number | null;
+        })[];
     };
   };
   responses: never;

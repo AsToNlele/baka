@@ -1,5 +1,8 @@
+import { AddressFields } from "@/features/greenhouses/components/AddressFields"
+import { BusinessHours } from "@/features/greenhouses/components/BusinessHours"
 import { useEditGreenhouse } from "@/features/greenhouses/hooks/useEditGreenhouse"
 import { useGreenhouseDetail } from "@/features/greenhouses/hooks/useGreenhouseDetail"
+import { BusinessHoursType, GreenhouseAddressType } from "@/utils/types"
 import {
     Button,
     Input,
@@ -33,35 +36,37 @@ export const EditGreenhouseModal = ({
 
     if (!greenhouseId) return null
 
-    // type GreenhouseAddress = Omit<GreenhouseType["greenhouse_address"], "id">
-
     type EditGreenhouseInputs = {
         title: string
         description: string
         published: boolean
-        // greenhouseAddress: GreenhouseAddress
-        // caretaker: GreenhouseType["caretaker"]
+        greenhouse_address: GreenhouseAddressType
+        greenhouse_business_hours: Array<BusinessHoursType>
     }
 
-    const { register, handleSubmit, reset, control } =
+    const { register, handleSubmit, reset, control, getValues } =
         useForm<EditGreenhouseInputs>({
             defaultValues: {
                 title: data?.title ?? "",
                 description: data?.description ?? "",
                 published: data?.published ?? false,
-                // greenhouseAddress: data?.greenhouse_address ?? {
-                //     country: "CZ",
-                //     state: null,
-                //     city: "",
-                //     city_part: "",
-                //     street: "",
-                //     zipcode: "",
-                //     latitude: "0",
-                //     longitude: "0",
-                // },
+                greenhouse_address: data?.greenhouse_address ?? {
+                    country: "CZ",
+                    state: null,
+                    city: "",
+                    city_part: "",
+                    street: "",
+                    zipcode: "",
+                    latitude: "0",
+                    longitude: "0",
+                },
+                greenhouse_business_hours:
+                    data?.greenhouse_business_hours ?? [],
                 // caretaker: data?.caretaker ?? null,
             },
         })
+
+    console.log(getValues())
 
     useEffect(() => {
         // Update data on form submit
@@ -71,7 +76,8 @@ export const EditGreenhouseModal = ({
                 title: data.title!,
                 description: data.description!,
                 published: data.published,
-                // greenhouseAddress: data.greenhouse_address,
+                greenhouse_address: data.greenhouse_address,
+                greenhouse_business_hours: data.greenhouse_business_hours,
                 // caretaker: data.caretaker,
             })
         }
@@ -100,8 +106,8 @@ export const EditGreenhouseModal = ({
                     </ModalHeader>
                     <ModalBody>
                         <form>
-                            <div className="flex">
-                                <div className="flex-1 flex flex-col gap-4">
+                            <div className="flex flex-col">
+                                <div className="flex flex-col gap-4">
                                     <Input
                                         label="Title"
                                         placeholder="Name of the greenhouse"
@@ -131,7 +137,31 @@ export const EditGreenhouseModal = ({
                                         )}
                                     />
                                 </div>
-                                <div className="flex-1"></div>
+                                <div className="flex flex-col mt-8 gap-2">
+                                    <h2 className="text-md">Address</h2>
+                                    <AddressFields
+                                        register={register}
+                                        data={data}
+                                    />
+                                </div>
+                                <div className="flex flex-col mt-8 gap-2">
+                                    <h2 className="text-md">Opening hours</h2>
+                                    <Controller
+                                        name="greenhouse_business_hours"
+                                        control={control}
+                                        defaultValue={
+                                            data?.greenhouse_business_hours
+                                        }
+                                        render={({
+                                            field: { onChange, value },
+                                        }) => (
+                                            <BusinessHours
+                                                onChange={onChange}
+                                                value={value}
+                                            />
+                                        )}
+                                    />
+                                </div>
                             </div>
                         </form>
                     </ModalBody>
@@ -152,3 +182,4 @@ export const EditGreenhouseModal = ({
         </Modal>
     )
 }
+
