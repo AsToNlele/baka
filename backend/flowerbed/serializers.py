@@ -1,21 +1,99 @@
 from datetime import datetime
 
-from flowerbed.models import Flowerbed, Lease
+from flowerbed.models import Flowerbed, Rent
 from greenhouse.models import Greenhouse, GreenhouseAddress
 from rest_framework import serializers
 
+from ordering.serializers import FlowerbedOrderSerializer
+
 # from greenhouse.serializers import GreenhouseAddressSerializer
 
+class FlowerbedStatusSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(choices=[('rented', 'Rented'), ('free', 'Free')])
 
-class LeaseSerializer(serializers.ModelSerializer):
+class CreateRentSerializer(serializers.ModelSerializer):
+    # greenhouse_address = GreenhouseAddressSerializer(required=False)
+    # greenhouse_business_hours = GreenhouseBusinessHourSerializer(
+    #     source="greenhousebusinesshour_set", many=True, required=False
+    # )
+
     class Meta:
-        model = Lease
+        model = Rent
+        fields = [
+            "rented_from",
+            "rented_to",
+        ]
+        extra_kwargs = {
+            "rented_from": {"required": True},
+            "rented_to": {"required": True},
+        }
+    
+
+    def validate(self, attrs):
+        return attrs
+
+    # def update(self, instance, validated_data):
+    #     instance.title = validated_data.get("title", instance.title)
+    #     instance.description = validated_data.get("description", instance.description)
+    #     instance.published = validated_data.get("published", instance.published)
+    #     instance.greenhouse_address = GreenhouseAddress.objects.get_or_create(
+    #         **validated_data["greenhouse_address"]
+    #     )[0]
+    #
+    #     instance.greenhousebusinesshour_set.all().delete()
+    #     if "greenhousebusinesshour_set" in validated_data:
+    #         print("NEMAM")
+    #         businessHours = validated_data.get("greenhousebusinesshour_set")
+    #         print(businessHours)
+    #
+    #         # TODO: put this above the if later
+    #
+    #         for businessHour in businessHours:
+    #             businessHourInstance = GreenhouseBusinessHour.objects.get_or_create(
+    #                 greenhouse=instance, day=businessHour.get("day")
+    #             )
+    #             businessHourInstance[0].save()
+    #             businessHourInstance[0].greenhousebusinesshourperiod_set.all().delete()
+    #             for period in businessHour.get("greenhousebusinesshourperiod_set"):
+    #                 periodInstance = GreenhouseBusinessHourPeriod.objects.get_or_create(
+    #                     business_hour=businessHourInstance[0],
+    #                     open=period.get("open"),
+    #                     close=period.get("close"),
+    #                 )
+    #                 periodInstance[0].save()
+    #         businessHours = validated_data["greenhousebusinesshour_set"]
+    #
+    #         instance.greenhousebusinesshour_set.all().delete()
+    #
+    #         for businessHour in businessHours:
+    #             businessHourInstance = GreenhouseBusinessHour.objects.get_or_create(
+    #                 greenhouse=instance, day=businessHour.get("day")
+    #             )
+    #             businessHourInstance[0].save()
+    #             businessHourInstance[0].greenhousebusinesshourperiod_set.all().delete()
+    #             for period in businessHour.get("greenhousebusinesshourperiod_set"):
+    #                 periodInstance = GreenhouseBusinessHourPeriod.objects.get_or_create(
+    #                     business_hour=businessHourInstance[0],
+    #                     open=period.get("open"),
+    #                     close=period.get("close"),
+    #                 )
+    #                 periodInstance[0].save()
+    #
+    #     instance.save()
+    #     return instance
+
+
+class RentSerializer(serializers.ModelSerializer):
+    order = FlowerbedOrderSerializer(source="flowerbedorders")
+    
+    class Meta:
+        model = Rent
         fields = "__all__"
 
 
-class LeaseFlowerbedSerializer(serializers.ModelSerializer):
+class RentFlowerbedSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Lease
+        model = Rent
         fields = "__all__"
 
 
@@ -34,17 +112,17 @@ class GreenhouseFlowerSerializer(serializers.ModelSerializer):
 
 
 class FlowerbedSerializer(serializers.ModelSerializer):
-    leases = LeaseFlowerbedSerializer(source="lease_set", many=True, read_only=True)
-    currentLease = serializers.SerializerMethodField()
+    rents = RentFlowerbedSerializer(source="rent_set", many=True, read_only=True)
+    currentRent = serializers.SerializerMethodField()
     greenhouse = GreenhouseFlowerSerializer()
 
-    def get_currentLease(self, obj):
+    def get_currentRent(self, obj):
         # Get the current lease for this flowerbed
         # If there is no current lease, return None
-        currentLease = obj.lease_set.filter(
-            leased_from__lte=datetime.now(), leased_to__gte=datetime.now()
+        currentRent = obj.rent_set.filter(
+            rented_from__lte=datetime.now(), rented_to__gte=datetime.now()
         ).first()
-        return LeaseSerializer(currentLease).data if currentLease else None
+        return RentSerializer(currentRent).data if currentRent else None
 
     class Meta:
         model = Flowerbed

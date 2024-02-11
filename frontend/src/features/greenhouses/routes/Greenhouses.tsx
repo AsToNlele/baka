@@ -58,8 +58,6 @@ export const Greenhouses = () => {
         defaultLocations: ["Brno-*"],
     })
 
-    console.log({ greenhouses, isLoading })
-
     return (
         <>
             <h1 className="text-3xl mb-8">Greenhouses</h1>

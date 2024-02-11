@@ -950,6 +950,26 @@ paths:
           description: ''
       tags:
       - api
+  /api/flowerbeds/{id}/status/:
+    get:
+      operationId: statusFlowerbed
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this flowerbed.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowerbedStatus'
+          description: ''
+      tags:
+      - api
   /api/auth/profile:
     get:
       operationId: listUsers
@@ -962,6 +982,37 @@ paths:
               schema:
                 type: array
                 items: {}
+          description: ''
+      tags:
+      - api
+  /api/flowerbeds/{id}/rent/:
+    post:
+      operationId: rentFlowerbed
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this flowerbed.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateRent'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateRent'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateRent'
           description: ''
       tags:
       - api
@@ -1181,7 +1232,7 @@ components:
               id:
                 type: integer
                 readOnly: true
-              leases:
+              rents:
                 type: array
                 items:
                   type: object
@@ -1189,11 +1240,11 @@ components:
                     id:
                       type: integer
                       readOnly: true
-                    leased_from:
+                    rented_from:
                       type: string
                       format: date-time
                       nullable: true
-                    leased_to:
+                    rented_to:
                       type: string
                       format: date-time
                       nullable: true
@@ -1204,7 +1255,7 @@ components:
                       type: integer
                       nullable: true
                 readOnly: true
-              currentLease:
+              currentRent:
                 type: string
                 readOnly: true
               greenhouse:
@@ -1269,6 +1320,12 @@ components:
                 type: string
                 nullable: true
                 maxLength: 100
+              pricePerDay:
+                type: string
+                format: decimal
+                multipleOf: 1.0e-05
+                maximum: 100000
+                minimum: -100000
             required:
             - greenhouse
           readOnly: true
@@ -1334,7 +1391,7 @@ components:
         id:
           type: integer
           readOnly: true
-        leases:
+        rents:
           type: array
           items:
             type: object
@@ -1342,11 +1399,11 @@ components:
               id:
                 type: integer
                 readOnly: true
-              leased_from:
+              rented_from:
                 type: string
                 format: date-time
                 nullable: true
-              leased_to:
+              rented_to:
                 type: string
                 format: date-time
                 nullable: true
@@ -1357,7 +1414,7 @@ components:
                 type: integer
                 nullable: true
           readOnly: true
-        currentLease:
+        currentRent:
           type: string
           readOnly: true
         greenhouse:
@@ -1422,8 +1479,38 @@ components:
           type: string
           nullable: true
           maxLength: 100
+        pricePerDay:
+          type: string
+          format: decimal
+          multipleOf: 1.0e-05
+          maximum: 100000
+          minimum: -100000
       required:
       - greenhouse
+    FlowerbedStatus:
+      type: object
+      properties:
+        status:
+          enum:
+          - rented
+          - free
+          type: string
+      required:
+      - status
+    CreateRent:
+      type: object
+      properties:
+        rented_from:
+          type: string
+          format: date-time
+          nullable: true
+        rented_to:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+      - rented_from
+      - rented_to
     EditGreenhouse:
       type: object
       properties:
@@ -1505,5 +1592,3 @@ components:
       - title
       - description
       - published
-      - greenhouse_address
-      - greenhouse_business_hours

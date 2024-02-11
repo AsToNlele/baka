@@ -27,18 +27,19 @@ class Flowerbed(models.Model):
     dimension_height = models.FloatField(default=0, blank=False, null=False)
     idealPlants = models.CharField(max_length=100, blank=True, null=True)
     tools = models.CharField(max_length=100, blank=True, null=True)
+    pricePerDay = models.DecimalField(max_digits=10, decimal_places=5, default = 50, blank=False, null=False)
 
     class Meta:
         db_table = "flowerbeds"
 
 
-class Lease(models.Model):
+class Rent(models.Model):
     flowerbed = models.ForeignKey(Flowerbed, models.DO_NOTHING, blank=True, null=True)
-    leased_from = models.DateTimeField(
+    rented_from = models.DateTimeField(
         default=datetime.now, blank=True, null=True
     )  # Field renamed because it was a Python reserved word.
-    leased_to = models.DateTimeField(blank=True, null=True)
+    rented_to = models.DateTimeField(blank=True, null=True)
     user = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
-        db_table = "leases"
+        db_table = "rents"

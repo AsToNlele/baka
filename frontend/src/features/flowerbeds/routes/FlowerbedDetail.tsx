@@ -9,8 +9,6 @@ export const FlowerbedDetail = () => {
     const flowerbedId = id ? parseInt(id) : null
     const { data, isLoading } = useFlowerbedDetail(flowerbedId)
 
-    console.log({ data, isLoading })
-
     return (
         <>
             <PageTitle

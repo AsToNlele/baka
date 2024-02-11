@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.db import models
-from flowerbed.models import Lease
+from flowerbed.models import Rent 
 from quickstart.models import Profile
 
 
@@ -22,13 +22,14 @@ class Discounts(models.Model):
 
 
 class FlowerbedOrders(models.Model):
-    lease = models.ForeignKey(Lease, models.DO_NOTHING, blank=True, null=True)
+    # rent = models.ForeignKey(Rent, models.DO_NOTHING, blank=True, null=True)
+    rent = models.OneToOneField(Rent, on_delete=models.DO_NOTHING, blank=True, null=True)
     user = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
     status = models.CharField(default="created", blank=True, null=True)
-    created_at = models.DateTimeField(default=datetime.now(), blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     final_price = models.DecimalField(
-        max_digits=10, decimal_places=5, blank=True, null=True
-    )  # max_digits and decimal_places have been guessed, as this database handles decimal fields as float
+        max_digits=10, decimal_places=5, blank=False, null=False
+    )  
     discounts = models.ManyToManyField(Discounts, blank=True)
 
     class Meta:

@@ -12,7 +12,6 @@ export const BusinessHours = ({
     type timeType = "from" | "to"
 
     const handleDaySwitch = (day: number, inputValue: boolean) => {
-        console.log(value.filter((d) => d.day !== day))
         if (inputValue) {
             onChange([
                 ...value,
@@ -80,8 +79,6 @@ export const BusinessHours = ({
                 : [],
         }
     })
-
-    console.log(mappedDays)
 
     return (
         <div className="flex flex-col gap-4 mt-4">

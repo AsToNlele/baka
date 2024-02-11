@@ -14,6 +14,7 @@ import { Greenhouses } from "./features/greenhouses/routes/Greenhouses"
 import { AnimatePresence } from "framer-motion"
 import { GreenhouseDetail } from "@/features/greenhouses/routes/GreenhouseDetail"
 import { FlowerbedDetail } from "@/features/flowerbeds/routes/FlowerbedDetail"
+import { RentFlowerbed } from "@/features/flowerbeds/routes/RentFlowerbed"
 
 function App() {
     const navigate = useNavigate()
@@ -50,6 +51,7 @@ function App() {
                                     path="/app/flowerbeds/:id"
                                     element={<FlowerbedDetail />}
                                 />
+                                <Route path="/app/flowerbeds/:id/rent" element={<RentFlowerbed />} />
                             </Route>
                             <Route path="*" element={<h1>404</h1>} />
                         </Routes>

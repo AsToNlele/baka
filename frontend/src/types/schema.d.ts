@@ -79,8 +79,14 @@ export interface paths {
     delete: operations["destroyFlowerbed"];
     patch: operations["partialUpdateFlowerbed"];
   };
+  "/api/flowerbeds/{id}/status/": {
+    get: operations["statusFlowerbed"];
+  };
   "/api/auth/profile": {
     get: operations["listUsers"];
+  };
+  "/api/flowerbeds/{id}/rent/": {
+    post: operations["rentFlowerbed"];
   };
   "/api/auth/login": {
     post: operations["createLogin"];
@@ -142,16 +148,16 @@ export interface components {
       };
       flowerbeds?: readonly ({
           id?: number;
-          leases?: readonly ({
+          rents?: readonly ({
               id?: number;
               /** Format: date-time */
-              leased_from?: string | null;
+              rented_from?: string | null;
               /** Format: date-time */
-              leased_to?: string | null;
+              rented_to?: string | null;
               flowerbed?: number | null;
               user?: number | null;
             })[];
-          currentLease?: string;
+          currentRent?: string;
           greenhouse: {
             id?: number;
             title?: string | null;
@@ -174,6 +180,8 @@ export interface components {
           dimension_height?: number;
           idealPlants?: string | null;
           tools?: string | null;
+          /** Format: decimal */
+          pricePerDay?: string;
         })[];
       greenhouse_business_hours: ({
           id?: number;
@@ -195,16 +203,16 @@ export interface components {
     };
     Flowerbed: {
       id?: number;
-      leases?: readonly ({
+      rents?: readonly ({
           id?: number;
           /** Format: date-time */
-          leased_from?: string | null;
+          rented_from?: string | null;
           /** Format: date-time */
-          leased_to?: string | null;
+          rented_to?: string | null;
           flowerbed?: number | null;
           user?: number | null;
         })[];
-      currentLease?: string;
+      currentRent?: string;
       greenhouse: {
         id?: number;
         title?: string | null;
@@ -227,12 +235,24 @@ export interface components {
       dimension_height?: number;
       idealPlants?: string | null;
       tools?: string | null;
+      /** Format: decimal */
+      pricePerDay?: string;
+    };
+    FlowerbedStatus: {
+      /** @enum {string} */
+      status: "rented" | "free";
+    };
+    CreateRent: {
+      /** Format: date-time */
+      rented_from: string | null;
+      /** Format: date-time */
+      rented_to: string | null;
     };
     EditGreenhouse: {
       title: string | null;
       description: string | null;
       published: boolean;
-      greenhouse_address: {
+      greenhouse_address?: {
         id?: number;
         country?: string | null;
         state?: string | null;
@@ -243,7 +263,7 @@ export interface components {
         latitude?: string | null;
         longitude?: string | null;
       };
-      greenhouse_business_hours: ({
+      greenhouse_business_hours?: ({
           id?: number;
           greenhouse_business_hour_periods: ({
               id?: number;
@@ -935,6 +955,43 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Flowerbed"];
+        };
+      };
+    };
+  };
+  statusFlowerbed: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this flowerbed. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["FlowerbedStatus"];
+        };
+      };
+    };
+  };
+  rentFlowerbed: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this flowerbed. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["CreateRent"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateRent"];
+        "multipart/form-data": components["schemas"]["CreateRent"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["CreateRent"];
         };
       };
     };

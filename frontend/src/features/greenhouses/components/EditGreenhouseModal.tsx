@@ -66,12 +66,9 @@ export const EditGreenhouseModal = ({
             },
         })
 
-    console.log(getValues())
-
     useEffect(() => {
         // Update data on form submit
         if (data) {
-            console.log("RESET")
             reset({
                 title: data.title!,
                 description: data.description!,
