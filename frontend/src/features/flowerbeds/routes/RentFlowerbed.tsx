@@ -11,6 +11,8 @@ import { toast } from "sonner"
 
 import * as z from "zod"
 import { useFlowerbedStatus } from "@/features/flowerbeds/hooks/useFlowerbedStatus"
+import { useProfile } from "@/features/auth/hooks/useProfile"
+import { useRentFlowerbed } from "@/features/flowerbeds/hooks/useRentFlowerbed"
 
 const RentFlowerbedHeader = () => {
     const { id } = useParams()
@@ -90,12 +92,6 @@ const schema = z
     )
 
 export const RentFlowerbed = () => {
-    const { id } = useParams()
-    const flowerbedId = id ? parseInt(id) : null
-    const { data, isLoading } = useFlowerbedDetail(flowerbedId)
-
-    console.log(data, isLoading)
-
     return (
         <div className="flex flex-col gap-4">
             <RentFlowerbedHeader />
@@ -109,7 +105,7 @@ const Step1 = () => {
     const flowerbedId = id ? parseInt(id) : null
     const { setCurrentStep, dateRange, setDateRange } = useMultistepFormStore()
     const { refetch } = useFlowerbedStatus(flowerbedId)
-    const { data } = useFlowerbedDetail(flowerbedId)
+    const { data, refetch: refetchDetail } = useFlowerbedDetail(flowerbedId)
 
     const [daysInBetween, setDaysInBetween] = useState<number | undefined>(
         undefined,
@@ -130,8 +126,6 @@ const Step1 = () => {
         setDaysInBetween(calculateDaysInBetween(dateRange))
     }, [dateRange])
 
-    console.log(daysInBetween)
-
     const goToNext = () => {
         const result = schema.safeParse(dateRange)
         console.log(result)
@@ -142,6 +136,7 @@ const Step1 = () => {
             return
         }
         refetch()
+        refetchDetail()
 
         setCurrentStep("step2")
     }
@@ -163,7 +158,7 @@ const Step1 = () => {
                 <p className="text-xl text-secondary">
                     {data &&
                         Number.parseFloat(data?.pricePerDay ?? "0") *
-                            daysInBetween!}
+                        daysInBetween!}
                 </p>
             </div>
             <div className="flex justify-between">
@@ -223,8 +218,22 @@ const Step1 = () => {
 // }
 
 const Step2 = () => {
+    const { id } = useParams()
+    const flowerbedId = id ? parseInt(id) : null
+    const { data } = useFlowerbedDetail(flowerbedId)
     const { dateRange, setCurrentStep } = useMultistepFormStore()
     const dateFormat = "dd.MM.yyyy"
+    const { mutate } = useRentFlowerbed()
+
+    const goToNext = () => {
+        mutate({
+            id: flowerbedId!,
+            data: {
+                rented_from: dateRange!.from!.toISOString(),
+                rented_to: dateRange!.to!.toISOString(),
+            },
+        })
+    }
 
     useEffect(() => {
         if (!dateRange || !dateRange.from || !dateRange.to) {
@@ -233,16 +242,79 @@ const Step2 = () => {
         }
     }, [dateRange])
 
+    const { data: profileData } = useProfile()
+    console.log(profileData)
+
+    const calculateDaysInBetween = (range: DateRange | undefined) => {
+        console.log(range)
+        if (!range) return 0
+        let val =
+            differenceInDays(
+                dateRange?.to || new Date(),
+                dateRange?.from || new Date(),
+            ) + 1
+        console.log(val)
+        return val
+    }
+
     return (
         <>
-            {dateRange && dateRange.from && dateRange.to && (
-                <div>
-                    {format(dateRange.from, dateFormat)} -{" "}
-                    {format(dateRange.to, dateFormat)}
+            <div className="lg:mx-24 mx-auto flex flex-col gap-4">
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
+                        <h2 className="text-xl font-bold">Full name: </h2>
+                        <p>
+                            {profileData?.first_name || "Test"}{" "}
+                            {profileData?.last_name || "User"}
+                        </p>
+                        <h2 className="text-xl font-bold">Email:</h2>
+                        <p>{profileData?.email || "test@email.com"}</p>
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-bold">Renting from:</h2>
+                        <p>{format(dateRange!.from!, dateFormat)}</p>
+                        <h2 className="text-xl font-bold">Renting to:</h2>
+                        <p>{format(dateRange!.to!, dateFormat)}</p>
+                    </div>
                 </div>
-            )}
-            <Button onPress={() => setCurrentStep("step1")}>Back</Button>
-            <Button onPress={() => setCurrentStep("step3")}>Next</Button>
+                <Divider />
+                {/* Price summary */}
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
+                        <h2 className="text-xl font-bold">Days:</h2>
+                        <p>
+                            {differenceInDays(
+                                dateRange?.to!,
+                                dateRange?.from!,
+                            ) + 1}
+                        </p>
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-bold">Price per day:</h2>
+                        <p>{Number.parseFloat(data?.pricePerDay ?? "0")}</p>
+                    </div>
+                </div>
+                <Divider />
+                <div className="grid grid-cols-2 gap-4">
+                    <div></div>
+                    <div className="flex flex-col">
+                        <h2 className="text-lg font-bold">Total:</h2>
+                        <p className="text-xl text-secondary">
+                            {data &&
+                                Number.parseFloat(data?.pricePerDay ?? "0") *
+                                calculateDaysInBetween(dateRange)}
+                        </p>
+                    </div>
+                </div>
+                <div className="flex justify-between">
+                    <Button onPress={() => setCurrentStep("step1")}>
+                        Previous
+                    </Button>
+                    <Button color="secondary" onPress={goToNext}>
+                        Confirm
+                    </Button>
+                </div>
+            </div>
         </>
     )
 }
@@ -256,9 +328,11 @@ const MultistepForm = () => {
     const { data: statusData } = useFlowerbedStatus(flowerbedId)
     const navigate = useNavigate()
 
+    console.log(statusData)
+
     useEffect(() => {
         if (statusData) {
-            if (statusData?.status === "rented") {
+            if (statusData?.status === "rented" && currentStep != "step3") {
                 toast.error("This flowerbed is already rented")
 
                 navigate(
@@ -271,31 +345,28 @@ const MultistepForm = () => {
     }, [statusData])
     return (
         <div>
-            <div className="flex justify-center gap-4">
+            <div className="flex justify-center gap-4 mb-2">
                 <div
-                    className={`${
-                        currentStep === "step1" ? "text-black" : "text-gray-300"
-                    }`}
+                    className={`${currentStep === "step1" ? "text-black" : "text-gray-300"
+                        }`}
                 >
                     Rent length
                 </div>
                 <div
-                    className={`${
-                        currentStep === "step2" ? "text-black" : "text-gray-500"
-                    }`}
+                    className={`${currentStep === "step2" ? "text-black" : "text-gray-500"
+                        }`}
                 >
                     Summary
                 </div>
                 <div
-                    className={`${
-                        currentStep === "step3" ? "text-black" : "text-gray-500"
-                    }`}
+                    className={`${currentStep === "step3" ? "text-black" : "text-gray-500"
+                        }`}
                 >
                     Payment
                 </div>
             </div>
             <Divider />
-            <div>
+            <div className="mt-4">
                 {currentStep === "step1" && <Step1 />}
                 {currentStep === "step2" && <Step2 />}
                 {currentStep === "step3" && <Step3 />}
