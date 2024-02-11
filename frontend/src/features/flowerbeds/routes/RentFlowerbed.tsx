@@ -1,6 +1,6 @@
 import { useFlowerbedDetail } from "@/features/flowerbeds/hooks/useFlowerbedDetail"
 import { useMultistepFormStore } from "@/features/flowerbeds/stores/useMultistepFormStore"
-import { Button, Divider } from "@nextui-org/react"
+import { Button, Divider, Image } from "@nextui-org/react"
 import { useNavigate, useParams } from "react-router-dom"
 import { DaySingleRangePickerWithInput } from "@/features/flowerbeds/components/DayRangePicker"
 import { DateRange } from "react-day-picker"
@@ -11,6 +11,64 @@ import { toast } from "sonner"
 
 import * as z from "zod"
 import { useFlowerbedStatus } from "@/features/flowerbeds/hooks/useFlowerbedStatus"
+
+const RentFlowerbedHeader = () => {
+    const { id } = useParams()
+    const flowerbedId = id ? parseInt(id) : null
+    const { data } = useFlowerbedDetail(flowerbedId)
+
+    return (
+        <div className="flex gap-4 flex-col sm:flex-row">
+            <div className="flex flex-1 sm:flex-none justify-center">
+                <div className="max-w-[400px] lg:max-w-[250px]">
+                    <Image
+                        classNames={{
+                            wrapper: "w-full",
+                            img: "w-full aspect-4/3",
+                        }}
+                        src={`https://placedog.net/800/600`}
+                    />
+                </div>
+            </div>
+            <div className="flex gap-2 justify-center">
+                <div className="flex flex-col gap-2">
+                    <h1 className="text-2xl font-bold">
+                        {data?.greenhouse.title}
+                    </h1>
+                    <p>{data?.name}</p>
+                    <div className="">
+                        <h3 className="text-lg font-semibold">Address</h3>
+                        <p>{data?.greenhouse.greenhouse_address.street}</p>
+                        <p>
+                            {data?.greenhouse.greenhouse_address.city}{" "}
+                            {data?.greenhouse.greenhouse_address.city_part &&
+                                `, ${data?.greenhouse.greenhouse_address.city_part}`}
+                        </p>
+                        <p>{data?.greenhouse.greenhouse_address.zipcode}</p>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <h3 className="text-lg font-semibold">Price</h3>
+                        <p>
+                            {data &&
+                                Number.parseFloat(
+                                    data?.pricePerDay ?? "0",
+                                )}{" "}
+                            CZK/day
+                        </p>
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-semibold">
+                            Minimal rent length
+                        </h3>
+                        <p>30 days</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
 
 // TODO: add min length of rent
 const schema = z
@@ -39,10 +97,10 @@ export const RentFlowerbed = () => {
     console.log(data, isLoading)
 
     return (
-        <>
-            Rent
+        <div className="flex flex-col gap-4">
+            <RentFlowerbedHeader />
             <MultistepForm />
-        </>
+        </div>
     )
 }
 
