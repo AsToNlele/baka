@@ -9,7 +9,7 @@ type FlowerbedListProps = {
 const FlowerbedStatus = ({ flowerbed }: { flowerbed: FlowerbedType }) => {
     if (flowerbed.disabled) {
         return "Disabled"
-    } else if (flowerbed.currentLease) {
+    } else if (flowerbed.currentRent) {
         return "Leased"
     } else {
         return "Available"

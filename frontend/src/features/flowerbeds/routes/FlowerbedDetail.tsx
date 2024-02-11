@@ -7,7 +7,7 @@ import { intlFormat } from "date-fns"
 export const FlowerbedDetail = () => {
     const { id } = useParams()
     const flowerbedId = id ? parseInt(id) : null
-    const { data, isLoading } = useFlowerbedDetail(flowerbedId)
+    const { data } = useFlowerbedDetail(flowerbedId)
 
     return (
         <>

@@ -7,7 +7,7 @@ import {
 import { useGreenhouseList } from "../hooks/useGreenhouseList"
 
 export const Greenhouses = () => {
-    const {data: greenhouses, isLoading } = useGreenhouseList()
+    const { data: greenhouses } = useGreenhouseList()
     const locationOptions = [
         {
             label: "Brno",
@@ -69,10 +69,7 @@ export const Greenhouses = () => {
                 </div>
                 <div className="grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-start">
                     {greenhouses?.results?.map((item, i) => (
-                        <Greenhouse
-                            item={item}
-                            key={i}
-                        />
+                        <Greenhouse item={item} key={i} />
                     ))}
                 </div>
             </div>

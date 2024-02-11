@@ -44,7 +44,7 @@ export const EditGreenhouseModal = ({
         greenhouse_business_hours: Array<BusinessHoursType>
     }
 
-    const { register, handleSubmit, reset, control, getValues } =
+    const { register, handleSubmit, reset, control } =
         useForm<EditGreenhouseInputs>({
             defaultValues: {
                 title: data?.title ?? "",
@@ -179,4 +179,3 @@ export const EditGreenhouseModal = ({
         </Modal>
     )
 }
-

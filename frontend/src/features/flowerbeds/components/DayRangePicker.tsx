@@ -2,7 +2,7 @@ import "react-day-picker/dist/style.css"
 import "./DayPicker.css"
 import { ChangeEventHandler, useEffect, useState, useRef } from "react"
 
-import { format, isAfter, isBefore, isValid, parse } from "date-fns"
+import { format, isAfter, isBefore, isValid, parse, startOfDay } from "date-fns"
 import { DateRange, DayPicker, SelectRangeEventHandler } from "react-day-picker"
 import { Divider, Input } from "@nextui-org/react"
 import { cs, enGB } from "date-fns/locale"
@@ -19,8 +19,19 @@ export const DaySingleRangePickerWithInput = ({
     range,
     onRangeChange,
 }: DaySingleRangePickerWithInputProps) => {
-    const fromValue = useRef<string>(format(new Date(), dateFormat))
-    const [toValue, setToValue] = useState<string>("")
+    const fromValue = useRef<string>(
+        format(
+            range && range?.from && isValid(range.from)
+                ? range.from
+                : startOfDay(new Date()),
+            dateFormat,
+        ),
+    )
+    const [toValue, setToValue] = useState<string>(
+        range && range?.to && isValid(range.to)
+            ? format(range.to, dateFormat)
+            : "",
+    )
 
     const handleToValueChange: ChangeEventHandler<HTMLInputElement> = (e) => {
         setToValue(e.target.value)
