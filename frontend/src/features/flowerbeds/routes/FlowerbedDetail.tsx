@@ -2,7 +2,7 @@ import { PageTitle } from "@/features/app/components/PageTitle"
 import { useFlowerbedDetail } from "@/features/flowerbeds/hooks/useFlowerbedDetail"
 import { Button, Card, CardBody, Image, Link } from "@nextui-org/react"
 import { useParams } from "react-router-dom"
-import { intlFormat } from "date-fns"
+import { parseIsoAndFormat } from "@/utils/utils"
 
 export const FlowerbedDetail = () => {
     const { id } = useParams()
@@ -16,20 +16,35 @@ export const FlowerbedDetail = () => {
                 backPath={`/app/greenhouses/${data?.greenhouse.id}?tab=flowerbeds`}
             />
 
-            <div className="flex flex-col sm:flex-row flex-wrap gap-2">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-2 mt-8">
                 <div className="flex-1 grid grid-cols-2 sm:grid-cols-2 gap-8 auto-rows-max">
                     <div className="">
-                        <h2 className="text-xl font-semibold">Leased</h2>
-                        <p>
-                            From{" "}
-                            {data?.currentLease &&
-                                intlFormat(data?.currentLease.leased_from)}
-                        </p>
-                        <p>
-                            To{" "}
-                            {data?.currentLease &&
-                                intlFormat(data?.currentLease.leased_to)}
-                        </p>
+                        {data?.currentRent ? (
+                            <>
+                                <h2 className="text-xl font-semibold">
+                                    Rented
+                                </h2>
+                                <h3 className="text-lg">From</h3>
+                                <p>
+                                    {parseIsoAndFormat(
+                                        data?.currentRent.rented_from,
+                                    )}
+                                </p>
+                                <h3 className="text-lg">To</h3>
+                                <p>
+                                    {parseIsoAndFormat( data?.currentRent.rented_to,
+                                    )}
+                                </p>
+                            </>
+                        ) : (
+                            <Button
+                                color="secondary"
+                                as={Link}
+                                href={`/app/flowerbeds/${data?.id}/rent`}
+                            >
+                                Rent
+                            </Button>
+                        )}
                     </div>
                     <div className="">
                         <h2 className="text-xl font-semibold">Dimensions</h2>

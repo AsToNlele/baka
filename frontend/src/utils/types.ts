@@ -30,9 +30,9 @@ export type TimePeriodType =
 export type FlowerbedType = components["schemas"]["Flowerbed"]
 export type FlowerbedDetailResponse =
     paths["/api/flowerbeds/{id}/"]["get"]["responses"][200]["content"]["application/json"] & {
-        currentLease: {
-            leased_from: string
-            leased_to: string
+        currentRent: {
+            rented_from: string
+            rented_to: string
         }
     }
 
