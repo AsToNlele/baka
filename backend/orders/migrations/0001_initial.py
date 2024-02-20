@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
                 ('status', models.CharField(blank=True, default='created', null=True)),
                 ('created_at', models.DateTimeField(blank=True, null=True)),
                 ('final_price', models.DecimalField(blank=True, decimal_places=5, max_digits=10, null=True)),
-                ('discounts', models.ManyToManyField(blank=True, to='ordering.discounts')),
+                ('discounts', models.ManyToManyField(blank=True, to='orders.discounts')),
                 ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, to='quickstart.profile')),
             ],
             options={
@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
                 ('status', models.CharField(blank=True, default='created', null=True)),
                 ('created_at', models.DateTimeField(blank=True, default=datetime.datetime(2024, 2, 7, 14, 44, 5, 102551), null=True)),
                 ('final_price', models.DecimalField(decimal_places=5, max_digits=10)),
-                ('discounts', models.ManyToManyField(blank=True, to='ordering.discounts')),
+                ('discounts', models.ManyToManyField(blank=True, to='orders.discounts')),
                 ('rent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, to='flowerbed.rent')),
                 ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, to='quickstart.profile')),
             ],

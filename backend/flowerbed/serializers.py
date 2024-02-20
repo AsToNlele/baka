@@ -4,7 +4,7 @@ from flowerbed.models import Flowerbed, Rent
 from greenhouse.models import Greenhouse, GreenhouseAddress
 from rest_framework import serializers
 
-from ordering.serializers import FlowerbedOrderSerializer
+from orders.serializers import FlowerbedOrderSerializer
 
 # from greenhouse.serializers import GreenhouseAddressSerializer
 

@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('flowerbed', '0013_alter_flowerbed_priceperday'),
-        ('ordering', '0001_initial'),
+        ('orders', '0001_initial'),
     ]
 
     operations = [

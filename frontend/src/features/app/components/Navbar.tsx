@@ -56,6 +56,10 @@ export const AppNavbar = () => {
             name: "Send Newsletter",
             href: "/app/newsletter",
         },
+        {
+            name: "Orders",
+            href: "/app/orders",
+        },
     ]
 
     const location = useLocation()
@@ -94,7 +98,7 @@ export const AppNavbar = () => {
                                 size="lg"
                                 color={
                                     location.pathname === item.href ||
-                                    `${location.pathname}/` === item.href
+                                        `${location.pathname}/` === item.href
                                         ? "secondary"
                                         : "foreground"
                                 }

@@ -82,6 +82,16 @@ export interface paths {
   "/api/flowerbeds/{id}/status/": {
     get: operations["statusFlowerbed"];
   };
+  "/api/orders/": {
+    get: operations["listOrders"];
+    post: operations["createOrder"];
+  };
+  "/api/orders/{id}/": {
+    get: operations["retrieveOrder"];
+    put: operations["updateOrder"];
+    delete: operations["destroyOrder"];
+    patch: operations["partialUpdateOrder"];
+  };
   "/api/auth/profile": {
     get: operations["listUsers"];
   };
@@ -241,6 +251,17 @@ export interface components {
     FlowerbedStatus: {
       /** @enum {string} */
       status: "rented" | "free";
+    };
+    Order: {
+      id?: number;
+      type?: string;
+      status?: string | null;
+      /** Format: date-time */
+      created_at?: string | null;
+      /** Format: decimal */
+      final_price?: string | null;
+      user?: number | null;
+      discounts?: number[];
     };
     CreateRent: {
       /** Format: date-time */
@@ -970,6 +991,123 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["FlowerbedStatus"];
+        };
+      };
+    };
+  };
+  listOrders: {
+    parameters: {
+      query?: {
+        /** @description A page number within the paginated result set. */
+        page?: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            /** @example 123 */
+            count?: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results?: components["schemas"]["Order"][];
+          };
+        };
+      };
+    };
+  };
+  createOrder: {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["Order"];
+        "application/x-www-form-urlencoded": components["schemas"]["Order"];
+        "multipart/form-data": components["schemas"]["Order"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["Order"];
+        };
+      };
+    };
+  };
+  retrieveOrder: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this order. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Order"];
+        };
+      };
+    };
+  };
+  updateOrder: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this order. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["Order"];
+        "application/x-www-form-urlencoded": components["schemas"]["Order"];
+        "multipart/form-data": components["schemas"]["Order"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Order"];
+        };
+      };
+    };
+  };
+  destroyOrder: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this order. */
+        id: string;
+      };
+    };
+    responses: {
+      204: {
+        content: never;
+      };
+    };
+  };
+  partialUpdateOrder: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this order. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["Order"];
+        "application/x-www-form-urlencoded": components["schemas"]["Order"];
+        "multipart/form-data": components["schemas"]["Order"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Order"];
         };
       };
     };

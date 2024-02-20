@@ -1,7 +1,6 @@
-from datetime import datetime
-
 from django.db import models
-from flowerbed.models import Rent 
+from rest_framework.fields import timezone
+from flowerbed.models import Rent
 from quickstart.models import Profile
 
 
@@ -21,31 +20,31 @@ class Discounts(models.Model):
         db_table = "discounts"
 
 
-class FlowerbedOrders(models.Model):
-    # rent = models.ForeignKey(Rent, models.DO_NOTHING, blank=True, null=True)
-    rent = models.OneToOneField(Rent, on_delete=models.DO_NOTHING, blank=True, null=True)
+class Order(models.Model):
     user = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
     status = models.CharField(default="created", blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
     final_price = models.DecimalField(
-        max_digits=10, decimal_places=5, blank=False, null=False
-    )  
+        max_digits=10, decimal_places=5, blank=True, null=True
+    )
     discounts = models.ManyToManyField(Discounts, blank=True)
+
+    class Meta:
+        db_table = "orders"
+        db_table_comment = 'There"s flowerbed orders and product_orders'
+
+
+class FlowerbedOrders(Order):
+    rent = models.OneToOneField(
+        Rent, on_delete=models.DO_NOTHING, blank=True, null=True
+    )
 
     class Meta:
         db_table = "flowerbed_orders"
         db_table_comment = 'There"s flowerbed orders and product_orders'
 
 
-class ProductOrders(models.Model):
-    user = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
-    status = models.CharField(default="created", blank=True, null=True)
-    created_at = models.DateTimeField(blank=True, null=True)
-    final_price = models.DecimalField(
-        max_digits=10, decimal_places=5, blank=True, null=True
-    )  # max_digits and decimal_places have been guessed, as this database handles decimal fields as float
-    discounts = models.ManyToManyField(Discounts, blank=True)
-
+class ProductOrders(Order):
     class Meta:
         db_table = "product_orders"
         db_table_comment = 'There"s flowerbed orders and product_orders'

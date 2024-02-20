@@ -156,13 +156,13 @@ export const GreenhouseDetail = () => {
                                 <h2 className="text-lg font-semibold mb-2">
                                     Address
                                 </h2>
-                                <p>{data.greenhouse_address.street}</p>
+                                <p>{data?.greenhouse_address?.street}</p>
                                 <p>
-                                    {data.greenhouse_address.city}{" "}
-                                    {data.greenhouse_address.city_part &&
-                                        `, ${data.greenhouse_address.city_part}`}
+                                    {data?.greenhouse_address?.city}{" "}
+                                    {data?.greenhouse_address?.city_part &&
+                                        `, ${data.greenhouse_address?.city_part}`}
                                 </p>
-                                <p>{data.greenhouse_address.zipcode}</p>
+                                <p>{data?.greenhouse_address?.zipcode}</p>
                             </div>
                         </div>
                     </div>

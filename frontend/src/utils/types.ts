@@ -21,8 +21,10 @@ type GreenhouseAddressWId =
     components["schemas"]["Greenhouse"]["greenhouse_address"]
 export type GreenhouseAddressType = Omit<GreenhouseAddressWId, "id">
 
-export type BusinessHoursType =
-    Exclude<EditGreenhouseRequest["greenhouse_business_hours"], undefined>[0]
+export type BusinessHoursType = Exclude<
+    EditGreenhouseRequest["greenhouse_business_hours"],
+    undefined
+>[0]
 
 export type TimePeriodType =
     BusinessHoursType["greenhouse_business_hour_periods"][0]
@@ -38,3 +40,24 @@ export type FlowerbedDetailResponse =
 
 export type FlowerbedStatusResponse =
     paths["/api/flowerbeds/{id}/status/"]["get"]["responses"][200]["content"]["application/json"]
+
+export type OrderType = components["schemas"]["Order"]
+
+type RentType = Exclude<components["schemas"]["Flowerbed"]["rents"], undefined>[0]
+
+export type FlowerbedOrderType = components["schemas"]["Order"] & {
+    type: "flowerbed"
+    rent: RentType & {
+        flowerbed: Omit<FlowerbedType, "currentRent" | "rents">
+    }
+}
+
+export type ProductOrderType = Omit<components["schemas"]["Order"], "type"> & {
+    type: "product"
+    // TBD
+    // product: components["schemas"]["Product"]
+}
+
+export type OrdersListResponse = Array<FlowerbedOrderType | ProductOrderType>
+
+export type OrderDetailResponse = FlowerbedOrderType | ProductOrderType

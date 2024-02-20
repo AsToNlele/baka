@@ -19,7 +19,7 @@ export const FlowerbedDetail = () => {
             <div className="flex flex-col sm:flex-row flex-wrap gap-2 mt-8">
                 <div className="flex-1 grid grid-cols-2 sm:grid-cols-2 gap-8 auto-rows-max">
                     <div className="">
-                        {data?.currentRent ? (
+                        {!data ? <div></div>: data?.currentRent ? (
                             <>
                                 <h2 className="text-xl font-semibold">
                                     Rented
