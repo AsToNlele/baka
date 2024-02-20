@@ -10,10 +10,10 @@ class Discounts(models.Model):
     valid_to = models.DateTimeField(blank=True, null=True)
     type = models.CharField(blank=True, null=True)
     percentage = models.DecimalField(
-        max_digits=10, decimal_places=5, blank=True, null=True
+        max_digits=10, decimal_places=2, blank=True, null=True
     )  # max_digits and decimal_places have been guessed, as this database handles decimal fields as float
     sum = models.DecimalField(
-        max_digits=10, decimal_places=5, blank=True, null=True
+        max_digits=10, decimal_places=2, blank=True, null=True
     )  # max_digits and decimal_places have been guessed, as this database handles decimal fields as float
 
     class Meta:
@@ -25,7 +25,7 @@ class Order(models.Model):
     status = models.CharField(default="created", blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
     final_price = models.DecimalField(
-        max_digits=10, decimal_places=5, blank=True, null=True
+        max_digits=10, decimal_places=2, blank=True, null=True
     )
     discounts = models.ManyToManyField(Discounts, blank=True)
 

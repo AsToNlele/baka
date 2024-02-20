@@ -10,12 +10,26 @@
 
 
 ### Dev
+
+#### Docker
 1. `docker-compose -f docker-compose.yml up -d --build`
-2. `cd frontend`
-3. `pnpm dev --host`
-4. `cd ../backend`
-5. `pip install -r requirements.txt`
-6. `python manage.py runserver`
+
+#### Backend
+1. `cd ../backend`
+2. Verify .env
+3. `pip install -r requirements.txt`
+4. `python manage.py runserver`
+
+#### Celery for scheduled tasks
+1. Start celery worker
+`celery -A myproject worker --loglevel=INFO`
+
+2. Start celery beat scheduler
+`celery -A myproject beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler\n`
+
+#### Frontend
+1. `cd frontend`
+2. `pnpm dev --host`
 
 
 #### Backend run migrations, superuser etc
