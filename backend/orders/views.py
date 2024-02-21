@@ -1,5 +1,6 @@
+from greenhouse.models import Greenhouse
 from orders.models import FlowerbedOrders, Order
-from orders.serializers import FlowerbedOrderSerializer, OrderSerializer
+from orders.serializers import FlowerbedOrderSerializer, OrderSerializer, PaymentSerializer
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -38,3 +39,21 @@ class OrderViewSet(viewsets.ModelViewSet):
         else:
             serializer = OrderSerializer(order)
             return Response(serializer.data)
+
+    @action(detail=True, methods=['get'], serializer_class=PaymentSerializer )
+    def get_payment(self, request, pk=None):
+        order = Order.objects.get(id=pk)
+        if hasattr(order, "flowerbedorders"):
+            flowerbed_order = FlowerbedOrders.objects.get(id=pk)
+            if flowerbed_order.status != "created":
+                return Response({"error": "Order is already paid"})
+            bankAccountNumber = flowerbed_order.rent.flowerbed.greenhouse.bank_account_number
+            payment_serializer = PaymentSerializer(data={"vs": order.id, "receiver": bankAccountNumber, "amount": flowerbed_order.final_price})
+            if payment_serializer.is_valid():
+                return Response(payment_serializer.data)
+            else:
+                return Response(payment_serializer.errors)
+        else:
+            serializer = OrderSerializer(order)
+            return Response(serializer.data)
+        

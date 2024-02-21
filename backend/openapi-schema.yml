@@ -1127,6 +1127,26 @@ paths:
           description: ''
       tags:
       - api
+  /api/orders/{id}/get_payment/:
+    get:
+      operationId: getPaymentOrder
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this order.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+          description: ''
+      tags:
+      - api
   /api/auth/profile:
     get:
       operationId: listUsers
@@ -1533,6 +1553,9 @@ components:
           nullable: true
         published:
           type: boolean
+        bank_account_number:
+          type: string
+          nullable: true
         owner:
           type: integer
         caretaker:
@@ -1669,13 +1692,12 @@ components:
         created_at:
           type: string
           format: date-time
-          nullable: true
         final_price:
           type: string
           format: decimal
-          multipleOf: 1.0e-05
-          maximum: 100000
-          minimum: -100000
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
           nullable: true
         user:
           type: integer
@@ -1684,6 +1706,23 @@ components:
           type: array
           items:
             type: integer
+    Payment:
+      type: object
+      properties:
+        receiver:
+          type: string
+        vs:
+          type: integer
+        amount:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+      required:
+      - receiver
+      - vs
+      - amount
     CreateRent:
       type: object
       properties:

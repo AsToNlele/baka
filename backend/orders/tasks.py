@@ -45,7 +45,10 @@ def get_bank_statement():
             amount = Decimal(amount.get("value"))
         if variableSymbol:
             variableSymbol = int(variableSymbol.get("value"))
-            order = Order.objects.get(id=variableSymbol)
+            try: 
+                order = Order.objects.get(id=variableSymbol)
+            except Order.DoesNotExist:
+                order = None
             if order:
                 if order.status == "created":
                     finalPriceConverted = str(order.final_price)

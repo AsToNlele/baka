@@ -61,6 +61,7 @@ class Greenhouse(models.Model):
     caretaker = models.ForeignKey(
         Profile, models.DO_NOTHING, blank=True, null=True, related_name="caretaker"
     )
+    bank_account_number = models.CharField(blank=True, null=True)
 
     class Meta:
         db_table = "greenhouses"

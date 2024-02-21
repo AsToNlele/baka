@@ -47,3 +47,8 @@ class FlowerbedOrderSerializer(serializers.ModelSerializer):
     def get_type(self, obj):
         return "flowerbed"
 
+class PaymentSerializer(serializers.Serializer):
+    receiver = serializers.CharField()
+    vs = serializers.IntegerField()
+    amount = serializers.DecimalField(max_digits=10, decimal_places=2)
+    
