@@ -3,6 +3,7 @@ import { useOrderDetail } from "@/features/orders/hooks/useOrderDetail"
 import { parseIsoAndFormat, upperCaseFirstLetter } from "@/utils/utils"
 import { Divider } from "@nextui-org/react"
 import { useParams } from "react-router-dom"
+import { QRPaymentStandalone } from "@/features/orders/components/QRPayment"
 
 export const OrderDetail = () => {
     const { id } = useParams()
@@ -22,7 +23,7 @@ export const OrderDetail = () => {
                         </p>
                         <p className="text-sm">Order ID: {data.id}</p>
                     </div>
-                    <Divider />
+                    <Divider />{" "}
                     <div className="flex gap-4">
                         {data.type === "flowerbed" ? (
                             <div className="flex gap-4">
@@ -37,13 +38,13 @@ export const OrderDetail = () => {
                                     <p>
                                         Rented from{" "}
                                         {parseIsoAndFormat(
-                                            data?.rent?.rented_from!,
+                                            data.rent.rented_from!,
                                         )}
                                     </p>
                                     <p>
                                         Rented to{" "}
                                         {parseIsoAndFormat(
-                                            data?.rent?.rented_to!,
+                                            data.rent.rented_to!,
                                         )}
                                     </p>
                                 </div>
@@ -55,6 +56,7 @@ export const OrderDetail = () => {
                     </div>
                 </div>
             ) : null}
+            {orderId && <QRPaymentStandalone orderId={orderId} />}
         </div>
     )
 }

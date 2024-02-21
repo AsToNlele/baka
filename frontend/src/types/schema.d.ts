@@ -92,6 +92,9 @@ export interface paths {
     delete: operations["destroyOrder"];
     patch: operations["partialUpdateOrder"];
   };
+  "/api/orders/{id}/get_payment/": {
+    get: operations["getPaymentOrder"];
+  };
   "/api/auth/profile": {
     get: operations["listUsers"];
   };
@@ -208,6 +211,7 @@ export interface components {
       description?: string | null;
       rules?: string | null;
       published?: boolean;
+      bank_account_number?: string | null;
       owner: number;
       caretaker?: number | null;
     };
@@ -257,11 +261,17 @@ export interface components {
       type?: string;
       status?: string | null;
       /** Format: date-time */
-      created_at?: string | null;
+      created_at?: string;
       /** Format: decimal */
       final_price?: string | null;
       user?: number | null;
       discounts?: number[];
+    };
+    Payment: {
+      receiver: string;
+      vs: number;
+      /** Format: decimal */
+      amount: string;
     };
     CreateRent: {
       /** Format: date-time */
@@ -1108,6 +1118,21 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Order"];
+        };
+      };
+    };
+  };
+  getPaymentOrder: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this order. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Payment"];
         };
       };
     };

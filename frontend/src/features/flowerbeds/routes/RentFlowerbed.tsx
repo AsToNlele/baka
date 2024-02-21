@@ -13,6 +13,8 @@ import * as z from "zod"
 import { useFlowerbedStatus } from "@/features/flowerbeds/hooks/useFlowerbedStatus"
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { useRentFlowerbed } from "@/features/flowerbeds/hooks/useRentFlowerbed"
+import { Loading } from "@/components/Loading"
+import { QRPaymentStandalone } from "@/features/orders/components/QRPayment"
 
 const RentFlowerbedHeader = () => {
     const { id } = useParams()
@@ -103,7 +105,8 @@ export const RentFlowerbed = () => {
 const Step1 = () => {
     const { id } = useParams()
     const flowerbedId = id ? parseInt(id) : null
-    const { setCurrentStep, dateRange, setDateRange } = useMultistepFormStore()
+    const { setCurrentStep, dateRange, setDateRange, setOrderId } =
+        useMultistepFormStore()
     const { refetch } = useFlowerbedStatus(flowerbedId)
     const { data, refetch: refetchDetail } = useFlowerbedDetail(flowerbedId)
 
@@ -115,12 +118,11 @@ const Step1 = () => {
         const calculateDaysInBetween = (range: DateRange | undefined) => {
             console.log(range)
             if (!range) return undefined
-            let val =
+            const val =
                 differenceInDays(
                     dateRange?.to || new Date(),
                     dateRange?.from || new Date(),
                 ) + 1
-            console.log(val)
             return val
         }
         setDaysInBetween(calculateDaysInBetween(dateRange))
@@ -138,6 +140,7 @@ const Step1 = () => {
         refetch()
         refetchDetail()
 
+        setOrderId(null)
         setCurrentStep("step2")
     }
 
@@ -246,9 +249,8 @@ const Step2 = () => {
     console.log(profileData)
 
     const calculateDaysInBetween = (range: DateRange | undefined) => {
-        console.log(range)
         if (!range) return 0
-        let val =
+        const val =
             differenceInDays(
                 dateRange?.to || new Date(),
                 dateRange?.from || new Date(),
@@ -284,8 +286,8 @@ const Step2 = () => {
                         <h2 className="text-xl font-bold">Days:</h2>
                         <p>
                             {differenceInDays(
-                                dateRange?.to!,
-                                dateRange?.from!,
+                                dateRange!.to!,
+                                dateRange!.from!,
                             ) + 1}
                         </p>
                     </div>
@@ -318,7 +320,17 @@ const Step2 = () => {
         </>
     )
 }
-const Step3 = () => <>Step3</>
+const Step3 = () => {
+    const { orderId } = useMultistepFormStore()
+    if (!orderId) {
+        return <Loading />
+    }
+    return (
+        <>
+            <QRPaymentStandalone orderId={orderId} />
+        </>
+    )
+}
 
 const MultistepForm = () => {
     const { id } = useParams()

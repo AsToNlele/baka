@@ -61,3 +61,5 @@ export type ProductOrderType = Omit<components["schemas"]["Order"], "type"> & {
 export type OrdersListResponse = Array<FlowerbedOrderType | ProductOrderType>
 
 export type OrderDetailResponse = FlowerbedOrderType | ProductOrderType
+
+export type OrderPaymentResponse = paths["/api/orders/{id}/get_payment/"]["get"]["responses"][200]["content"]["application/json"]

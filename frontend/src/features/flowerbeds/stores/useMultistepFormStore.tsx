@@ -8,6 +8,9 @@ type MultistepFormStore = {
 
     dateRange: DateRange | undefined
     setDateRange: (dateRange: DateRange | undefined) => void
+
+    orderId: number | null
+    setOrderId: (orderId: number | null) => void
 }
 
 export const useMultistepFormStore = create<MultistepFormStore>()(
@@ -17,5 +20,8 @@ export const useMultistepFormStore = create<MultistepFormStore>()(
 
         dateRange: undefined,
         setDateRange: (dateRange) => set({ dateRange }),
+
+        orderId: null,
+        setOrderId: (orderId) => set({ orderId }),
     })),
 )
