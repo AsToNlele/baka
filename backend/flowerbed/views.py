@@ -85,7 +85,7 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         if rentedFrom is None or rentedTo is None:
             return Response({"error": "Invalid date format"}, status=400)
 
-        orderedDays = (rentedFrom - rentedTo).days
+        orderedDays = (rentedFrom - rentedTo).days + 1
 
         finalPrice = flowerbed.pricePerDay * orderedDays
 
