@@ -4,6 +4,7 @@ export const AddressFields = ({
     register,
     data,
 }: {
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
     register: any
     data: any
 }) => {
@@ -39,7 +40,8 @@ export const AddressFields = ({
                 placeholder="Zipcode"
                 {...register("greenhouse_address.zipcode")}
                 defaultValue={data?.greenhouse_address.zipcode ?? ""}
-            /> <Input
+            />{" "}
+            <Input
                 label="Latitude"
                 placeholder="Latitude"
                 {...register("greenhouse_address.latitude")}

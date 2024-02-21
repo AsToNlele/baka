@@ -3,12 +3,10 @@ import { api } from "../../../utils/api"
 import { FlowerbedStatusResponse } from "utils/types"
 
 const flowerbedStatus = async (id: number) => {
-    console.log('flowerbedStatus', id)
-    let res = api
+    const res = api
         .get(`/flowerbeds/${id}/status/`)
         .then((res) => res.data)
         .then((data: FlowerbedStatusResponse) => data)
-    console.log('flowerbedStatus', res)
     return res
 }
 

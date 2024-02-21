@@ -6,6 +6,7 @@ export const BusinessHours = ({
     onChange,
     value,
 }: {
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
     onChange: (data: any) => void
     value: Array<BusinessHoursType>
 }) => {
@@ -42,7 +43,7 @@ export const BusinessHours = ({
     }
 
     const handlePeriodRemove = (day: number, index: number) => {
-        let tempDays = [...value]
+        const tempDays = [...value]
         const filteredPeriods = tempDays
             .find((d) => d.day === day)!
             .greenhouse_business_hour_periods.filter((_, i) => i !== index)
@@ -57,7 +58,7 @@ export const BusinessHours = ({
         type: timeType,
         inputValue: string,
     ) => {
-        let tempDays = [...value]
+        const tempDays = [...value]
         if (type === "from") {
             tempDays.find(
                 (d) => d.day === day,
