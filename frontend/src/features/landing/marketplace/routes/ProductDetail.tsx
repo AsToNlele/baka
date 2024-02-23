@@ -37,7 +37,10 @@ export const ProductDetail = () => {
                 {listings && (
                     <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                         {listings.map((listing) => (
-                            <ProductListing listing={listing} key={listing.id} />
+                            <ProductListing
+                                listing={listing}
+                                key={listing.id}
+                            />
                         ))}
                     </div>
                 )}
@@ -69,12 +72,12 @@ const ProductListing = ({ listing }: ProductListingProps) => {
                     </div>
                     <div className="flex flex-col">
                         <p className="text-default-500">${listing.price}</p>
-                        <p className="text-default-500">{listing.quantity} available</p>
+                        <p className="text-default-500">
+                            {listing.quantity} available
+                        </p>
                     </div>
                 </div>
-                <div className="flex">
-                    {/* TODO ADD TO CART */}
-                </div>
+                <div className="flex">{/* TODO ADD TO CART */}</div>
             </CardFooter>
         </Card>
     )

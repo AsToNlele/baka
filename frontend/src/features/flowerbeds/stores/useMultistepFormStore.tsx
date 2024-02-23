@@ -23,5 +23,5 @@ export const useMultistepFormStore = create<MultistepFormStore>()(
 
         orderId: null,
         setOrderId: (orderId) => set({ orderId }),
-    })),
+    }))
 )

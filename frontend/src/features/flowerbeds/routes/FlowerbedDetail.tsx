@@ -19,7 +19,9 @@ export const FlowerbedDetail = () => {
             <div className="flex flex-col sm:flex-row flex-wrap gap-2 mt-8">
                 <div className="flex-1 grid grid-cols-2 sm:grid-cols-2 gap-8 auto-rows-max">
                     <div className="">
-                        {!data ? <div></div>: data?.currentRent ? (
+                        {!data ? (
+                            <div></div>
+                        ) : data?.currentRent ? (
                             <>
                                 <h2 className="text-xl font-semibold">
                                     Rented
@@ -27,12 +29,13 @@ export const FlowerbedDetail = () => {
                                 <h3 className="text-lg">From</h3>
                                 <p>
                                     {parseIsoAndFormat(
-                                        data?.currentRent.rented_from,
+                                        data?.currentRent.rented_from
                                     )}
                                 </p>
                                 <h3 className="text-lg">To</h3>
                                 <p>
-                                    {parseIsoAndFormat( data?.currentRent.rented_to,
+                                    {parseIsoAndFormat(
+                                        data?.currentRent.rented_to
                                     )}
                                 </p>
                             </>

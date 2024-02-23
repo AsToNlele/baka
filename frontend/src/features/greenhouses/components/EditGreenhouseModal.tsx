@@ -34,7 +34,6 @@ export const EditGreenhouseModal = ({
     const { data } = useGreenhouseDetail(greenhouseId)
     const editGreenhouse = useEditGreenhouse()
 
-
     type EditGreenhouseInputs = {
         title: string
         description: string
@@ -86,7 +85,7 @@ export const EditGreenhouseModal = ({
     const submit = () => {
         handleSubmit(onSubmit)()
     }
-    
+
     if (!greenhouseId) return null
 
     return (

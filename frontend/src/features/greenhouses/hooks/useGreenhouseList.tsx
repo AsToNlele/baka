@@ -3,7 +3,10 @@ import { api } from "../../../utils/api"
 import { GreenhouseListResponse } from "utils/types"
 
 const greenhouseList = async () => {
-    return api.get("/greenhouses").then((res) => res.data).then((data: GreenhouseListResponse) => data)
+    return api
+        .get("/greenhouses")
+        .then((res) => res.data)
+        .then((data: GreenhouseListResponse) => data)
 }
 
 export const useGreenhouseList = () => {

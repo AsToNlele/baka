@@ -15,7 +15,7 @@ export const useFlowerbedStatus = (id: number | null) => {
         queryKey: ["flowerbedStatus", id],
         queryFn: () => flowerbedStatus(id as number),
         retry: 0,
-        enabled: typeof id === 'number' && !isNaN(id),
+        enabled: typeof id === "number" && !isNaN(id),
     })
     return query
 }

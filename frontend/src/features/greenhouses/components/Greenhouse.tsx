@@ -6,7 +6,7 @@ const StarRating = ({ rating }: { rating: number }) => {
     const ratingToArray = Array(5)
         .fill(0)
         .map((_, index) =>
-            rating - index >= 1 ? 1 : rating - index >= 0.5 ? 0.5 : 0,
+            rating - index >= 1 ? 1 : rating - index >= 0.5 ? 0.5 : 0
         )
 
     return (
@@ -36,10 +36,7 @@ const FreePlaces = ({ count }: { count: number }) =>
     )
 
 export const Greenhouse = ({ item }: { item: GreenhouseType }) => {
-    const {
-        title,
-        greenhouse_address,
-    } = item
+    const { title, greenhouse_address } = item
 
     const rating = Math.round(Math.random() * 5 * 10) / 10 + 1
     const freePlaces = Math.floor(Math.random() * 5)
@@ -49,7 +46,13 @@ export const Greenhouse = ({ item }: { item: GreenhouseType }) => {
         : "Brno, Cernovice"
 
     return (
-        <Card shadow="sm" isPressable className="h-full" as={Link} href={`greenhouses/${item.id}?tab=flowerbeds`}>
+        <Card
+            shadow="sm"
+            isPressable
+            className="h-full"
+            as={Link}
+            href={`greenhouses/${item.id}?tab=flowerbeds`}
+        >
             <CardBody className="overflow-visible p-0">
                 <Image
                     shadow="sm"

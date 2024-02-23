@@ -10,8 +10,7 @@ export const queryConfig = {
                 if (!error?.request?.responseURL?.includes("/auth/profile")) {
                     if (error && error?.response?.data?.detail) {
                         toast.error(error.response.data.detail)
-                    }
-                    else if (error && error?.message) {
+                    } else if (error && error?.message) {
                         toast.error(error.message)
                     }
                 }
@@ -33,12 +32,12 @@ export const queryConfig = {
                     console.log(
                         error.response.data[
                             Object.keys(error.response.data)[0]
-                        ][0],
+                        ][0]
                     )
                     toast.error(
                         error.response.data[
                             Object.keys(error.response.data)[0]
-                        ][0],
+                        ][0]
                     )
                 }
             }

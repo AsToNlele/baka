@@ -98,7 +98,7 @@ export const AppNavbar = () => {
                                 size="lg"
                                 color={
                                     location.pathname === item.href ||
-                                        `${location.pathname}/` === item.href
+                                    `${location.pathname}/` === item.href
                                         ? "secondary"
                                         : "foreground"
                                 }

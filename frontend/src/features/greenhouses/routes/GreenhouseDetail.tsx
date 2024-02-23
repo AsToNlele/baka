@@ -82,7 +82,7 @@ export const GreenhouseDetail = () => {
             0,
             0,
             parseInt(timeString.split(":")[0]),
-            parseInt(timeString.split(":")[1]),
+            parseInt(timeString.split(":")[1])
         )
         return format(date, "HH:mm")
         // const [hours, minutes] = timeString.split(":")
@@ -133,14 +133,14 @@ export const GreenhouseDetail = () => {
                                                 (period) => (
                                                     <p>
                                                         {formatTime(
-                                                            period.open,
+                                                            period.open
                                                         )}{" "}
                                                         -{" "}
                                                         {formatTime(
-                                                            period.close,
+                                                            period.close
                                                         )}
                                                     </p>
-                                                ),
+                                                )
                                             )}
                                         </div>
                                     </div>

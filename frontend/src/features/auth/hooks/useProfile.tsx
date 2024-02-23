@@ -3,7 +3,10 @@ import { api } from "../../../utils/api"
 import { ProfileType } from "@/utils/types"
 
 const profile = async () => {
-    return api.get("/auth/profile").then((res) => res.data).then((data: ProfileType) => data)
+    return api
+        .get("/auth/profile")
+        .then((res) => res.data)
+        .then((data: ProfileType) => data)
 }
 
 export const useProfile = () => {

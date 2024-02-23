@@ -39,13 +39,13 @@ export const OrderDetail = () => {
                                     <p>
                                         Rented from{" "}
                                         {parseIsoAndFormat(
-                                            data.rent.rented_from!,
+                                            data.rent.rented_from!
                                         )}
                                     </p>
                                     <p>
                                         Rented to{" "}
                                         {parseIsoAndFormat(
-                                            data.rent.rented_to!,
+                                            data.rent.rented_to!
                                         )}
                                     </p>
                                 </div>
@@ -59,7 +59,7 @@ export const OrderDetail = () => {
             ) : null}
             {orderId && (
                 <div className="flex flex-col gap-4">
-                    <QRPaymentStandalone orderId={orderId} /> 
+                    <QRPaymentStandalone orderId={orderId} />
                     <AwaitPayment orderId={orderId} />
                 </div>
             )}

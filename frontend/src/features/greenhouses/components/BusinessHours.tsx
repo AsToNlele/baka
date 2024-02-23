@@ -56,16 +56,16 @@ export const BusinessHours = ({
         day: number,
         index: number,
         type: timeType,
-        inputValue: string,
+        inputValue: string
     ) => {
         const tempDays = [...value]
         if (type === "from") {
             tempDays.find(
-                (d) => d.day === day,
+                (d) => d.day === day
             )!.greenhouse_business_hour_periods[index].open = inputValue
         } else {
             tempDays.find(
-                (d) => d.day === day,
+                (d) => d.day === day
             )!.greenhouse_business_hour_periods[index].close = inputValue
         }
         onChange(tempDays)
@@ -115,7 +115,7 @@ export const BusinessHours = ({
                                                     day.day,
                                                     index,
                                                     "from",
-                                                    inputValue.target.value,
+                                                    inputValue.target.value
                                                 )
                                             }
                                         />
@@ -130,7 +130,7 @@ export const BusinessHours = ({
                                                     day.day,
                                                     index,
                                                     "to",
-                                                    inputValue.target.value,
+                                                    inputValue.target.value
                                                 )
                                             }
                                         />
@@ -153,7 +153,7 @@ export const BusinessHours = ({
                                                 onPress={() =>
                                                     handlePeriodRemove(
                                                         day.day,
-                                                        index,
+                                                        index
                                                     )
                                                 }
                                             >
@@ -161,7 +161,7 @@ export const BusinessHours = ({
                                             </Button>
                                         )}
                                     </div>
-                                ),
+                                )
                             )}
                         </div>
                     </div>

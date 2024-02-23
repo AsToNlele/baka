@@ -3,7 +3,10 @@ import { useQuery } from "@tanstack/react-query"
 import { OrdersListResponse } from "utils/types"
 
 const orderList = async () => {
-    return api.get("/orders").then((res) => res.data).then((data: OrdersListResponse) => data)
+    return api
+        .get("/orders")
+        .then((res) => res.data)
+        .then((data: OrdersListResponse) => data)
 }
 
 export const useOrderList = () => {

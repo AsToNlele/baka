@@ -14,7 +14,7 @@ export const useFlowerbedDetail = (id: number | null) => {
         queryKey: ["flowerbedList", id],
         queryFn: () => flowerbedDetail(id as number),
         retry: 0,
-        enabled: typeof id === 'number' && !isNaN(id),
+        enabled: typeof id === "number" && !isNaN(id),
     })
     return query
 }

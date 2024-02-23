@@ -43,7 +43,10 @@ export type FlowerbedStatusResponse =
 
 export type OrderType = components["schemas"]["Order"]
 
-type RentType = Exclude<components["schemas"]["Flowerbed"]["rents"], undefined>[0]
+type RentType = Exclude<
+    components["schemas"]["Flowerbed"]["rents"],
+    undefined
+>[0]
 
 export type FlowerbedOrderType = components["schemas"]["Order"] & {
     type: "flowerbed"
@@ -62,23 +65,37 @@ export type OrdersListResponse = Array<FlowerbedOrderType | ProductOrderType>
 
 export type OrderDetailResponse = FlowerbedOrderType | ProductOrderType
 
-export type OrderPaymentResponse = paths["/api/orders/{id}/get_payment/"]["get"]["responses"][200]["content"]["application/json"]
+export type OrderPaymentResponse =
+    paths["/api/orders/{id}/get_payment/"]["get"]["responses"][200]["content"]["application/json"]
 
-export type ProductListResponse = Exclude<paths["/api/marketplace/products/"]["get"]["responses"][200]["content"]["application/json"]["results"], undefined>
-
+export type ProductListResponse = Exclude<
+    paths["/api/marketplace/products/"]["get"]["responses"][200]["content"]["application/json"]["results"],
+    undefined
+>
 
 export type ProductType = components["schemas"]["Product"]
 
-export type ProductDetailResponse = paths["/api/marketplace/products/{id}/"]["get"]["responses"][200]["content"]["application/json"]
+export type ProductDetailResponse =
+    paths["/api/marketplace/products/{id}/"]["get"]["responses"][200]["content"]["application/json"]
 
-export type ProductListingsListResponse = Array<components["schemas"]["ProductDetailMarketplaceProduct"]>
+export type ProductListingsListResponse = Array<
+    components["schemas"]["ProductDetailMarketplaceProduct"]
+>
 
-export type ProductListingType = components["schemas"]["ProductDetailMarketplaceProduct"]
+export type ProductListingType =
+    components["schemas"]["ProductDetailMarketplaceProduct"]
 
-export type SharedProductListResponse = Exclude<paths["/api/marketplace/shared-products/"]["get"]["responses"][200]["content"]["application/json"]["results"], undefined>
+export type SharedProductListResponse = Exclude<
+    paths["/api/marketplace/shared-products/"]["get"]["responses"][200]["content"]["application/json"]["results"],
+    undefined
+>
 
-export type SharedProductDetailResponse = paths["/api/marketplace/shared-products/{id}/"]["get"]["responses"][200]["content"]["application/json"]
+export type SharedProductDetailResponse =
+    paths["/api/marketplace/shared-products/{id}/"]["get"]["responses"][200]["content"]["application/json"]
 
-export type GreenhouseProductListResponse = Exclude<paths["/api/marketplace/greenhouses/{id}/products"]["get"]["responses"][200]["content"]["application/json"]["results"], undefined>
+export type GreenhouseProductListResponse = Exclude<
+    paths["/api/marketplace/greenhouses/{id}/products"]["get"]["responses"][200]["content"]["application/json"]["results"],
+    undefined
+>
 
 export type GreenhouseProductType = components["schemas"]["MarketplaceProduct"]

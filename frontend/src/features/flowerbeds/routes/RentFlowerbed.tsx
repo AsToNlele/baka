@@ -58,7 +58,7 @@ const RentFlowerbedHeader = () => {
                         <p>
                             {data &&
                                 Number.parseFloat(
-                                    data?.pricePerDay ?? "0",
+                                    data?.pricePerDay ?? "0"
                                 )}{" "}
                             CZK/day
                         </p>
@@ -83,15 +83,15 @@ const schema = z
     })
     .refine(
         (schema) => schema.from <= schema.to,
-        "'From' has to be before 'To'",
+        "'From' has to be before 'To'"
     )
     .refine(
         (schema) => schema.from >= startOfDay(new Date()),
-        "'From' has to be in the future",
+        "'From' has to be in the future"
     )
     .refine(
         (schema) => schema.to >= startOfDay(new Date()),
-        "'To' has to be in the future",
+        "'To' has to be in the future"
     )
 
 export const RentFlowerbed = () => {
@@ -112,7 +112,7 @@ const Step1 = () => {
     const { data, refetch: refetchDetail } = useFlowerbedDetail(flowerbedId)
 
     const [daysInBetween, setDaysInBetween] = useState<number | undefined>(
-        undefined,
+        undefined
     )
 
     useEffect(() => {
@@ -122,7 +122,7 @@ const Step1 = () => {
             const val =
                 differenceInDays(
                     dateRange?.to || new Date(),
-                    dateRange?.from || new Date(),
+                    dateRange?.from || new Date()
                 ) + 1
             return val
         }
@@ -162,7 +162,7 @@ const Step1 = () => {
                 <p className="text-xl text-secondary">
                     {data &&
                         Number.parseFloat(data?.pricePerDay ?? "0") *
-                        daysInBetween!}
+                            daysInBetween!}
                 </p>
             </div>
             <div className="flex justify-between">
@@ -254,7 +254,7 @@ const Step2 = () => {
         const val =
             differenceInDays(
                 dateRange?.to || new Date(),
-                dateRange?.from || new Date(),
+                dateRange?.from || new Date()
             ) + 1
         console.log(val)
         return val
@@ -288,7 +288,7 @@ const Step2 = () => {
                         <p>
                             {differenceInDays(
                                 dateRange!.to!,
-                                dateRange!.from!,
+                                dateRange!.from!
                             ) + 1}
                         </p>
                     </div>
@@ -305,7 +305,7 @@ const Step2 = () => {
                         <p className="text-xl text-secondary">
                             {data &&
                                 Number.parseFloat(data?.pricePerDay ?? "0") *
-                                calculateDaysInBetween(dateRange)}
+                                    calculateDaysInBetween(dateRange)}
                         </p>
                     </div>
                 </div>
@@ -352,7 +352,7 @@ const MultistepForm = () => {
                 navigate(
                     data?.greenhouse.id
                         ? `/app/greenhouses/${data?.greenhouse.id}`
-                        : "/app/greenhouses",
+                        : "/app/greenhouses"
                 )
             }
         }
@@ -361,20 +361,23 @@ const MultistepForm = () => {
         <div>
             <div className="flex justify-center gap-4 mb-2">
                 <div
-                    className={`${currentStep === "step1" ? "text-black" : "text-gray-300"
-                        }`}
+                    className={`${
+                        currentStep === "step1" ? "text-black" : "text-gray-300"
+                    }`}
                 >
                     Rent length
                 </div>
                 <div
-                    className={`${currentStep === "step2" ? "text-black" : "text-gray-500"
-                        }`}
+                    className={`${
+                        currentStep === "step2" ? "text-black" : "text-gray-500"
+                    }`}
                 >
                     Summary
                 </div>
                 <div
-                    className={`${currentStep === "step3" ? "text-black" : "text-gray-500"
-                        }`}
+                    className={`${
+                        currentStep === "step3" ? "text-black" : "text-gray-500"
+                    }`}
                 >
                     Payment
                 </div>

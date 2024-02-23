@@ -1,10 +1,10 @@
 export const calculateQRString = (
     BIC: string,
     variableSymbol: number,
-    amount: number,
+    amount: number
 ) => {
     return `SPD:1.0*ACC:${calculateIBANfromBIC(
-        BIC,
+        BIC
     )}*AM:${amount}*CC:CZK*PT:IP*X-VS:${variableSymbol}*`
 }
 export const calculateIBANfromBIC = (bic: string) => {

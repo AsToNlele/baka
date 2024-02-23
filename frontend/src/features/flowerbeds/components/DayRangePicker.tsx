@@ -24,13 +24,13 @@ export const DaySingleRangePickerWithInput = ({
             range && range?.from && isValid(range.from)
                 ? range.from
                 : startOfDay(new Date()),
-            dateFormat,
-        ),
+            dateFormat
+        )
     )
     const [toValue, setToValue] = useState<string>(
         range && range?.to && isValid(range.to)
             ? format(range.to, dateFormat)
-            : "",
+            : ""
     )
 
     const handleToValueChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -181,7 +181,7 @@ export const DayRangePicker = ({
     }
 
     const handleRangeSelect: SelectRangeEventHandler = (
-        range: DateRange | undefined,
+        range: DateRange | undefined
     ) => {
         setSelectedRange(range)
         if (range?.from) {
