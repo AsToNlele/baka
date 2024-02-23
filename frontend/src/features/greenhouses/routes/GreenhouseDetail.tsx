@@ -16,6 +16,7 @@ import { FaEdit } from "react-icons/fa"
 import { EditGreenhouseModal } from "@/features/greenhouses/components/EditGreenhouseModal"
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { format } from "date-fns"
+import { GreenhouseProducts } from "@/features/landing/marketplace/components/GreenhouseProducts"
 
 export const GreenhouseDetail = () => {
     const { id } = useParams()
@@ -76,11 +77,16 @@ export const GreenhouseDetail = () => {
     }
 
     const formatTime = (timeString: string) => {
-        const date = new Date(0, 0, 0, parseInt(timeString.split(":")[0]), parseInt(timeString.split(":")[1]))
+        const date = new Date(
+            0,
+            0,
+            0,
+            parseInt(timeString.split(":")[0]),
+            parseInt(timeString.split(":")[1]),
+        )
         return format(date, "HH:mm")
         // const [hours, minutes] = timeString.split(":")
         // return new Date(0, 0, 0, parseInt(hours), parseInt(minutes))
-        
     }
 
     return (
@@ -126,8 +132,13 @@ export const GreenhouseDetail = () => {
                                             {day.greenhouse_business_hour_periods.map(
                                                 (period) => (
                                                     <p>
-                                                        {formatTime(period.open)} -{" "}
-                                                        {formatTime(period.close)}
+                                                        {formatTime(
+                                                            period.open,
+                                                        )}{" "}
+                                                        -{" "}
+                                                        {formatTime(
+                                                            period.close,
+                                                        )}
                                                     </p>
                                                 ),
                                             )}
@@ -193,7 +204,9 @@ export const GreenhouseDetail = () => {
                 </Tab>
                 <Tab key="marketplace" title="Marketplace">
                     <Card>
-                        <CardBody>Marketplace</CardBody>
+                        <CardBody>
+                            <GreenhouseProducts />
+                        </CardBody>
                     </Card>
                 </Tab>
                 <Tab key="flowerbeds" title="Flowerbeds">

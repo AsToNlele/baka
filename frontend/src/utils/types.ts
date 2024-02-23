@@ -80,3 +80,5 @@ export type SharedProductListResponse = Exclude<paths["/api/marketplace/shared-p
 export type SharedProductDetailResponse = paths["/api/marketplace/shared-products/{id}/"]["get"]["responses"][200]["content"]["application/json"]
 
 export type GreenhouseProductListResponse = Exclude<paths["/api/marketplace/greenhouses/{id}/products"]["get"]["responses"][200]["content"]["application/json"]["results"], undefined>
+
+export type GreenhouseProductType = components["schemas"]["MarketplaceProduct"]
