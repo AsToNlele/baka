@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     "django_filters",
     "greenhouse",
     "flowerbed",
-    "orders"
+    "orders",
+    "marketplace"
 ]
 
 MIDDLEWARE = [

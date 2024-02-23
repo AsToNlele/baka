@@ -13,8 +13,10 @@ router.register(r"books", views.BookViewSet)
 router.register(r"greenhouses", GreenhouseViewSet)
 router.register(r"flowerbeds", FlowerbedViewSet)
 router.register(r"orders", OrderViewSet)
+# router.register(r"marketplace", MarketplaceView)
 
 urlpatterns = [
     path("", include(router.urls)),
     path("auth/", include("auth.urls"), name="auth"),
+    path("marketplace/", include("marketplace.urls"), name="marketplace"),
 ]
