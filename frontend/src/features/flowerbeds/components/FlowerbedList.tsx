@@ -30,7 +30,7 @@ const Flowerbed = ({ flowerbed }: { flowerbed: FlowerbedType }) => {
                     radius="lg"
                     width="100%"
                     alt={flowerbed.name!}
-                    src={`https://placekitten.com/400/300?image=${flowerbed.id}`}
+                    src={`https://placekitten.com/400/300?image=${flowerbed.id! % 17}`}
                 />
             </CardBody>
             <CardFooter className="text-small justify-between">

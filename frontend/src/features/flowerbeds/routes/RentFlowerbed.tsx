@@ -15,6 +15,7 @@ import { useProfile } from "@/features/auth/hooks/useProfile"
 import { useRentFlowerbed } from "@/features/flowerbeds/hooks/useRentFlowerbed"
 import { Loading } from "@/components/Loading"
 import { QRPaymentStandalone } from "@/features/orders/components/QRPayment"
+import { AwaitPayment } from "@/features/orders/components/AwaitPayment"
 
 const RentFlowerbedHeader = () => {
     const { id } = useParams()
@@ -326,9 +327,10 @@ const Step3 = () => {
         return <Loading />
     }
     return (
-        <>
+        <div className="flex flex-col gap-4">
             <QRPaymentStandalone orderId={orderId} />
-        </>
+            <AwaitPayment orderId={orderId} />
+        </div>
     )
 }
 

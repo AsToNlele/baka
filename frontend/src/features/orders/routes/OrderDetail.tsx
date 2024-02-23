@@ -4,6 +4,7 @@ import { parseIsoAndFormat, upperCaseFirstLetter } from "@/utils/utils"
 import { Divider } from "@nextui-org/react"
 import { useParams } from "react-router-dom"
 import { QRPaymentStandalone } from "@/features/orders/components/QRPayment"
+import { AwaitPayment } from "@/features/orders/components/AwaitPayment"
 
 export const OrderDetail = () => {
     const { id } = useParams()
@@ -56,7 +57,12 @@ export const OrderDetail = () => {
                     </div>
                 </div>
             ) : null}
-            {orderId && <QRPaymentStandalone orderId={orderId} />}
+            {orderId && (
+                <div className="flex flex-col gap-4">
+                    <QRPaymentStandalone orderId={orderId} /> 
+                    <AwaitPayment orderId={orderId} />
+                </div>
+            )}
         </div>
     )
 }
