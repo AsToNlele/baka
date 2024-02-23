@@ -63,3 +63,17 @@ export type OrdersListResponse = Array<FlowerbedOrderType | ProductOrderType>
 export type OrderDetailResponse = FlowerbedOrderType | ProductOrderType
 
 export type OrderPaymentResponse = paths["/api/orders/{id}/get_payment/"]["get"]["responses"][200]["content"]["application/json"]
+
+export type ProductListResponse = Exclude<paths["/api/marketplace/products/"]["get"]["responses"][200]["content"]["application/json"]["results"], undefined>
+
+export type ProductType = components["schemas"]["Product"]
+
+export type ProductDetailResponse = paths["/api/marketplace/products/{id}/"]["get"]["responses"][200]["content"]["application/json"]
+
+export type ProductListingsResponse = Array<components["schemas"]["ProductDetailMarketplaceProduct"]>
+
+export type SharedProductListResponse = Exclude<paths["/api/marketplace/shared-products/"]["get"]["responses"][200]["content"]["application/json"]["results"], undefined>
+
+export type SharedProductDetailResponse = paths["/api/marketplace/shared-products/{id}/"]["get"]["responses"][200]["content"]["application/json"]
+
+export type GreenhouseProductListResponse = Exclude<paths["/api/marketplace/greenhouses/{id}/products"]["get"]["responses"][200]["content"]["application/json"]["results"], undefined>

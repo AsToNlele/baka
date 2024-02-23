@@ -98,6 +98,32 @@ export interface paths {
   "/api/auth/profile": {
     get: operations["listUsers"];
   };
+  "/api/marketplace/products/": {
+    get: operations["listProducts"];
+    post: operations["createProduct"];
+  };
+  "/api/marketplace/products/{id}/": {
+    get: operations["retrieveProduct"];
+    put: operations["updateProduct"];
+    delete: operations["destroyProduct"];
+    patch: operations["partialUpdateProduct"];
+  };
+  "/api/marketplace/products/{id}/listings/": {
+    get: operations["listingsProduct"];
+  };
+  "/api/marketplace/shared-products/": {
+    get: operations["listSharedProducts"];
+    post: operations["createSharedProduct"];
+  };
+  "/api/marketplace/shared-products/{id}/": {
+    get: operations["retrieveSharedProduct"];
+    put: operations["updateSharedProduct"];
+    delete: operations["destroySharedProduct"];
+    patch: operations["partialUpdateSharedProduct"];
+  };
+  "/api/marketplace/greenhouses/{id}/products": {
+    get: operations["listMarketplaceProducts"];
+  };
   "/api/flowerbeds/{id}/rent/": {
     post: operations["rentFlowerbed"];
   };
@@ -272,6 +298,60 @@ export interface components {
       vs: number;
       /** Format: decimal */
       amount: string;
+    };
+    Product: {
+      id?: number;
+      name?: string;
+      description?: string | null;
+      image?: string | null;
+      shared?: boolean;
+    };
+    ProductDetailMarketplaceProduct: {
+      id?: number;
+      greenhouse: {
+        id?: number;
+        title?: string | null;
+        description?: string | null;
+        rules?: string | null;
+        published?: boolean;
+        bank_account_number?: string | null;
+        owner: number;
+        greenhouse_address?: number | null;
+        caretaker?: number | null;
+      };
+      /** Format: decimal */
+      price: string;
+      quantity: number;
+      /** Format: date-time */
+      created_at?: string;
+      /** Format: date-time */
+      updated_at?: string;
+      product?: number | null;
+    };
+    SharedProduct: {
+      id?: number;
+      name?: string;
+      description?: string | null;
+      image?: string | null;
+      shared?: boolean;
+    };
+    MarketplaceProduct: {
+      id?: number;
+      product: {
+        id?: number;
+        name?: string;
+        description?: string | null;
+        image?: string | null;
+        shared?: boolean;
+      };
+      /** Format: decimal */
+      price: string;
+      quantity: number;
+      /** Format: date-time */
+      created_at?: string;
+      /** Format: date-time */
+      updated_at?: string;
+      greenhouse?: number | null;
     };
     CreateRent: {
       /** Format: date-time */
@@ -1133,6 +1213,288 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Payment"];
+        };
+      };
+    };
+  };
+  listProducts: {
+    parameters: {
+      query?: {
+        /** @description A page number within the paginated result set. */
+        page?: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            /** @example 123 */
+            count?: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results?: components["schemas"]["Product"][];
+          };
+        };
+      };
+    };
+  };
+  createProduct: {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["Product"];
+        "application/x-www-form-urlencoded": components["schemas"]["Product"];
+        "multipart/form-data": components["schemas"]["Product"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["Product"];
+        };
+      };
+    };
+  };
+  retrieveProduct: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this product. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Product"];
+        };
+      };
+    };
+  };
+  updateProduct: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this product. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["Product"];
+        "application/x-www-form-urlencoded": components["schemas"]["Product"];
+        "multipart/form-data": components["schemas"]["Product"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Product"];
+        };
+      };
+    };
+  };
+  destroyProduct: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this product. */
+        id: string;
+      };
+    };
+    responses: {
+      204: {
+        content: never;
+      };
+    };
+  };
+  partialUpdateProduct: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this product. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["Product"];
+        "application/x-www-form-urlencoded": components["schemas"]["Product"];
+        "multipart/form-data": components["schemas"]["Product"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Product"];
+        };
+      };
+    };
+  };
+  listingsProduct: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this product. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["ProductDetailMarketplaceProduct"];
+        };
+      };
+    };
+  };
+  listSharedProducts: {
+    parameters: {
+      query?: {
+        /** @description A page number within the paginated result set. */
+        page?: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            /** @example 123 */
+            count?: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results?: components["schemas"]["SharedProduct"][];
+          };
+        };
+      };
+    };
+  };
+  createSharedProduct: {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["SharedProduct"];
+        "application/x-www-form-urlencoded": components["schemas"]["SharedProduct"];
+        "multipart/form-data": components["schemas"]["SharedProduct"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["SharedProduct"];
+        };
+      };
+    };
+  };
+  retrieveSharedProduct: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this shared product. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["SharedProduct"];
+        };
+      };
+    };
+  };
+  updateSharedProduct: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this shared product. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["SharedProduct"];
+        "application/x-www-form-urlencoded": components["schemas"]["SharedProduct"];
+        "multipart/form-data": components["schemas"]["SharedProduct"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["SharedProduct"];
+        };
+      };
+    };
+  };
+  destroySharedProduct: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this shared product. */
+        id: string;
+      };
+    };
+    responses: {
+      204: {
+        content: never;
+      };
+    };
+  };
+  partialUpdateSharedProduct: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this shared product. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["SharedProduct"];
+        "application/x-www-form-urlencoded": components["schemas"]["SharedProduct"];
+        "multipart/form-data": components["schemas"]["SharedProduct"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["SharedProduct"];
+        };
+      };
+    };
+  };
+  listMarketplaceProducts: {
+    parameters: {
+      query?: {
+        /** @description A page number within the paginated result set. */
+        page?: number;
+      };
+      path: {
+        /** @description A unique integer value identifying this marketplace product. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            /** @example 123 */
+            count?: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results?: components["schemas"]["MarketplaceProduct"][];
+          };
         };
       };
     };

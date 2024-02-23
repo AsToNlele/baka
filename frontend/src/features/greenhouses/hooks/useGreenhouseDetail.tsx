@@ -14,7 +14,7 @@ export const useGreenhouseDetail = (id: number | null) => {
         queryKey: ["greenhouseList", id],
         queryFn: () => greenhouseDetail(id as number),
         retry: 0,
-        enabled: typeof id === 'number' && !isNaN(id),
+        enabled: typeof id === "number" && !isNaN(id),
     })
     return query
 }

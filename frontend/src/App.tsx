@@ -17,6 +17,8 @@ import { FlowerbedDetail } from "@/features/flowerbeds/routes/FlowerbedDetail"
 import { RentFlowerbed } from "@/features/flowerbeds/routes/RentFlowerbed"
 import { Orders } from "@/features/orders/routes/Orders"
 import { OrderDetail } from "@/features/orders/routes/OrderDetail"
+import { Marketplace } from "@/features/landing/marketplace/routes/Marketplace"
+import { ProductDetail } from "@/features/landing/marketplace/routes/ProductDetail"
 
 function App() {
     const navigate = useNavigate()
@@ -65,8 +67,16 @@ function App() {
                                     path="/app/orders/:id"
                                     element={<OrderDetail />}
                                 />
+                                <Route
+                                    path="/app/marketplace"
+                                    element={<Marketplace />}
+                                />
+                                <Route
+                                    path="/app/marketplace/products/:id"
+                                    element={<ProductDetail />}
+                                />
+                                <Route path="*" element={<h1>404</h1>} />
                             </Route>
-                            <Route path="*" element={<h1>404</h1>} />
                         </Routes>
                     </AnimatePresence>
                 </main>

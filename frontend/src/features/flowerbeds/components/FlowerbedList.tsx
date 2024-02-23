@@ -30,7 +30,9 @@ const Flowerbed = ({ flowerbed }: { flowerbed: FlowerbedType }) => {
                     radius="lg"
                     width="100%"
                     alt={flowerbed.name!}
-                    src={`https://placekitten.com/400/300?image=${flowerbed.id! % 17}`}
+                    src={`https://placekitten.com/400/300?image=${
+                        flowerbed.id! % 17
+                    }`}
                 />
             </CardBody>
             <CardFooter className="text-small justify-between">
@@ -43,12 +45,7 @@ const Flowerbed = ({ flowerbed }: { flowerbed: FlowerbedType }) => {
     )
 }
 
-export const FlowerbedList = ({
-    flowerbeds,
-} // greenhouseId,
-    : FlowerbedListProps) => {
-    // const hasGreenhouseId = greenhouseId !== undefined
-
+export const FlowerbedList = ({ flowerbeds }: FlowerbedListProps) => {
     return (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {flowerbeds.map((flowerbed) => (
