@@ -1,6 +1,6 @@
 import { PageTitle } from "@/features/app/components/PageTitle"
-import { useProductDetail } from "@/features/landing/marketplace/hooks/useProductDetail"
-import { useProductListingsList } from "@/features/landing/marketplace/hooks/useProductListingsList"
+import { useProductDetail } from "@/features/marketplace/hooks/useProductDetail"
+import { useProductListingsList } from "@/features/marketplace/hooks/useProductListingsList"
 import { ProductListingType } from "@/utils/types"
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react"
 import { useParams } from "react-router-dom"

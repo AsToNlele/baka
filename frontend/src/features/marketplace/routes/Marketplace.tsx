@@ -1,7 +1,7 @@
 import { Card, CardBody, CardFooter, Image, Link } from "@nextui-org/react"
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { ProductType } from "@/utils/types"
-import { useProductList } from "@/features/landing/marketplace/hooks/useProductList"
+import { useProductList } from "@/features/marketplace/hooks/useProductList"
 
 export const Marketplace = () => {
     const { data: products } = useProductList()

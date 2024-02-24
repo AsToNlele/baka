@@ -17,8 +17,8 @@ import { FlowerbedDetail } from "@/features/flowerbeds/routes/FlowerbedDetail"
 import { RentFlowerbed } from "@/features/flowerbeds/routes/RentFlowerbed"
 import { Orders } from "@/features/orders/routes/Orders"
 import { OrderDetail } from "@/features/orders/routes/OrderDetail"
-import { Marketplace } from "@/features/landing/marketplace/routes/Marketplace"
-import { ProductDetail } from "@/features/landing/marketplace/routes/ProductDetail"
+import { Marketplace } from "@/features/marketplace/routes/Marketplace"
+import { ProductDetail } from "@/features/marketplace/routes/ProductDetail"
 
 function App() {
     const navigate = useNavigate()

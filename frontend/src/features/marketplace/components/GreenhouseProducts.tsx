@@ -1,4 +1,4 @@
-import { useGreenhouseProductList } from "@/features/landing/marketplace/hooks/useGreenhouseProductList"
+import { useGreenhouseProductList } from "@/features/marketplace/hooks/useGreenhouseProductList"
 import { GreenhouseProductType } from "@/utils/types"
 import { useParams } from "react-router-dom"
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react"

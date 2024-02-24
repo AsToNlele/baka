@@ -16,7 +16,7 @@ import { FaEdit } from "react-icons/fa"
 import { EditGreenhouseModal } from "@/features/greenhouses/components/EditGreenhouseModal"
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { format } from "date-fns"
-import { GreenhouseProducts } from "@/features/landing/marketplace/components/GreenhouseProducts"
+import { GreenhouseProducts } from "@/features/marketplace/components/GreenhouseProducts"
 
 export const GreenhouseDetail = () => {
     const { id } = useParams()
