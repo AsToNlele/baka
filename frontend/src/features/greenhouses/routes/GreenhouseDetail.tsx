@@ -82,7 +82,7 @@ export const GreenhouseDetail = () => {
             0,
             0,
             parseInt(timeString.split(":")[0]),
-            parseInt(timeString.split(":")[1])
+            parseInt(timeString.split(":")[1]),
         )
         return format(date, "HH:mm")
         // const [hours, minutes] = timeString.split(":")
@@ -126,21 +126,26 @@ export const GreenhouseDetail = () => {
                             {/* <p>Open</p> */}
                             <div className="flex flex-col mt-2 gap-2">
                                 {data?.greenhouse_business_hours?.map((day) => (
-                                    <div className="flex justify-between gap-2">
+                                    <div
+                                        className="flex justify-between gap-2"
+                                        key={`${day.id}${day.day}`}
+                                    >
                                         <p>{dayNumberToDay(day.day)}</p>
                                         <div>
                                             {day.greenhouse_business_hour_periods.map(
                                                 (period) => (
-                                                    <p>
+                                                    <p
+                                                        key={`${period.id}${period.open}${period.close}`}
+                                                    >
                                                         {formatTime(
-                                                            period.open
+                                                            period.open,
                                                         )}{" "}
                                                         -{" "}
                                                         {formatTime(
-                                                            period.close
+                                                            period.close,
                                                         )}
                                                     </p>
-                                                )
+                                                ),
                                             )}
                                         </div>
                                     </div>
