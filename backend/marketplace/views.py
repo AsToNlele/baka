@@ -5,7 +5,7 @@ from rest_framework.views import Response
 from rest_framework.decorators import action
 
 from marketplace.models import MarketplaceProduct, Product, SharedProduct
-from marketplace.serializers import MarketplaceProductSerializer, ProductDetailMarketplaceProductSerializer, ProductSerializer, SharedProductSerializer
+from marketplace.serializers import CreateGreenhouseProductFromSharedProductSerializer, MarketplaceProductSerializer, ProductDetailMarketplaceProductSerializer, ProductSerializer, SharedProductSerializer
 
 class ProductViewset(viewsets.ModelViewSet):
     queryset = Product.objects.all()
@@ -29,6 +29,14 @@ class GreenhouseProductView(generics.ListAPIView):
         )
 
         return items
+
+class CreateGreenhouseProductFromSharedProductView(generics.CreateAPIView):
+    queryset = MarketplaceProduct.objects.all()
+    serializer_class = CreateGreenhouseProductFromSharedProductSerializer
+    lookup_field = "pk"
+
+    def perform_create(self, serializer):
+        serializer.save(greenhouse=self.kwargs["pk"])
 
 class SharedProductViewset(viewsets.ModelViewSet):
     queryset = SharedProduct.objects.filter(shared=True)

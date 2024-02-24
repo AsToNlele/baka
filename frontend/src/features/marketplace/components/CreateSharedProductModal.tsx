@@ -1,8 +1,3 @@
-// import { AddressFields } from "@/features/greenhouses/components/AddressFields"
-// import { BusinessHours } from "@/features/greenhouses/components/BusinessHours"
-// import { useCreateSharedProduct } from "@/features/greenhouses/hooks/useEditGreenhouse"
-// import { useGreenhouseDetail } from "@/features/greenhouses/hooks/useGreenhouseDetail"
-// import { BusinessHoursType, GreenhouseAddressType } from "@/utils/types"
 import { useCreateSharedProduct } from "@/features/marketplace/hooks/useCreateSharedProduct"
 import {
     Button,
@@ -14,25 +9,14 @@ import {
     ModalHeader,
 } from "@nextui-org/react"
 import { SubmitHandler, useForm } from "react-hook-form"
-import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect } from "react"
-
-const CreateSharedProductSchema = z.object({
-    name: z.string().min(3),
-    description: z.string().min(3),
-    image: z.string().optional(),
-})
-
-export type CreateSharedProductValidationType = z.infer<
-    typeof CreateSharedProductSchema
->
+import { CreateSharedProductSchema, CreateSharedProductValidationType } from "@/features/marketplace/types"
 
 type CreateSharedProductModalProps = {
     isOpen: boolean
     onOpenChange: (open: boolean) => void
-    onClose: () => void
-}
+    onClose: () => void }
 
 export const CreateSharedProductModal = ({
     isOpen,
@@ -49,8 +33,6 @@ export const CreateSharedProductModal = ({
     } = useForm<CreateSharedProductValidationType>({
         resolver: zodResolver(CreateSharedProductSchema),
     })
-
-    console.log(errors)
 
     const onSubmit: SubmitHandler<CreateSharedProductValidationType> = (
         data,

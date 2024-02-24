@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { api } from "../../../utils/api"
 import { toast } from "sonner"
-import { CreateSharedProductValidationType } from "@/features/marketplace/components/CreateSharedProductModal"
+import { CreateSharedProductValidationType } from "@/features/marketplace/types"
+
 
 const createSharedProduct = ({
     data,

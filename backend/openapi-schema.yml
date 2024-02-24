@@ -1496,7 +1496,7 @@ paths:
           description: ''
       tags:
       - api
-  /api/marketplace/greenhouses/{id}/products:
+  /api/marketplace/greenhouses/{id}/products/:
     get:
       operationId: listMarketplaceProducts
       description: ''
@@ -1631,6 +1631,37 @@ paths:
           content:
             application/json:
               schema: {}
+          description: ''
+      tags:
+      - api
+  /api/marketplace/greenhouses/{id}/products/from-shared/:
+    post:
+      operationId: createMarketplaceProduct
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this marketplace product.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGreenhouseProductFromSharedProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateGreenhouseProductFromSharedProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateGreenhouseProductFromSharedProduct'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGreenhouseProductFromSharedProduct'
           description: ''
       tags:
       - api
@@ -2260,6 +2291,25 @@ components:
       required:
       - rented_from
       - rented_to
+    CreateGreenhouseProductFromSharedProduct:
+      type: object
+      properties:
+        product:
+          type: integer
+        price:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - product
+      - price
+      - quantity
     EditGreenhouse:
       type: object
       properties:

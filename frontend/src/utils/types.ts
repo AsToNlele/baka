@@ -94,7 +94,7 @@ export type SharedProductDetailResponse =
     paths["/api/marketplace/shared-products/{id}/"]["get"]["responses"][200]["content"]["application/json"]
 
 export type GreenhouseProductListResponse = Exclude<
-    paths["/api/marketplace/greenhouses/{id}/products"]["get"]["responses"][200]["content"]["application/json"]["results"],
+    paths["/api/marketplace/greenhouses/{id}/products/"]["get"]["responses"][200]["content"]["application/json"]["results"],
     undefined
 >
 
@@ -106,4 +106,12 @@ export type CreateSharedProductRequest = Omit<
         undefined
     >["content"]["application/json"],
     "id" | "shared"
+>
+
+export type CreateGreenhouseProductFromSharedProductRequest = Omit<
+    Exclude<
+        paths["/api/marketplace/greenhouses/{id}/products/from-shared/"]["post"]["requestBody"],
+        undefined
+    >["content"]["application/json"],
+    "id" | "greenhouse"
 >

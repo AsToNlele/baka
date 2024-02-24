@@ -1,21 +1,43 @@
 import { useGreenhouseProductList } from "@/features/marketplace/hooks/useGreenhouseProductList"
 import { GreenhouseProductType } from "@/utils/types"
 import { useParams } from "react-router-dom"
-import { Card, CardBody, CardFooter, Image } from "@nextui-org/react"
+import {
+    Button,
+    Card,
+    CardBody,
+    CardFooter,
+    Image,
+    useDisclosure,
+} from "@nextui-org/react"
+import { FaPlus } from "react-icons/fa"
+import { CreateGreenhouseProductModal } from "@/features/marketplace/components/CreateGreenhouseProductModal"
 
 export const GreenhouseProducts = () => {
     const { id } = useParams()
     const greenhouseId = id ? parseInt(id) : null
     const { data: products } = useGreenhouseProductList(greenhouseId)
 
-    console.log(id)
+    const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure()
 
     return (
-        <div className="grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-start">
-            {products &&
-                products.map((product) => (
-                    <GreenhouseProduct product={product} key={product.id} />
-                ))}
+        <div className="flex flex-col gap-4">
+            <div className="flex gap-2 items-center">
+                <h3 className="text-2xl font-bold">Products</h3>
+                <Button isIconOnly color="primary" size="sm" onPress={onOpen}>
+                    <FaPlus />
+                </Button>
+                <CreateGreenhouseProductModal
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                    onClose={onClose}
+                />
+            </div>
+            <div className="grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-start">
+                {products &&
+                    products.map((product) => (
+                        <GreenhouseProduct product={product} key={product.id} />
+                    ))}
+            </div>
         </div>
     )
 }

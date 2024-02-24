@@ -121,7 +121,7 @@ export interface paths {
     delete: operations["destroySharedProduct"];
     patch: operations["partialUpdateSharedProduct"];
   };
-  "/api/marketplace/greenhouses/{id}/products": {
+  "/api/marketplace/greenhouses/{id}/products/": {
     get: operations["listMarketplaceProducts"];
   };
   "/api/flowerbeds/{id}/rent/": {
@@ -135,6 +135,9 @@ export interface paths {
   };
   "/api/auth/logout": {
     post: operations["createLogout"];
+  };
+  "/api/marketplace/greenhouses/{id}/products/from-shared/": {
+    post: operations["createMarketplaceProduct"];
   };
   "/api/greenhouses/{id}/edit_greenhouse/": {
     put: operations["editGreenhouseGreenhouse"];
@@ -359,6 +362,12 @@ export interface components {
       rented_from: string | null;
       /** Format: date-time */
       rented_to: string | null;
+    };
+    CreateGreenhouseProductFromSharedProduct: {
+      product: number;
+      /** Format: decimal */
+      price: string;
+      quantity: number;
     };
     EditGreenhouse: {
       title: string | null;
@@ -1566,6 +1575,28 @@ export interface operations {
       201: {
         content: {
           "application/json": unknown;
+        };
+      };
+    };
+  };
+  createMarketplaceProduct: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this marketplace product. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["CreateGreenhouseProductFromSharedProduct"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateGreenhouseProductFromSharedProduct"];
+        "multipart/form-data": components["schemas"]["CreateGreenhouseProductFromSharedProduct"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["CreateGreenhouseProductFromSharedProduct"];
         };
       };
     };

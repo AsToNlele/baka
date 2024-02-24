@@ -175,52 +175,6 @@ const Step1 = () => {
     )
 }
 
-// const Step1WithBothRanges = () => {
-//     const {id} = useParams()
-//     const flowerbedId = id ? parseInt(id) : null
-//     const {setCurrentStep, dateRange, setDateRange} = useMultistepFormStore()
-//     // const {refetch} = useFlowerbedStatus(flowerbedId)
-//     const {data} = useFlowerbedDetail(flowerbedId)
-//     console.log(dateRange)
-//
-//     const handleRangeChange = (range: DateRange | undefined) => {
-//         console.log(range)
-//         if (!range) {
-//             setDateRange(undefined)
-//         } else {
-//             setDateRange(range)
-//         }
-//     }
-//
-//     const goToNext = () => {
-//         const result = schema.safeParse(dateRange)
-//         console.log(result)
-//         if (!result.success) {
-//             // console.log(result.error.errors)
-//             result.error.errors.map((error) => {
-//                 toast.error(error.message)
-//             })
-//             return
-//         }
-//         // refetch();
-//
-//         setCurrentStep("step2")
-//     }
-//
-//     return (
-//         <div>
-//             <div className="flex justify-center">
-//                 <DayRangePicker
-//                     selectedRange={dateRange}
-//                     onRangeChange={handleRangeChange}
-//                     rents={data?.rents}
-//                 />
-//             </div>
-//             <Button onPress={goToNext}>Next</Button>
-//         </div>
-//     )
-// }
-
 const Step2 = () => {
     const { id } = useParams()
     const flowerbedId = id ? parseInt(id) : null
