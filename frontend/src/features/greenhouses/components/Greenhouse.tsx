@@ -36,10 +36,10 @@ const FreePlaces = ({ count }: { count: number }) =>
     )
 
 export const Greenhouse = ({ item }: { item: GreenhouseType }) => {
-    const { title, greenhouse_address } = item
+    const { title, greenhouse_address, available_flowerbeds } = item
 
     const rating = Math.round(Math.random() * 5 * 10) / 10 + 1
-    const freePlaces = Math.floor(Math.random() * 5)
+    const freePlaces = parseInt(`${available_flowerbeds}`) || 0
 
     const address = greenhouse_address
         ? `${greenhouse_address.city}, ${greenhouse_address.city_part}`

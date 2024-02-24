@@ -1920,6 +1920,9 @@ components:
             required:
             - greenhouse_business_hour_periods
             - day
+        available_flowerbeds:
+          type: string
+          readOnly: true
         title:
           type: string
           nullable: true

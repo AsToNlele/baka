@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flowerbed.serializers import FlowerbedSerializer
 from greenhouse.models import (
     Greenhouse,
@@ -37,6 +39,18 @@ class GreenhouseSerializer(serializers.ModelSerializer):
     greenhouse_business_hours = GreenhouseBusinessHourSerializer(
         source="greenhousebusinesshour_set", many=True
     )
+    available_flowerbeds = serializers.SerializerMethodField()
+
+    def get_available_flowerbeds(self, obj):
+        flowerbeds = obj.flowerbed_set.all()
+        availableCount = 0
+        for flowerbed in flowerbeds:
+            currentRent = flowerbed.rent_set.filter(
+                rented_from__lte=datetime.now(), rented_to__gte=datetime.now()
+            ).first()
+            if currentRent is None:
+                availableCount += 1
+        return availableCount
 
     class Meta:
         model = Greenhouse
