@@ -63,3 +63,26 @@ class CreateGreenhouseProductFromSharedProductSerializer(serializers.ModelSerial
             price=validated_data["price"],
             quantity=validated_data["quantity"],
         )
+
+
+class CreateGreenhouseProductFromCustomProductSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+    class Meta:
+        model = MarketplaceProduct
+        fields = ["product", "price", "quantity"]
+        read_only_fields = ["greenhouse"]
+
+    def create(self, validated_data):
+        greenhouse = Greenhouse.objects.get(pk=self.context["view"].kwargs["pk"])
+        product = Product.objects.create(
+            name=validated_data["product"]["name"],
+            description=validated_data["product"]["description"],
+            image=validated_data["product"]["image"],
+            shared=False,
+        )
+        return MarketplaceProduct.objects.create(
+            product=product,
+            greenhouse=greenhouse,
+            price=validated_data["price"],
+            quantity=validated_data["quantity"],
+        )

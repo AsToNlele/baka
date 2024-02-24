@@ -19,3 +19,17 @@ export const CreateGreenhouseProductFromSharedProductSchema = z.object({
 export type CreateGreenhouseProductFromSharedProductValidationType = z.infer<
     typeof CreateGreenhouseProductFromSharedProductSchema
 >
+
+export const CreateGreenhouseProductFromCustomProductSchema = z.object({
+    product: z.object({
+        name: z.string().min(3),
+        description: z.string().min(3),
+        image: z.string().optional(),
+    }),
+    price: z.coerce.number().gt(0),
+    quantity: z.coerce.number().int().gt(0),
+})
+
+export type CreateGreenhouseProductFromCustomProductValidationType = z.infer<
+    typeof CreateGreenhouseProductFromCustomProductSchema
+>

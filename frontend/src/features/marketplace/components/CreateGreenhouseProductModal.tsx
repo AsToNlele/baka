@@ -16,10 +16,14 @@ import { useEffect, useState, Key } from "react"
 import { useCreateGreenhouseProductFromSharedProduct } from "@/features/marketplace/hooks/useCreateGreenhouseProductFromSharedProduct"
 import { GreenhouseProductSharedFields } from "@/features/marketplace/components/GreenhouseProductSharedFields"
 import {
+    CreateGreenhouseProductFromCustomProductSchema,
+    CreateGreenhouseProductFromCustomProductValidationType,
     CreateGreenhouseProductFromSharedProductSchema,
     CreateGreenhouseProductFromSharedProductValidationType,
 } from "@/features/marketplace/types"
 import { useParams } from "react-router-dom"
+import { useCreateGreenhouseProductFromCustomProduct } from "@/features/marketplace/hooks/useCreateGreenhouseProductFromCustomProduct"
+import { GreenhouseProductCustomFields } from "@/features/marketplace/components/GreenhouseProductCustomFields"
 
 type CreateGreenhouseProductModalProps = {
     isOpen: boolean
@@ -36,8 +40,7 @@ export const CreateGreenhouseProductModal = ({
     const greenhouseId = id ? parseInt(id) : null
     const createGreenhouseProductFromSharedProduct =
         useCreateGreenhouseProductFromSharedProduct()
-    // createGreenhouseProductFromSharedProduct.mutate({ id: greenhouseId!, data: {price: 100, quantity: 5, product: 1  }})
-    //
+
     const {
         register: registerShared,
         handleSubmit: handleSubmitShared,
@@ -57,30 +60,58 @@ export const CreateGreenhouseProductModal = ({
         })
     }
 
+    const submitShared = () => {
+        handleSubmitShared(onSubmitShared)()
+    }
+
+    const createGreenhouseProductFromCustomProduct =
+        useCreateGreenhouseProductFromCustomProduct()
+
+    const {
+        register: registerCustom,
+        handleSubmit: handleSubmitCustom,
+        reset: resetCustom,
+        formState: { errors: errorsCustom },
+    } = useForm<CreateGreenhouseProductFromCustomProductValidationType>({
+        resolver: zodResolver(CreateGreenhouseProductFromCustomProductSchema),
+    })
+
+    const onSubmitCustom: SubmitHandler<
+        CreateGreenhouseProductFromCustomProductValidationType
+    > = (data) => {
+        createGreenhouseProductFromCustomProduct.mutate({
+            id: greenhouseId!,
+            data: data,
+        })
+    }
+
+    const submitCustom = () => {
+        handleSubmitCustom(onSubmitCustom)()
+    }
+
+    useEffect(() => {
+        if (createGreenhouseProductFromSharedProduct.isSuccess || createGreenhouseProductFromCustomProduct.isSuccess) {
+            onClose()
+        }
+    }, [createGreenhouseProductFromSharedProduct.isSuccess, createGreenhouseProductFromCustomProduct.isSuccess ,onClose])
+
+    useEffect(() => {
+        resetShared()
+        resetCustom()
+    }, [onOpenChange, resetShared, resetCustom])
+
     const submit = () => {
         if (tab === "shared") {
             submitShared()
+        } else {
+            submitCustom()
         }
-    }
-
-    const submitShared = () => {
-        handleSubmitShared(onSubmitShared)()
     }
 
     const setTab = (key: Key) => {
         setTabb(key.toString())
     }
     const [tab, setTabb] = useState("shared")
-
-    useEffect(() => {
-        if (createGreenhouseProductFromSharedProduct.isSuccess) {
-            onClose()
-        }
-    }, [createGreenhouseProductFromSharedProduct.isSuccess, onClose])
-
-    useEffect(() => {
-        resetShared()
-    }, [onOpenChange, resetShared])
 
     return (
         <Modal
@@ -118,7 +149,17 @@ export const CreateGreenhouseProductModal = ({
                             <Tab key="custom" title="Create a new product">
                                 <Card>
                                     <CardBody>
-                                        <span>xd</span>
+                                        <form
+                                            onSubmit={(e) => {
+                                                e.preventDefault()
+                                                submitCustom()
+                                            }}
+                                        >
+                                            <GreenhouseProductCustomFields
+                                                register={registerCustom}
+                                                errors={errorsCustom}
+                                            />
+                                        </form>
                                     </CardBody>
                                 </Card>
                             </Tab>
@@ -132,8 +173,8 @@ export const CreateGreenhouseProductModal = ({
                             color="primary"
                             onPress={submit}
                             isDisabled={
-                                createGreenhouseProductFromSharedProduct.isPending
-                                // || createGreenhouseProductFromCustomProduct.isPending
+                                createGreenhouseProductFromSharedProduct.isPending ||
+                                createGreenhouseProductFromCustomProduct.isPending
                             }
                         >
                             Save
