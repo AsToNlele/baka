@@ -1,16 +1,41 @@
-import { Card, CardBody, CardFooter, Image, Link } from "@nextui-org/react"
+import {
+    Button,
+    Card,
+    CardBody,
+    CardFooter,
+    Image,
+    Link,
+    useDisclosure,
+} from "@nextui-org/react"
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { ProductType } from "@/utils/types"
 import { useProductList } from "@/features/marketplace/hooks/useProductList"
+import { FaPlus } from "react-icons/fa"
+import { CreateSharedProductModal } from "@/features/marketplace/components/CreateSharedProductModal"
 
 export const Marketplace = () => {
     const { data: products } = useProductList()
-    console.log(products)
+
+    const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
+
     return (
         <div className="flex flex-col gap-4">
             <PageTitle title="Marketplace" />
 
-            {products && <ProductList products={products} />}
+            <div className="flex flex-col gap-4">
+                <div className="flex gap-2 items-center">
+                    <h2 className="text-2xl font-bold">Products</h2>
+                    <Button isIconOnly color="primary" size="sm" onPress={onOpen}>
+                        <FaPlus />
+                    </Button>
+                    <CreateSharedProductModal
+                        isOpen={isOpen}
+                        onOpenChange={onOpenChange}
+                        onClose={onClose}
+                    />
+                </div>
+                {products && <ProductList products={products} />}
+            </div>
         </div>
     )
 }
@@ -29,9 +54,8 @@ const Product = ({ product }: { product: ProductType }) => {
                     radius="lg"
                     width="100%"
                     alt={product.name!}
-                    src={`https://placekitten.com/400/300?image=${
-                        product.id! % 17
-                    }`}
+                    src={`https://placekitten.com/400/300?image=${product.id! % 17
+                        }`}
                 />
             </CardBody>
             <CardFooter className="text-small justify-between">

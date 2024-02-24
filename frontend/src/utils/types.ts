@@ -99,3 +99,11 @@ export type GreenhouseProductListResponse = Exclude<
 >
 
 export type GreenhouseProductType = components["schemas"]["MarketplaceProduct"]
+
+export type CreateSharedProductRequest = Omit<
+    Exclude<
+        paths["/api/marketplace/shared-products/"]["post"]["requestBody"],
+        undefined
+    >["content"]["application/json"],
+    "id" | "shared"
+>
