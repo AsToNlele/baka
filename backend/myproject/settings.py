@@ -44,13 +44,15 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_extensions",
     "django_celery_beat",
+    "django_seed",
     "quickstart",
     "corsheaders",
     "django_filters",
     "greenhouse",
     "flowerbed",
     "orders",
-    "marketplace"
+    "marketplace",
+    "api"
 ]
 
 MIDDLEWARE = [
