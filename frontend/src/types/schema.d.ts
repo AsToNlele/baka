@@ -139,6 +139,9 @@ export interface paths {
   "/api/marketplace/greenhouses/{id}/products/from-shared/": {
     post: operations["createMarketplaceProduct"];
   };
+  "/api/marketplace/greenhouses/{id}/products/from-custom/": {
+    post: operations["createMarketplaceProduct"];
+  };
   "/api/greenhouses/{id}/edit_greenhouse/": {
     put: operations["editGreenhouseGreenhouse"];
   };
@@ -365,6 +368,18 @@ export interface components {
     };
     CreateGreenhouseProductFromSharedProduct: {
       product: number;
+      /** Format: decimal */
+      price: string;
+      quantity: number;
+    };
+    CreateGreenhouseProductFromCustomProduct: {
+      product: {
+        id?: number;
+        name?: string;
+        description?: string | null;
+        image?: string | null;
+        shared?: boolean;
+      };
       /** Format: decimal */
       price: string;
       quantity: number;
@@ -1588,15 +1603,15 @@ export interface operations {
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["CreateGreenhouseProductFromSharedProduct"];
-        "application/x-www-form-urlencoded": components["schemas"]["CreateGreenhouseProductFromSharedProduct"];
-        "multipart/form-data": components["schemas"]["CreateGreenhouseProductFromSharedProduct"];
+        "application/json": components["schemas"]["CreateGreenhouseProductFromCustomProduct"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateGreenhouseProductFromCustomProduct"];
+        "multipart/form-data": components["schemas"]["CreateGreenhouseProductFromCustomProduct"];
       };
     };
     responses: {
       201: {
         content: {
-          "application/json": components["schemas"]["CreateGreenhouseProductFromSharedProduct"];
+          "application/json": components["schemas"]["CreateGreenhouseProductFromCustomProduct"];
         };
       };
     };

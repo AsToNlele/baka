@@ -39,19 +39,35 @@ export const OrderDetail = () => {
                                     <p>
                                         Rented from{" "}
                                         {parseIsoAndFormat(
-                                            data.rent.rented_from!
+                                            data.rent.rented_from!,
                                         )}
                                     </p>
                                     <p>
                                         Rented to{" "}
                                         {parseIsoAndFormat(
-                                            data.rent.rented_to!
+                                            data.rent.rented_to!,
                                         )}
                                     </p>
                                 </div>
                                 <div className="flex-col">
                                     <p>Price: {data.final_price}</p>
                                 </div>
+                            </div>
+                        ) : data.type === "product" ? (
+                            <div className="flex flex-col gap-4">
+                                {data?.items.map((item) => (
+                                    <div className="flex gap-4" key={item.id}>
+                                        <div className="flex-col">
+                                            <p>Product: {item.productName}</p>
+                                            <p>Quantity: {item.quantity}</p>
+                                        </div>
+                                        <div className="flex-col">
+                                            <p>Price: {item.price}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                                <Divider />
+                                <p>Total price: {data.final_price}</p>
                             </div>
                         ) : null}
                     </div>

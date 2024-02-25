@@ -48,3 +48,17 @@ class ProductOrders(Order):
     class Meta:
         db_table = "product_orders"
         db_table_comment = 'There"s flowerbed orders and product_orders'
+
+class ProductOrderItems(models.Model):
+    productOrder = models.ForeignKey(
+        ProductOrders, models.DO_NOTHING, blank=True, null=True
+    )
+    quantity = models.IntegerField(blank=True, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    greenhouseName = models.CharField(max_length=255, blank=True, null=True)
+    productName = models.CharField(max_length=255, blank=True, null=True)
+    productImage = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        db_table = "product_order_items"
+        db_table_comment = 'There"s flowerbed orders and product_orders'

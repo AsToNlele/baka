@@ -1665,6 +1665,37 @@ paths:
           description: ''
       tags:
       - api
+  /api/marketplace/greenhouses/{id}/products/from-custom/:
+    post:
+      operationId: createMarketplaceProduct
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this marketplace product.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGreenhouseProductFromCustomProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateGreenhouseProductFromCustomProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateGreenhouseProductFromCustomProduct'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGreenhouseProductFromCustomProduct'
+          description: ''
+      tags:
+      - api
   /api/greenhouses/{id}/edit_greenhouse/:
     put:
       operationId: editGreenhouseGreenhouse
@@ -2296,6 +2327,40 @@ components:
       properties:
         product:
           type: integer
+        price:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - product
+      - price
+      - quantity
+    CreateGreenhouseProductFromCustomProduct:
+      type: object
+      properties:
+        product:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            name:
+              type: string
+              maxLength: 255
+            description:
+              type: string
+              nullable: true
+            image:
+              type: string
+              nullable: true
+            shared:
+              type: boolean
         price:
           type: string
           format: decimal

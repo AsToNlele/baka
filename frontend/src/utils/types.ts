@@ -55,10 +55,19 @@ export type FlowerbedOrderType = components["schemas"]["Order"] & {
     }
 }
 
+export type ProductOrderItemType = {
+    id: number
+    productOrder: number
+    quantity: number
+    price: number
+    greenhouseName: string
+    productName: string
+    productImage: string
+}
+
 export type ProductOrderType = Omit<components["schemas"]["Order"], "type"> & {
     type: "product"
-    // TBD
-    // product: components["schemas"]["Product"]
+    items: Array<ProductOrderItemType>
 }
 
 export type OrdersListResponse = Array<FlowerbedOrderType | ProductOrderType>
