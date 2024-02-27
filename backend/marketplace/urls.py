@@ -12,4 +12,5 @@ urlpatterns = [
     path("greenhouses/<pk>/products/", views.GreenhouseProductView.as_view(), name="greenhouse-products"),
     path("greenhouses/<pk>/products/from-shared/", views.CreateGreenhouseProductFromSharedProductView.as_view(), name="create-greenhouse-product-from-shared"),
     path("greenhouses/<pk>/products/from-custom/", views.CreateGreenhouseProductFromCustomProductView.as_view(), name="create-greenhouse-product-from-custom"),
+    path("order/", views.CreateProductOrderView.as_view(), name="create-product-order"),
 ]

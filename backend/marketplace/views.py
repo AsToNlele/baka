@@ -2,11 +2,14 @@ from marketplace.models import MarketplaceProduct, Product, SharedProduct
 from marketplace.serializers import (
     CreateGreenhouseProductFromCustomProductSerializer,
     CreateGreenhouseProductFromSharedProductSerializer,
+    CreateProductOrderInputSerializer,
+    CreateProductOrderOutputSerializer,
     MarketplaceProductSerializer,
     ProductDetailMarketplaceProductSerializer,
     ProductSerializer,
     SharedProductSerializer,
 )
+from orders.models import ProductOrders
 from rest_framework import generics, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404, mixins
@@ -61,3 +64,18 @@ class CreateGreenhouseProductFromCustomProductView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(greenhouse=self.kwargs["pk"])
+
+
+class CreateProductOrderView(generics.CreateAPIView):
+    queryset = ProductOrders.objects.all()
+    serializer_class = CreateProductOrderInputSerializer
+
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        instance = self.perform_create(serializer)
+        instance_serializer = CreateProductOrderOutputSerializer(instance)
+        return Response(instance_serializer.data)
