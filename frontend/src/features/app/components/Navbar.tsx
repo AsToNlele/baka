@@ -72,7 +72,7 @@ export const AppNavbar = () => {
         <Navbar
             isMenuOpen={isMenuOpen}
             onMenuOpenChange={setIsMenuOpen}
-            className="lg:flex lg:flex-col lg:justify-start lg:h-full flex-1"
+            className="flex-1 lg:flex lg:h-full lg:flex-col lg:justify-start"
             classNames={{
                 wrapper: ["lg:flex", "lg:flex-col", "lg:h-full"],
             }}
@@ -83,7 +83,7 @@ export const AppNavbar = () => {
                 />
             </NavbarContent>
 
-            <NavbarContent className="lg:hidden pr-3" justify="center">
+            <NavbarContent className="pr-3 lg:hidden" justify="center">
                 <NavbarBrand>
                     <Brand />
                 </NavbarBrand>
@@ -113,9 +113,9 @@ export const AppNavbar = () => {
 
             {/* Lg */}
             <NavbarContent>
-                <div className="hidden lg:flex lg:flex-col p-2 justify-between h-full">
+                <div className="hidden h-full justify-between p-2 lg:flex lg:flex-col">
                     <Brand />
-                    <div className="flex flex-col pt-8 gap-2 grow">
+                    <div className="flex grow flex-col gap-2 pt-8">
                         {menuLinks.map((item) => {
                             const isActive =
                                 location.pathname === item.href ||
@@ -189,10 +189,10 @@ export const AppNavbar = () => {
                             </Dropdown>
                         ) : (
                             <div className="flex gap-1">
-                                <Skeleton className="rounded-full w-10 h-10" />
+                                <Skeleton className="size-10 rounded-full" />
                                 <div className="flex flex-col justify-center gap-1">
-                                    <Skeleton className="text-small w-14 h-3" />
-                                    <Skeleton className="text-tiny w-10 h-2" />
+                                    <Skeleton className="h-3 w-14 text-small" />
+                                    <Skeleton className="h-2 w-10 text-tiny" />
                                 </div>
                             </div>
                         )}

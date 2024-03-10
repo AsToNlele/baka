@@ -18,7 +18,7 @@ export const PageTitle = ({
         <div className="flex items-center">
             {!hideBackButton && (
                 <button
-                    className="flex items-center justify-center w-8 h-8 mr-2 text-gray-500 rounded-full hover:bg-gray-100 focus:outline-none"
+                    className="mr-2 flex size-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 focus:outline-none"
                     onClick={() =>
                         navigate(
                             backPath,
@@ -26,7 +26,7 @@ export const PageTitle = ({
                         )
                     }
                 >
-                    <FaArrowLeft className="w-4 h-4" />
+                    <FaArrowLeft className="size-4" />
                 </button>
             )}
             <h2 className="text-3xl font-semibold">{title}</h2>

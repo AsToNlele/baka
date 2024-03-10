@@ -63,12 +63,12 @@ export const Greenhouse = ({ item }: { item: GreenhouseType }) => {
                     src={`https://placedog.net/300/200?id=${item.id!}`}
                 />
             </CardBody>
-            <CardFooter className="text-small justify-between flex flex-col">
-                <div className="flex justify-between items-center w-full flex-wrap">
+            <CardFooter className="flex flex-col justify-between text-small">
+                <div className="flex w-full flex-wrap items-center justify-between">
                     <h1 className="text-lg">{title}</h1>
                     <StarRating rating={rating} />
                 </div>
-                <div className="flex justify-between h-full pt-1 w-full flex-wrap">
+                <div className="flex size-full flex-wrap justify-between pt-1">
                     <p className="text-default-500">{address}</p>
                     <FreePlaces count={freePlaces} />
                 </div>

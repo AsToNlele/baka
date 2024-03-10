@@ -33,3 +33,8 @@ export const CreateGreenhouseProductFromCustomProductSchema = z.object({
 export type CreateGreenhouseProductFromCustomProductValidationType = z.infer<
     typeof CreateGreenhouseProductFromCustomProductSchema
 >
+
+export type ShoppingCartItem = { 
+    marketplaceProduct: number,
+    quantity: number,
+}

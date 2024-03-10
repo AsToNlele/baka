@@ -26,6 +26,14 @@ class ProductDetailMarketplaceProductSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class MarketplaceDetailProductSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+    greenhouse = MarketplaceProductGreenhouseSerializer()
+
+    class Meta:
+        model = MarketplaceProduct
+        fields = "__all__"
+
 class MarketplaceProductSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
 

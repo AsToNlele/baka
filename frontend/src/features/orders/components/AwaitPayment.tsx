@@ -25,9 +25,9 @@ export const AwaitPayment = ({ orderId }: AwaitPaymentProps) => {
     return (
         <div>
             {data && data.status === "paid" ? (
-                <div className="flex flex-col justify-center items-center">
+                <div className="flex flex-col items-center justify-center">
                     <FaCheckCircle size={50} color="green" />
-                    <h3 className="text-lg font-semibold text-center mt-4">
+                    <h3 className="mt-4 text-center text-lg font-semibold">
                         Order is paid
                     </h3>
                     {data?.type === "flowerbed" ? (
@@ -44,7 +44,7 @@ export const AwaitPayment = ({ orderId }: AwaitPaymentProps) => {
             ) : (
                 <div className="flex flex-col">
                     <Spinner size="lg" color="primary" />
-                    <h3 className="text-lg font-semibold text-center mt-4">
+                    <h3 className="mt-4 text-center text-lg font-semibold">
                         Awaiting payment
                     </h3>
                 </div>

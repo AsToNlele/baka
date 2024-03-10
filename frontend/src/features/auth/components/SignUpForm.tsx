@@ -16,7 +16,7 @@ export const SignUpForm = () => {
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex space-y-4 flex-col"
+            className="flex flex-col space-y-4"
         >
             <Input
                 label="Username"

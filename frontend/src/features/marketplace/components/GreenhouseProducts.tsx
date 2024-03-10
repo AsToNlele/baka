@@ -21,7 +21,7 @@ export const GreenhouseProducts = () => {
 
     return (
         <div className="flex flex-col gap-4">
-            <div className="flex gap-2 items-center">
+            <div className="flex items-center gap-2">
                 <h3 className="text-2xl font-bold">Products</h3>
                 <Button isIconOnly color="primary" size="sm" onPress={onOpen}>
                     <FaPlus />
@@ -32,7 +32,7 @@ export const GreenhouseProducts = () => {
                     onClose={onClose}
                 />
             </div>
-            <div className="grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 items-start">
+            <div className="grid grow grid-cols-1 items-start gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {products &&
                     products.map((product) => (
                         <GreenhouseProduct product={product} key={product.id} />
@@ -58,9 +58,9 @@ export const GreenhouseProduct = ({
                     src={`https://placedog.net/300/200?id=${product.id!}`}
                 />
             </CardBody>
-            <CardFooter className="text-small justify-between flex">
+            <CardFooter className="flex justify-between text-small">
                 <div className="flex flex-col">
-                    <div className="flex justify-between items-center w-full flex-wrap">
+                    <div className="flex w-full flex-wrap items-center justify-between">
                         <h1 className="text-lg">{product.product.name}</h1>
                     </div>
                     <div className="flex flex-col">

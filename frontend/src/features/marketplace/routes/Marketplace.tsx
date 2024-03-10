@@ -23,7 +23,7 @@ export const Marketplace = () => {
             <PageTitle title="Marketplace" />
 
             <div className="flex flex-col gap-4">
-                <div className="flex gap-2 items-center">
+                <div className="flex items-center gap-2">
                     <h2 className="text-2xl font-bold">Products</h2>
                     <Button isIconOnly color="primary" size="sm" onPress={onOpen}>
                         <FaPlus />
@@ -58,7 +58,7 @@ const Product = ({ product }: { product: ProductType }) => {
                         }`}
                 />
             </CardBody>
-            <CardFooter className="text-small justify-between">
+            <CardFooter className="justify-between text-small">
                 <b>{product.name}</b>
                 <p className="text-default-500">
                     {/* <FlowerbedStatus product={flowerbed} /> */}
@@ -70,7 +70,7 @@ const Product = ({ product }: { product: ProductType }) => {
 
 const ProductList = ({ products }: { products: ProductType[] }) => {
     return (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
             {products.map((product) => (
                 <Product key={product.id} product={product} />
             ))}

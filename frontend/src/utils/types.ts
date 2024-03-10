@@ -107,7 +107,7 @@ export type GreenhouseProductListResponse = Exclude<
     undefined
 >
 
-export type GreenhouseProductType = components["schemas"]["MarketplaceProduct"]
+export type GreenhouseProductType = components["schemas"]["MarketplaceDetailProduct"]
 
 export type CreateSharedProductRequest = Omit<
     Exclude<
@@ -124,3 +124,5 @@ export type CreateGreenhouseProductFromSharedProductRequest = Omit<
     >["content"]["application/json"],
     "id" | "greenhouse"
 >
+
+export type CreateProductOrderType = components["schemas"]["CreateProductOrderInput"]

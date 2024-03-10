@@ -35,7 +35,7 @@ const Flowerbed = ({ flowerbed }: { flowerbed: FlowerbedType }) => {
                     }`}
                 />
             </CardBody>
-            <CardFooter className="text-small justify-between">
+            <CardFooter className="justify-between text-small">
                 <b>{flowerbed.name}</b>
                 <p className="text-default-500">
                     <FlowerbedStatus flowerbed={flowerbed} />
@@ -47,7 +47,7 @@ const Flowerbed = ({ flowerbed }: { flowerbed: FlowerbedType }) => {
 
 export const FlowerbedList = ({ flowerbeds }: FlowerbedListProps) => {
     return (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
             {flowerbeds.map((flowerbed) => (
                 <Flowerbed key={flowerbed.id} flowerbed={flowerbed} />
             ))}

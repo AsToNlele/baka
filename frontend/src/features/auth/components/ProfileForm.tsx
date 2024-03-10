@@ -15,10 +15,10 @@ export const ProfileForm = () => {
         console.log(data)
     }
     return (
-        <div className="flex flex-col gap-8 pt-8 justify-start">
+        <div className="flex flex-col justify-start gap-8 pt-8">
             <div className="flex gap-8">
                 <Avatar
-                    className="w-24 h-24"
+                    className="size-24"
                     src="https://i.pravatar.cc/150?u=a04258114e29026702d"
                 />
                 <div className="flex flex-col gap-4">
@@ -34,10 +34,10 @@ export const ProfileForm = () => {
             />
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="flex gap-8 flex-col items-start"
+                className="flex flex-col items-start gap-8"
             >
-                <div className="flex flex-col gap-4 items-start">
-                    <div className="flex gap-4 items-start">
+                <div className="flex flex-col items-start gap-4">
+                    <div className="flex items-start gap-4">
                         <Input
                             label="First name"
                             placeholder="Your first name"
@@ -58,7 +58,7 @@ export const ProfileForm = () => {
                         {...register("email", { required: true })}
                     />
                 </div>
-                <div className="flex flex-col gap-4 w-full">
+                <div className="flex w-full flex-col gap-4">
                     <div className="flex gap-4">
                         <Input label="Address line 1" />
                         <Input label="Address line 2" />

@@ -1,5 +1,5 @@
 import { useFlowerbedDetail } from "@/features/flowerbeds/hooks/useFlowerbedDetail"
-import { useMultistepFormStore } from "@/features/flowerbeds/stores/useMultistepFormStore"
+import { useMultistepFormStore } from "@/features/flowerbeds/stores/useRentMultistepFormStore"
 import { Button, Divider, Image } from "@nextui-org/react"
 import { useNavigate, useParams } from "react-router-dom"
 import { DaySingleRangePickerWithInput } from "@/features/flowerbeds/components/DayRangePicker"
@@ -23,8 +23,8 @@ const RentFlowerbedHeader = () => {
     const { data } = useFlowerbedDetail(flowerbedId)
 
     return (
-        <div className="flex gap-4 flex-col sm:flex-row">
-            <div className="flex flex-1 sm:flex-none justify-center">
+        <div className="flex flex-col gap-4 sm:flex-row">
+            <div className="flex flex-1 justify-center sm:flex-none">
                 <div className="max-w-[400px] lg:max-w-[250px]">
                     <Image
                         classNames={{
@@ -35,7 +35,7 @@ const RentFlowerbedHeader = () => {
                     />
                 </div>
             </div>
-            <div className="flex gap-2 justify-center">
+            <div className="flex justify-center gap-2">
                 <div className="flex flex-col gap-2">
                     <h1 className="text-2xl font-bold">
                         {data?.greenhouse.title}
@@ -148,7 +148,7 @@ const Step1 = () => {
     const navigate = useNavigate()
 
     return (
-        <div className="lg:mx-24 mx-auto flex flex-col gap-4">
+        <div className="mx-auto flex flex-col gap-4 lg:mx-24">
             <DaySingleRangePickerWithInput
                 range={dateRange}
                 onRangeChange={setDateRange}
@@ -216,7 +216,7 @@ const Step2 = () => {
 
     return (
         <>
-            <div className="lg:mx-24 mx-auto flex flex-col gap-4">
+            <div className="mx-auto flex flex-col gap-4 lg:mx-24">
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <h2 className="text-xl font-bold">Full name: </h2>
@@ -313,7 +313,7 @@ const MultistepForm = () => {
     }, [statusData])
     return (
         <div>
-            <div className="flex justify-center gap-4 mb-2">
+            <div className="mb-2 flex justify-center gap-4">
                 <div
                     className={`${
                         currentStep === "step1" ? "text-black" : "text-gray-300"

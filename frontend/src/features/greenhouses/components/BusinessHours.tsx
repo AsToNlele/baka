@@ -82,7 +82,7 @@ export const BusinessHours = ({
     })
 
     return (
-        <div className="flex flex-col gap-4 mt-4">
+        <div className="mt-4 flex flex-col gap-4">
             {mappedDays.map((day) => {
                 return (
                     <div className="flex gap-4">
@@ -103,7 +103,7 @@ export const BusinessHours = ({
                         <div className="flex flex-col gap-4">
                             {day.greenhouse_business_hour_periods?.map(
                                 (period, index) => (
-                                    <div className="flex gap-8 items-center">
+                                    <div className="flex items-center gap-8">
                                         <Input
                                             label="From"
                                             type="time"

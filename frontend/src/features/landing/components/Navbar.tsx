@@ -25,7 +25,7 @@ export default function LandingNavbar() {
             classNames={{
                 item: ["data-[active=true]:text-secondarytw"],
             }}
-            className="bg-transparent backdrop-blur-none backdrop-filter-none border-none"
+            className="border-none bg-transparent backdrop-blur-none backdrop-filter-none"
         >
             <NavbarContent className="sm:hidden" justify="start">
                 <NavbarMenuToggle
@@ -33,18 +33,18 @@ export default function LandingNavbar() {
                 />
             </NavbarContent>
 
-            <NavbarContent className="sm:hidden pr-3" justify="center">
+            <NavbarContent className="pr-3 sm:hidden" justify="center">
                 <NavbarBrand>
                     <Brand />
                 </NavbarBrand>
             </NavbarContent>
 
-            <NavbarContent className="hidden sm:flex gap-4" justify="start">
+            <NavbarContent className="hidden gap-4 sm:flex" justify="start">
                 <NavbarBrand>
                     <Brand />
                 </NavbarBrand>
             </NavbarContent>
-            <NavbarContent className="hidden sm:flex gap-4" justify="center">
+            <NavbarContent className="hidden gap-4 sm:flex" justify="center">
                 <NavbarItem>
                     <Link href="#" color="foreground">
                         Features

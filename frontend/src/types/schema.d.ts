@@ -124,6 +124,9 @@ export interface paths {
   "/api/marketplace/greenhouses/{id}/products/": {
     get: operations["listMarketplaceProducts"];
   };
+  "/api/marketplace/product/{id}/": {
+    get: operations["retrieveMarketplaceProduct"];
+  };
   "/api/flowerbeds/{id}/rent/": {
     post: operations["rentFlowerbed"];
   };
@@ -141,6 +144,9 @@ export interface paths {
   };
   "/api/marketplace/greenhouses/{id}/products/from-custom/": {
     post: operations["createMarketplaceProduct"];
+  };
+  "/api/marketplace/order/": {
+    post: operations["createProductOrders"];
   };
   "/api/greenhouses/{id}/edit_greenhouse/": {
     put: operations["editGreenhouseGreenhouse"];
@@ -360,6 +366,34 @@ export interface components {
       updated_at?: string;
       greenhouse?: number | null;
     };
+    MarketplaceDetailProduct: {
+      id?: number;
+      product: {
+        id?: number;
+        name?: string;
+        description?: string | null;
+        image?: string | null;
+        shared?: boolean;
+      };
+      greenhouse: {
+        id?: number;
+        title?: string | null;
+        description?: string | null;
+        rules?: string | null;
+        published?: boolean;
+        bank_account_number?: string | null;
+        owner: number;
+        greenhouse_address?: number | null;
+        caretaker?: number | null;
+      };
+      /** Format: decimal */
+      price: string;
+      quantity: number;
+      /** Format: date-time */
+      created_at?: string;
+      /** Format: date-time */
+      updated_at?: string;
+    };
     CreateRent: {
       /** Format: date-time */
       rented_from: string | null;
@@ -383,6 +417,12 @@ export interface components {
       /** Format: decimal */
       price: string;
       quantity: number;
+    };
+    CreateProductOrderInput: {
+      items: {
+          marketplaceProduct: number;
+          quantity: number;
+        }[];
     };
     EditGreenhouse: {
       title: string | null;
@@ -1524,6 +1564,21 @@ export interface operations {
       };
     };
   };
+  retrieveMarketplaceProduct: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this marketplace product. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["MarketplaceDetailProduct"];
+        };
+      };
+    };
+  };
   rentFlowerbed: {
     parameters: {
       path: {
@@ -1612,6 +1667,22 @@ export interface operations {
       201: {
         content: {
           "application/json": components["schemas"]["CreateGreenhouseProductFromCustomProduct"];
+        };
+      };
+    };
+  };
+  createProductOrders: {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["CreateProductOrderInput"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateProductOrderInput"];
+        "multipart/form-data": components["schemas"]["CreateProductOrderInput"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["CreateProductOrderInput"];
         };
       };
     };

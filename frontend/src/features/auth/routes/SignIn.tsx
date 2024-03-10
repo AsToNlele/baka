@@ -7,14 +7,14 @@ export const SignIn = () => {
     return (
         <div className="flex min-h-full flex-col justify-center px-4 py-12">
             <div className="w-full">
-                <Card className="max-w-screen-sm mx-auto">
+                <Card className="mx-auto max-w-screen-sm">
                     <CardHeader className="block p-0 pt-8">
                         <h1 className="text-center text-2xl font-semibold">
                             Sign In
                         </h1>
                     </CardHeader>
-                    <CardBody className="px-8 py-8 gap-4">
-                        <div className="flex flex-col sm:flex-row w-full justify-evenly gap-4">
+                    <CardBody className="gap-4 p-8">
+                        <div className="flex w-full flex-col justify-evenly gap-4 sm:flex-row">
                             <Button fullWidth variant="bordered" size="lg">
                                 Sign in with
                                 <FcGoogle size={22} />
@@ -24,7 +24,7 @@ export const SignIn = () => {
                                 <FaDiscord size={22} />
                             </Button>
                         </div>
-                        <div className="flex justify-center items-center">
+                        <div className="flex items-center justify-center">
                             <div className="grow border-b"></div>
                             <div className="shrink-0 px-4 text-sm">or</div>
                             <div className="grow border-b"></div>

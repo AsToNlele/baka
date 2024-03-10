@@ -134,15 +134,15 @@ export const EditGreenhouseModal = ({
                                         )}
                                     />
                                 </div>
-                                <div className="flex flex-col mt-8 gap-2">
-                                    <h2 className="text-md">Address</h2>
+                                <div className="mt-8 flex flex-col gap-2">
+                                    <h2 className="text-base">Address</h2>
                                     <AddressFields
                                         register={register}
                                         data={data}
                                     />
                                 </div>
-                                <div className="flex flex-col mt-8 gap-2">
-                                    <h2 className="text-md">Opening hours</h2>
+                                <div className="mt-8 flex flex-col gap-2">
+                                    <h2 className="text-base">Opening hours</h2>
                                     <Controller
                                         name="greenhouse_business_hours"
                                         control={control}

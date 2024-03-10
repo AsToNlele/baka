@@ -19,6 +19,7 @@ import { Orders } from "@/features/orders/routes/Orders"
 import { OrderDetail } from "@/features/orders/routes/OrderDetail"
 import { Marketplace } from "@/features/marketplace/routes/Marketplace"
 import { ProductDetail } from "@/features/marketplace/routes/ProductDetail"
+import { Cart } from "@/features/marketplace/routes/Cart"
 
 function App() {
     const navigate = useNavigate()
@@ -28,7 +29,7 @@ function App() {
     return (
         <NextUIProvider navigate={navigate}>
             <QueryClientProvider client={queryClient}>
-                <main className="main-theme min-h-screen text-foreground bg-background">
+                <main className="min-h-screen bg-background text-foreground main-theme">
                     <Toaster richColors position="top-right" />
                     <AnimatePresence mode="wait">
                         <Routes location={location} key={location.pathname}>
@@ -74,6 +75,10 @@ function App() {
                                 <Route
                                     path="/app/marketplace/products/:id"
                                     element={<ProductDetail />}
+                                />
+                                <Route
+                                    path="/app/marketplace/cart"
+                                    element={<Cart />}
                                 />
                                 <Route path="*" element={<h1>404</h1>} />
                             </Route>

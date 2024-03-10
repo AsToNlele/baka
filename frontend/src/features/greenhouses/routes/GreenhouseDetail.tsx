@@ -91,7 +91,7 @@ export const GreenhouseDetail = () => {
 
     return (
         <>
-            <div className="flex gap-2 mb-8">
+            <div className="mb-8 flex gap-2">
                 <PageTitle title={data.title!} />
                 {userIsOwnerOrCareTaker() && (
                     <Button color="secondary" isIconOnly onPress={onOpen}>
@@ -106,8 +106,8 @@ export const GreenhouseDetail = () => {
                 onClose={onClose}
             />
 
-            <div className="flex gap-8 flex-col md:flex-row">
-                <div className="flex-1 flex justify-center">
+            <div className="flex flex-col gap-8 md:flex-row">
+                <div className="flex flex-1 justify-center">
                     <Image
                         classNames={{
                             wrapper: "w-full",
@@ -117,14 +117,14 @@ export const GreenhouseDetail = () => {
                         height={160}
                     />
                 </div>
-                <div className="flex flex-col flex-1 gap-8">
-                    <div className="flex flex-wrap gap-8 justify-between sm:justify-around lg:justify-evenly">
+                <div className="flex flex-1 flex-col gap-8">
+                    <div className="flex flex-wrap justify-between gap-8 sm:justify-around lg:justify-evenly">
                         <div className="flex-col">
-                            <h2 className="text-lg font-semibold mb-2 flex-1">
+                            <h2 className="mb-2 flex-1 text-lg font-semibold">
                                 Opening hours
                             </h2>
                             {/* <p>Open</p> */}
-                            <div className="flex flex-col mt-2 gap-2">
+                            <div className="mt-2 flex flex-col gap-2">
                                 {data?.greenhouse_business_hours?.map((day) => (
                                     <div
                                         className="flex justify-between gap-2"
@@ -167,9 +167,9 @@ export const GreenhouseDetail = () => {
                                 {/* </div> */}
                             </div>
                         </div>
-                        <div className="md:col-start-3 md:col-span-1 xl:col-span-2 flex justify-center">
+                        <div className="flex justify-center md:col-span-1 md:col-start-3 xl:col-span-2">
                             <div className="flex flex-col">
-                                <h2 className="text-lg font-semibold mb-2">
+                                <h2 className="mb-2 text-lg font-semibold">
                                     Address
                                 </h2>
                                 <p>{data?.greenhouse_address?.street}</p>
@@ -182,10 +182,10 @@ export const GreenhouseDetail = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="md:min-h-48 h-full">
+                    <div className="h-full md:min-h-48">
                         <Card className="h-full">
                             <iframe
-                                className="w-full h-full"
+                                className="size-full"
                                 src={`https://maps.google.com/maps?q=${data.greenhouse_address.latitude},${data.greenhouse_address.longitude}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
                                 style={{ border: 0 }}
                                 loading="lazy"

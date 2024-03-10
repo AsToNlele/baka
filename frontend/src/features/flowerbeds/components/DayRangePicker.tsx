@@ -53,7 +53,7 @@ export const DaySingleRangePickerWithInput = ({
     }, [toValue])
     return (
         <div className="flex flex-col gap-4">
-            <div className="flex justify-center flex-1">
+            <div className="flex flex-1 justify-center">
                 <DaySingleRangePicker
                     range={range}
                     onDayClick={handleDayClick}
@@ -198,7 +198,7 @@ export const DayRangePicker = ({
 
     return (
         <div className="flex flex-wrap gap-4">
-            <div className="flex justify-center flex-1">
+            <div className="flex flex-1 justify-center">
                 <DayPicker
                     mode="range"
                     selected={selectedRange}

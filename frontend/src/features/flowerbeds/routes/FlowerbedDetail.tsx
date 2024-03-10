@@ -16,8 +16,8 @@ export const FlowerbedDetail = () => {
                 backPath={`/app/greenhouses/${data?.greenhouse.id}?tab=flowerbeds`}
             />
 
-            <div className="flex flex-col sm:flex-row flex-wrap gap-2 mt-8">
-                <div className="flex-1 grid grid-cols-2 sm:grid-cols-2 gap-8 auto-rows-max">
+            <div className="mt-8 flex flex-col flex-wrap gap-2 sm:flex-row">
+                <div className="grid flex-1 auto-rows-max grid-cols-2 gap-8 sm:grid-cols-2">
                     <div className="">
                         {!data ? (
                             <div></div>
@@ -66,8 +66,8 @@ export const FlowerbedDetail = () => {
                     </div>
                 </div>
                 <Card className="flex-1">
-                    <CardBody className="flex flex-wrap lg:flex-row gap-2 items-center">
-                        <div className="w-full justify-around xl:justify-start gap-2 flex flex-col sm:flex-row lg:flex-col flex-1">
+                    <CardBody className="flex flex-wrap items-center gap-2 lg:flex-row">
+                        <div className="flex w-full flex-1 flex-col justify-around gap-2 sm:flex-row lg:flex-col xl:justify-start">
                             <div className="">
                                 <h2 className="text-xl font-semibold">
                                     {data?.greenhouse.title}

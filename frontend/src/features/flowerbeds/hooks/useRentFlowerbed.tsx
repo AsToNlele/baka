@@ -1,4 +1,4 @@
-import { useMultistepFormStore } from "@/features/flowerbeds/stores/useMultistepFormStore"
+import { useMultistepFormStore } from "@/features/flowerbeds/stores/useRentMultistepFormStore"
 import { api } from "@/utils/api"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { AxiosResponse } from "axios"

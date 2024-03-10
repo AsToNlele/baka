@@ -12,7 +12,7 @@ export const ProductDetail = () => {
     const { data: listings } = useProductListingsList(productId)
     return (
         <div className="flex flex-col gap-4">
-            <div className="flex flex-col md:flex-row gap-2">
+            <div className="flex flex-col gap-2 md:flex-row">
                 <div className="flex flex-col gap-4">
                     <PageTitle
                         title={`${product?.name}`}
@@ -35,7 +35,7 @@ export const ProductDetail = () => {
             <div className="flex flex-col gap-4">
                 <h2 className="text-2xl font-semibold">Listings</h2>
                 {listings && (
-                    <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                    <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                         {listings.map((listing) => (
                             <ProductListing
                                 listing={listing}
@@ -65,9 +65,9 @@ const ProductListing = ({ listing }: ProductListingProps) => {
                     src={`https://placedog.net/300/200?id=${listing.id!}`}
                 />
             </CardBody>
-            <CardFooter className="text-small justify-between flex">
+            <CardFooter className="flex justify-between text-small">
                 <div className="flex flex-col">
-                    <div className="flex justify-between items-center w-full flex-wrap">
+                    <div className="flex w-full flex-wrap items-center justify-between">
                         <h1 className="text-lg">{listing.greenhouse.title}</h1>
                     </div>
                     <div className="flex flex-col">

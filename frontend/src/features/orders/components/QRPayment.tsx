@@ -24,7 +24,7 @@ export const QRPaymentStandalone = ({ orderId }: QRPaymentStandaloneProps) => {
     if (!data) return null
 
     return (
-        <div className="flex flex-col md:flex-row items-center gap-4 justify-center">
+        <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
             {"error" in data ? null : "receiver" in data ? (
                 <>
                     <QRPayment

@@ -1540,6 +1540,26 @@ paths:
           description: ''
       tags:
       - api
+  /api/marketplace/product/{id}/:
+    get:
+      operationId: retrieveMarketplaceProduct
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this marketplace product.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketplaceDetailProduct'
+          description: ''
+      tags:
+      - api
   /api/flowerbeds/{id}/rent/:
     post:
       operationId: rentFlowerbed
@@ -1693,6 +1713,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateGreenhouseProductFromCustomProduct'
+          description: ''
+      tags:
+      - api
+  /api/marketplace/order/:
+    post:
+      operationId: createProductOrders
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProductOrderInput'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateProductOrderInput'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateProductOrderInput'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateProductOrderInput'
           description: ''
       tags:
       - api
@@ -2308,6 +2353,81 @@ components:
       - product
       - price
       - quantity
+    MarketplaceDetailProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        product:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            name:
+              type: string
+              maxLength: 255
+            description:
+              type: string
+              nullable: true
+            image:
+              type: string
+              nullable: true
+            shared:
+              type: boolean
+        greenhouse:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            title:
+              type: string
+              nullable: true
+            description:
+              type: string
+              nullable: true
+            rules:
+              type: string
+              nullable: true
+            published:
+              type: boolean
+            bank_account_number:
+              type: string
+              nullable: true
+            owner:
+              type: integer
+            greenhouse_address:
+              type: integer
+              nullable: true
+            caretaker:
+              type: integer
+              nullable: true
+          required:
+          - owner
+        price:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - product
+      - greenhouse
+      - price
+      - quantity
     CreateRent:
       type: object
       properties:
@@ -2375,6 +2495,23 @@ components:
       - product
       - price
       - quantity
+    CreateProductOrderInput:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              marketplaceProduct:
+                type: integer
+              quantity:
+                type: integer
+            required:
+            - marketplaceProduct
+            - quantity
+      required:
+      - items
     EditGreenhouse:
       type: object
       properties:

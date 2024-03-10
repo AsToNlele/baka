@@ -4,13 +4,14 @@ from marketplace.serializers import (
     CreateGreenhouseProductFromSharedProductSerializer,
     CreateProductOrderInputSerializer,
     CreateProductOrderOutputSerializer,
+    MarketplaceDetailProductSerializer,
     MarketplaceProductSerializer,
     ProductDetailMarketplaceProductSerializer,
     ProductSerializer,
     SharedProductSerializer,
 )
 from orders.models import ProductOrders
-from rest_framework import generics, viewsets
+from rest_framework import generics, permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404, mixins
 from rest_framework.views import Response
@@ -42,6 +43,16 @@ class GreenhouseProductView(generics.ListAPIView):
 
         return items
 
+class MarketplaceProductView(generics.RetrieveAPIView):
+    queryset = MarketplaceProduct.objects.all()
+    serializer_class = MarketplaceDetailProductSerializer
+    lookup_field = "pk"
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
 
 class SharedProductViewset(viewsets.ModelViewSet):
     queryset = SharedProduct.objects.filter(shared=True)
@@ -69,6 +80,7 @@ class CreateGreenhouseProductFromCustomProductView(generics.CreateAPIView):
 class CreateProductOrderView(generics.CreateAPIView):
     queryset = ProductOrders.objects.all()
     serializer_class = CreateProductOrderInputSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     def perform_create(self, serializer):
         return serializer.save()
