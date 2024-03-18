@@ -1,19 +1,27 @@
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { useMarketplaceProductDetails } from "@/features/marketplace/hooks/useMarketplaceProductDetail"
 import { useShoppingCartStore } from "@/features/marketplace/stores/useShoppingCartStore"
-import { ShoppingCartItem } from "@/features/marketplace/types"
-import { GreenhouseProductType } from "@/utils/types"
+import {
+    ShoppingCartProductItem,
+    ShoppingCartMarketplaceItem,
+} from "@/features/marketplace/types"
+import {
+    GreenhouseDetailProductType,
+    ProductMinMaxPriceType,
+} from "@/utils/types"
 import { Button, Input, Spinner, Divider } from "@nextui-org/react"
 import { useEffect } from "react"
 import { FaTrash } from "react-icons/fa"
 
 import { Link } from "react-router-dom"
 
-import { useProfile } from "@/features/auth/hooks/useProfile"
+// import { useProfile } from "@/features/auth/hooks/useProfile"
 import { Loading } from "@/components/Loading"
 import { QRPaymentStandalone } from "@/features/orders/components/QRPayment"
 import { AwaitPayment } from "@/features/orders/components/AwaitPayment"
-import { useCreateProductOrder } from "@/features/marketplace/hooks/useCreateProductOrder"
+// import { useCreateProductOrder } from "@/features/marketplace/hooks/useCreateProductOrder"
+import { useProductMinMaxDetails } from "@/features/marketplace/hooks/useProductMinMaxDetails"
+// import { useOrderDetail } from "@/features/orders/hooks/useOrderDetail"
 
 export const Cart = () => {
     return (
@@ -25,15 +33,43 @@ export const Cart = () => {
 
 const CartStep = () => {
     const { items, sum, setSum, setCurrentStep } = useShoppingCartStore()
-    const query = useMarketplaceProductDetails(items)
-    const allFinished = query.every((query) => query.isSuccess)
+    const productItems = items.filter(
+        (item): item is ShoppingCartProductItem => "product" in item,
+    )
+    const marketplaceItems = items.filter(
+        (item): item is ShoppingCartMarketplaceItem =>
+            "marketplaceProduct" in item,
+    )
+
+    const marketplaceProductQuery =
+        useMarketplaceProductDetails(marketplaceItems)
+    const productQuery = useProductMinMaxDetails(productItems)
+
+    const allFinished =
+        marketplaceProductQuery.every((query) => query.isSuccess) &&
+        productQuery.every((query) => query.isSuccess)
 
     useEffect(() => {
         const total = items.reduce((acc, item) => {
-            const product = query.find((q) => q.data?.id === item.marketplaceProduct)
-            if (!product) return acc
-            if (!product.data?.product) return acc
-            return acc + parseFloat(product?.data?.price) * item.quantity
+            let product
+            // Product
+            if ("product" in item) {
+                product = productQuery.find((q) => q.data?.id === item.product)
+                if (!product) return acc
+                if (!product.data?.min) return acc
+                return (
+                    acc +
+                    parseFloat(product?.data?.min.toString()) * item.quantity
+                )
+                // Marketplace product
+            } else {
+                product = marketplaceProductQuery.find(
+                    (q) => q.data?.id === item.marketplaceProduct,
+                )
+                if (!product) return acc
+                if (!product.data?.product) return acc
+                return acc + parseFloat(product?.data?.price) * item.quantity
+            }
         }, 0)
         setSum(total)
     }, [allFinished, setSum, items])
@@ -46,12 +82,32 @@ const CartStep = () => {
         <div className="flex flex-col gap-4">
             <PageTitle title="Cart" />
             <div className="flex flex-col items-start gap-2">
-                {items.map((item, index) => {
+                {items.map((item) => {
+                    if ("product" in item) {
+                        return (
+                            <CartItem
+                                key={item.product}
+                                type="product"
+                                item={item}
+                                data={
+                                    productQuery.find(
+                                        (q) => q.data?.id === item.product,
+                                    )?.data
+                                }
+                            />
+                        )
+                    }
                     return (
                         <CartItem
                             key={item.marketplaceProduct}
+                            type="marketplaceProduct"
                             item={item}
-                            data={query[index]?.data}
+                            data={
+                                marketplaceProductQuery.find(
+                                    (q) =>
+                                        q.data?.id === item.marketplaceProduct,
+                                )?.data
+                            }
                         />
                     )
                 })}
@@ -66,70 +122,129 @@ const CartStep = () => {
     )
 }
 
-type CartItemProps = {
-    item: ShoppingCartItem
-    data: GreenhouseProductType | undefined
-}
+type CartItemProps =
+    | {
+          type: "product"
+          item: ShoppingCartProductItem
+          data: ProductMinMaxPriceType | undefined
+      }
+    | {
+          type: "marketplaceProduct"
+          item: ShoppingCartMarketplaceItem
+          data: GreenhouseDetailProductType | undefined
+      }
 
-const CartItemLocked = ({ item, data }: CartItemProps) => {
-    if (!data) {
-        return <Spinner color="primary" />
-    }
-    return (
-        <div className="flex items-center gap-4">
-            <div>{data?.product?.name}</div>
-            <p className="whitespace-nowrap">{item.quantity}x</p>
-            <p className="whitespace-nowrap">{data?.price} / piece</p>
-            <p>
-                From:{" "}
-                <Link
-                    className="text-secondary"
-                    to={`/app/greenhouses/${data.greenhouse.id}`}
-                >
-                    {data.greenhouse.title}
-                </Link>
-            </p>
-            <div className="text-lg font-bold text-primary">
-                {parseFloat(data?.price) * item.quantity}
-            </div>
-        </div>
-    )
-}
+// const CartItemLocked = ({ type, item, data }: CartItemProps) => {
+//     if (!data) {
+//         return <Spinner color="primary" />
+//     }
+//     if (type === "product") {
+//         return (
+//             <div className="flex items-center gap-4">
+//                 <div>{data?.name}</div>
+//                 {/* <p className="whitespace-nowrap">{item.quantity}x</p> */}
+//                 {/* <p className="whitespace-nowrap">{data?.price} / piece</p> */}
+//                 <div className="text-lg font-bold text-primary">
+//                     Price: {data?.min} - {data?.max}
+//                 </div>
+//             </div>
+//         )
+//     } else {
+//         return (
+//             <div className="flex items-center gap-4">
+//                 <div>{data?.product?.name}</div>
+//                 <p className="whitespace-nowrap">{item.quantity}x</p>
+//                 <p className="whitespace-nowrap">{data?.price} / piece</p>
+//                 <p>
+//                     From:{" "}
+//                     <Link
+//                         className="text-secondary"
+//                         to={`/app/greenhouses/${data.greenhouse.id}`}
+//                     >
+//                         {data.greenhouse.title}
+//                     </Link>
+//                 </p>
+//                 <div className="text-lg font-bold text-primary">
+//                     {parseFloat(data?.price) * item.quantity}
+//                 </div>
+//             </div>
+//         )
+//     }
+// }
 
-const CartItem = ({ item, data }: CartItemProps) => {
+const CartItem = ({ type, item, data }: CartItemProps) => {
     const { changeQuantity, removeItem } = useShoppingCartStore()
     if (!data) {
         return <Spinner color="primary" />
     }
-    return (
-        <div className="flex items-center gap-4">
-            <div>{data?.product?.name}</div>
-            <Input
-                type="number"
-                value={item.quantity.toString()}
-                className="w-14"
-                onChange={(e) =>
-                    changeQuantity(item.marketplaceProduct, parseInt(e.target.value))
-                }
-            />
-            <p className="whitespace-nowrap">{data?.price} / piece</p>
-            <p>
-                From:{" "}
-                <Link
-                    className="text-secondary"
-                    to={`/app/greenhouses/${data.greenhouse.id}`}
+    if (type === "product") {
+        return (
+            <div className="flex items-center gap-4">
+                <div>{data?.name}</div>
+                <Input
+                    type="number"
+                    value={item.quantity.toString()}
+                    className="w-14"
+                    onChange={(e) =>
+                        changeQuantity(
+                            item.product,
+                            parseInt(e.target.value),
+                            type,
+                        )
+                    }
+                />
+                <p className="whitespace-nowrap">
+                    {data.min} - {data.max} / piece
+                </p>
+                <Button
+                    isIconOnly
+                    onPress={() => removeItem(item.product, type)}
                 >
-                    {data.greenhouse.title}
-                </Link>
-            </p>
-            <Button isIconOnly onPress={() => removeItem(item.marketplaceProduct)}>
-                <FaTrash />
-            </Button>
-            <div className="text-lg font-bold text-primary">
-                {parseFloat(data?.price) * item.quantity}
+                    <FaTrash />
+                </Button>
+                <div className="text-lg font-bold text-primary">
+                    Price: {data?.min} - {data?.max}
+                </div>
             </div>
-        </div>
-    )
+        )
+    } else {
+        return (
+            <div className="flex items-center gap-4">
+                <div>{data?.product?.name}</div>
+                <Input
+                    type="number"
+                    value={item.quantity.toString()}
+                    className="w-14"
+                    onChange={(e) =>
+                        changeQuantity(
+                            item.marketplaceProduct,
+                            parseInt(e.target.value),
+                            type,
+                        )
+                    }
+                />
+                <p className="whitespace-nowrap">{data?.price} / piece</p>
+                <p>
+                    From:{" "}
+                    <Link
+                        className="text-secondary"
+                        to={`/app/greenhouses/${data.greenhouse.id}`}
+                    >
+                        {data.greenhouse.title}
+                    </Link>
+                </p>
+                <Button
+                    isIconOnly
+                    onPress={() => removeItem(item.marketplaceProduct, type)}
+                >
+                    <FaTrash />
+                </Button>
+                <div className="text-lg font-bold text-primary">
+                    {parseFloat(data?.price) * item.quantity}
+                </div>
+            </div>
+        )
+    }
 }
 
 export const RentFlowerbed = () => {
@@ -137,76 +252,75 @@ export const RentFlowerbed = () => {
 }
 
 const Step2 = () => {
-    const { setCurrentStep, items, sum } = useShoppingCartStore()
-    const {mutate} = useCreateProductOrder()
-
-    const goToNext = () => {
-        // setCurrentStep("step3")
-        console.log("ITEMS", items)
-        mutate({data:{items}})
-    }
-
-    const { data: profileData } = useProfile()
-    console.log(profileData)
-
-    const query = useMarketplaceProductDetails(items)
-
-    return (
-        <>
-            <div className="mx-auto flex flex-col gap-4 lg:mx-24">
-                <div className="grid grid-cols-2 gap-4">
-                    <div>
-                        <h2 className="text-xl font-bold">Full name: </h2>
-                        <p>
-                            {profileData?.first_name || "Test"}{" "}
-                            {profileData?.last_name || "User"}
-                        </p>
-                        <h2 className="text-xl font-bold">Email:</h2>
-                        <p>{profileData?.email || "test@email.com"}</p>
-                    </div>
-                    <div></div>
-                </div>
-                <Divider />
-                {/* Price summary */}
-                <div className="grid grid-cols-2 gap-4">
-                    <div>
-                        <h2 className="text-xl font-bold">Items:</h2>
-                        {items.map((item, index) => {
-                            return (
-                                <CartItemLocked
-                                    key={item.marketplaceProduct}
-                                    item={item}
-                                    data={query[index]?.data}
-                                />
-                            )
-                        })}
-                    </div>
-                    <div>
-                        {/* <h2 className="text-xl font-bold">Price per day:</h2> */}
-                        {/* <p>{Number.parseFloat(data?.pricePerDay ?? "0")}</p> */}
-                    </div>
-                </div>
-                <Divider />
-                <div className="grid grid-cols-2 gap-4">
-                    <div></div>
-                    <div className="flex flex-col">
-                        <h2 className="text-lg font-bold">Total:</h2>
-                        <p className="text-xl text-secondary">
-                            {sum}
-                        </p>
-                    </div>
-                </div>
-                <div className="flex gap-4">
-                    <Button onPress={() => setCurrentStep("step1")}>
-                        Previous
-                    </Button>
-                    <Button color="secondary" onPress={goToNext}>
-                        Confirm
-                    </Button>
-                </div>
-            </div>
-        </>
-    )
+    return "Step2"
+    // const { setCurrentStep, items, sum } = useShoppingCartStore()
+    // const { mutate } = useCreateProductOrder()
+    //
+    // const goToNext = () => {
+    //     // setCurrentStep("step3")
+    //     console.log("ITEMS", items)
+    //     mutate({ data: { items } })
+    // }
+    //
+    // const { data: profileData } = useProfile()
+    // console.log(profileData)
+    //
+    // const query = useMarketplaceProductDetails(items)
+    //
+    // return (
+    //     <>
+    //         <div className="mx-auto flex flex-col gap-4 lg:mx-24">
+    //             <div className="grid grid-cols-2 gap-4">
+    //                 <div>
+    //                     <h2 className="text-xl font-bold">Full name: </h2>
+    //                     <p>
+    //                         {profileData?.first_name || "Test"}{" "}
+    //                         {profileData?.last_name || "User"}
+    //                     </p>
+    //                     <h2 className="text-xl font-bold">Email:</h2>
+    //                     <p>{profileData?.email || "test@email.com"}</p>
+    //                 </div>
+    //                 <div></div>
+    //             </div>
+    //             <Divider />
+    //             {/* Price summary */}
+    //             <div className="grid grid-cols-2 gap-4">
+    //                 <div>
+    //                     <h2 className="text-xl font-bold">Items:</h2>
+    //                     {items.map((item, index) => {
+    //                         return (
+    //                             <CartItemLocked
+    //                                 key={item.marketplaceProduct}
+    //                                 item={item}
+    //                                 data={query[index]?.data}
+    //                             />
+    //                         )
+    //                     })}
+    //                 </div>
+    //                 <div>
+    //                     {/* <h2 className="text-xl font-bold">Price per day:</h2> */}
+    //                     {/* <p>{Number.parseFloat(data?.pricePerDay ?? "0")}</p> */}
+    //                 </div>
+    //             </div>
+    //             <Divider />
+    //             <div className="grid grid-cols-2 gap-4">
+    //                 <div></div>
+    //                 <div className="flex flex-col">
+    //                     <h2 className="text-lg font-bold">Total:</h2>
+    //                     <p className="text-xl text-secondary">{sum}</p>
+    //                 </div>
+    //             </div>
+    //             <div className="flex gap-4">
+    //                 <Button onPress={() => setCurrentStep("step1")}>
+    //                     Previous
+    //                 </Button>
+    //                 <Button color="secondary" onPress={goToNext}>
+    //                     Confirm
+    //                 </Button>
+    //             </div>
+    //         </div>
+    //     </>
+    // )
 }
 const Step3 = () => {
     const { orderId, setCurrentStep } = useShoppingCartStore()
@@ -221,13 +335,44 @@ const Step3 = () => {
         <div className="flex flex-col gap-4 items-center">
             <QRPaymentStandalone orderId={orderId} />
             <AwaitPayment orderId={orderId} />
-            {orderId && <Button className="" onPress={goToNext}>Continue</Button>}
+            {orderId && (
+                <Button className="" onPress={goToNext}>
+                    Continue
+                </Button>
+            )}
         </div>
     )
 }
 
 const Step4 = () => {
-    return <div>Step 4</div>
+    return <div>TBD</div>
+    // const { orderId, items } = useShoppingCartStore()
+    // const { data } = useOrderDetail(orderId)
+    // console.log(data)
+    //
+    // // return <div>Step 4</div>
+    // return (
+    //     <div className="flex flex-col gap-8">
+    //         <h1 className="text-xl font-bold">Please pickup your order!</h1>
+    //         {data &&
+    //             data.items.map((item) => {
+    //                 return (
+    //                     <div key={item.id} className="flex gap-2">
+    //                         <Image
+    //                             shadow="sm"
+    //                             radius="lg"
+    //                             width="300px"
+    //                             className="w-full object-cover"
+    //                             src={`https://placedog.net/300/200?id=${item.id!}`}
+    //                         />
+    //                         <p>{item.productName}</p>
+    //                         <p>{item.quantity}x</p>
+    //                         <p>From {item.greenhouseName}</p>
+    //                     </div>
+    //                 )
+    //             })}
+    //     </div>
+    // )
 }
 
 const MultistepForm = () => {

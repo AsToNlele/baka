@@ -155,3 +155,13 @@ class CreateProductOrderOutputSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductOrders
         fields = "__all__"
+
+class ProductMinMaxSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    description = serializers.CharField()
+    image = serializers.CharField()
+    min = serializers.IntegerField()
+    max = serializers.IntegerField()
+    totalQuantity = serializers.IntegerField()
+    totalGreenhouses = serializers.IntegerField()

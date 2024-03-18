@@ -1,16 +1,23 @@
-import { ShoppingCartItem } from "@/features/marketplace/types"
-import { GreenhouseProductType } from "@/utils/types"
+import {
+    ShoppingCartMarketplaceItem,
+    ShoppingCartProductItem,
+} from "@/features/marketplace/types"
 import { create } from "zustand"
 import { devtools } from "zustand/middleware"
 
 type ShoppingCartStore = {
-    
-    items: Array<ShoppingCartItem>
+    items: Array<ShoppingCartProductItem | ShoppingCartMarketplaceItem>
     sum: number
 
-    addItem: (item: GreenhouseProductType) => void
-    removeItem: (id: number) => void
-    changeQuantity: (id: number, quantity: number) => void
+    addItem: (
+        item: ShoppingCartProductItem | ShoppingCartMarketplaceItem,
+    ) => void
+    removeItem: (id: number, type: "product" | "marketplaceProduct") => void
+    changeQuantity: (
+        id: number,
+        quantity: number,
+        type: "product" | "marketplaceProduct",
+    ) => void
 
     setSum: (sum: number) => void
 
@@ -34,31 +41,72 @@ export const useShoppingCartStore = create<ShoppingCartStore>()(
             },
         ],
         sum: 0,
-        addItem: (item: GreenhouseProductType) =>
+        addItem: (
+            item: ShoppingCartProductItem | ShoppingCartMarketplaceItem,
+        ) =>
+            set(({ items }) => {
+                // If id is already in the list, increase quantity
+                if ("product" in item) {
+                    const index = items.findIndex(
+                        (i) => "product" in i && i.product === item.product,
+                    )
+                    if (index !== -1) {
+                        items[index].quantity += item.quantity
+                        return { items }
+                    }
+                } else {
+                    const index = items.findIndex(
+                        (i) =>
+                            "marketplaceProduct" in i &&
+                            i.marketplaceProduct === item.marketplaceProduct,
+                    )
+                    if (index !== -1) {
+                        items[index].quantity += item.quantity
+                        return { items }
+                    }
+                }
+                // Append new item
+                return { items: [...items, item] }
+            }),
+        removeItem: (id: number, type: "product" | "marketplaceProduct") =>
             set((state) => ({
                 ...state,
-                items: [
-                    ...state.items,
-                    {
-                        marketplaceProduct: item.id!,
-                        quantity: item.quantity!,
-                    },
-                ],
+                items: state.items.filter((item) => {
+                    if (type === "product") {
+                        return "product" in item && item.product !== id
+                    } else {
+                        return (
+                            "marketplaceProduct" in item &&
+                            item.marketplaceProduct !== id
+                        )
+                    }
+                }),
             })),
-        removeItem: (id: number) =>
+        changeQuantity: (
+            id: number,
+            quantity: number,
+            type: "product" | "marketplaceProduct",
+        ) =>
             set((state) => ({
                 ...state,
-                items: state.items.filter((item) => item.marketplaceProduct !== id),
-            })),
-        changeQuantity: (id: number, quantity: number) =>
-            set((state) => ({
-                ...state,
-                items: state.items.map((item) =>
-                    item.marketplaceProduct === id ? { ...item, quantity } : item,
-                ),
+                items: state.items.map((item) => {
+                    if (type === "product") {
+                        if ("product" in item && item.product === id) {
+                            return { ...item, quantity }
+                        }
+                    } else {
+                        if (
+                            "marketplaceProduct" in item &&
+                            item.marketplaceProduct === id
+                        ) {
+                            return { ...item, quantity }
+                        }
+                    }
+                    return item
+                }),
             })),
         setSum: (total: number) => set({ sum: total }),
-        
+
         currentStep: "step1",
         setCurrentStep: (currentStep) => set({ currentStep }),
 

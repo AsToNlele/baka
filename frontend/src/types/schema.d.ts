@@ -111,6 +111,9 @@ export interface paths {
   "/api/marketplace/products/{id}/listings/": {
     get: operations["listingsProduct"];
   };
+  "/api/marketplace/products/{id}/minmax/": {
+    get: operations["minmaxProduct"];
+  };
   "/api/marketplace/shared-products/": {
     get: operations["listSharedProducts"];
     post: operations["createSharedProduct"];
@@ -147,6 +150,9 @@ export interface paths {
   };
   "/api/marketplace/order/": {
     post: operations["createProductOrders"];
+  };
+  "/api/marketplace/pickup-options/": {
+    post: operations["createGetPickupOptionsFromCartItems"];
   };
   "/api/greenhouses/{id}/edit_greenhouse/": {
     put: operations["editGreenhouseGreenhouse"];
@@ -340,6 +346,16 @@ export interface components {
       /** Format: date-time */
       updated_at?: string;
       product?: number | null;
+    };
+    ProductMinMax: {
+      id: number;
+      name: string;
+      description: string;
+      image: string;
+      min: number;
+      max: number;
+      totalQuantity: number;
+      totalGreenhouses: number;
     };
     SharedProduct: {
       id?: number;
@@ -1414,6 +1430,21 @@ export interface operations {
       };
     };
   };
+  minmaxProduct: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this product. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["ProductMinMax"];
+        };
+      };
+    };
+  };
   listSharedProducts: {
     parameters: {
       query?: {
@@ -1683,6 +1714,22 @@ export interface operations {
       201: {
         content: {
           "application/json": components["schemas"]["CreateProductOrderInput"];
+        };
+      };
+    };
+  };
+  createGetPickupOptionsFromCartItems: {
+    requestBody?: {
+      content: {
+        "application/json": unknown;
+        "application/x-www-form-urlencoded": unknown;
+        "multipart/form-data": unknown;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": unknown;
         };
       };
     };

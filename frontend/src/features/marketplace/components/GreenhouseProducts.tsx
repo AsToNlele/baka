@@ -9,8 +9,9 @@ import {
     Image,
     useDisclosure,
 } from "@nextui-org/react"
-import { FaPlus } from "react-icons/fa"
+import { FaPlus, FaShoppingCart } from "react-icons/fa"
 import { CreateGreenhouseProductModal } from "@/features/marketplace/components/CreateGreenhouseProductModal"
+import { useShoppingCartStore } from "@/features/marketplace/stores/useShoppingCartStore"
 
 export const GreenhouseProducts = () => {
     const { id } = useParams()
@@ -47,6 +48,7 @@ export const GreenhouseProduct = ({
 }: {
     product: GreenhouseProductType
 }) => {
+    const {addItem } = useShoppingCartStore()
     return (
         <Card shadow="sm" className="h-full">
             <CardBody className="overflow-visible p-0">
@@ -70,7 +72,15 @@ export const GreenhouseProduct = ({
                         </p>
                     </div>
                 </div>
-                <div className="flex">{/* TODO ADD TO CART */}</div>
+                <div className="flex">
+                    <Button
+                        isIconOnly
+                        color="primary"
+                        onPress={() => addItem({marketplaceProduct: product.id!, quantity: 1})}
+                    >
+                        <FaShoppingCart />
+                    </Button>
+                </div>
             </CardFooter>
         </Card>
     )

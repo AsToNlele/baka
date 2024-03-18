@@ -34,7 +34,13 @@ export type CreateGreenhouseProductFromCustomProductValidationType = z.infer<
     typeof CreateGreenhouseProductFromCustomProductSchema
 >
 
-export type ShoppingCartItem = { 
+export type ShoppingCartMarketplaceItem = { 
     marketplaceProduct: number,
     quantity: number,
 }
+
+export type ShoppingCartProductItem = {
+    product: number,
+    quantity: number,
+}
+

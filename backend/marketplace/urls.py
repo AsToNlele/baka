@@ -30,4 +30,5 @@ urlpatterns = [
         views.MarketplaceProductView.as_view(),
         name="marketplace-product",
     ),
+    path("pickup-options/", views.GetPickupOptionsFromCartItemsView.as_view(), name="pickup-options"),
 ]

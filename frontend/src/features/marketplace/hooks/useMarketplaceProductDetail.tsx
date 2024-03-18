@@ -1,11 +1,11 @@
-import { ShoppingCartItem } from "@/features/marketplace/types"
+import { ShoppingCartMarketplaceItem } from "@/features/marketplace/types"
 import { api } from "@/utils/api"
-import { GreenhouseProductType } from "@/utils/types"
+import { GreenhouseDetailProductType } from "@/utils/types"
 import { useQueries, useQuery } from "@tanstack/react-query"
 
 const MarketplaceProductDetail = (id: number) => {
     return api.get(`/marketplace/product/${id}`)
-    .then((res) => res.data as GreenhouseProductType)
+    .then((res) => res.data as GreenhouseDetailProductType)
 }
 
 export const useMarketplaceProductDetail = (id: number | undefined) => {
@@ -18,7 +18,7 @@ export const useMarketplaceProductDetail = (id: number | undefined) => {
 }
 
 export const useMarketplaceProductDetails = (
-    items: Array<ShoppingCartItem>,
+    items: Array<ShoppingCartMarketplaceItem>,
 ) => {
     const query = useQueries({
         queries: items.map((item) => ({

@@ -107,7 +107,9 @@ export type GreenhouseProductListResponse = Exclude<
     undefined
 >
 
-export type GreenhouseProductType = components["schemas"]["MarketplaceDetailProduct"]
+export type GreenhouseProductType = components["schemas"]["MarketplaceProduct"]
+
+export type GreenhouseDetailProductType = components["schemas"]["MarketplaceDetailProduct"]
 
 export type CreateSharedProductRequest = Omit<
     Exclude<
@@ -126,3 +128,5 @@ export type CreateGreenhouseProductFromSharedProductRequest = Omit<
 >
 
 export type CreateProductOrderType = components["schemas"]["CreateProductOrderInput"]
+
+export type ProductMinMaxPriceType = components["schemas"]["ProductMinMax"]

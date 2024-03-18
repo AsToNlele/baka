@@ -1339,6 +1339,26 @@ paths:
           description: ''
       tags:
       - api
+  /api/marketplace/products/{id}/minmax/:
+    get:
+      operationId: minmaxProduct
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this product.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductMinMax'
+          description: ''
+      tags:
+      - api
   /api/marketplace/shared-products/:
     get:
       operationId: listSharedProducts
@@ -1738,6 +1758,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateProductOrderInput'
+          description: ''
+      tags:
+      - api
+  /api/marketplace/pickup-options/:
+    post:
+      operationId: createGetPickupOptionsFromCartItems
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
           description: ''
       tags:
       - api
@@ -2288,6 +2329,34 @@ components:
       - greenhouse
       - price
       - quantity
+    ProductMinMax:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+        min:
+          type: integer
+        max:
+          type: integer
+        totalQuantity:
+          type: integer
+        totalGreenhouses:
+          type: integer
+      required:
+      - id
+      - name
+      - description
+      - image
+      - min
+      - max
+      - totalQuantity
+      - totalGreenhouses
     SharedProduct:
       type: object
       properties:

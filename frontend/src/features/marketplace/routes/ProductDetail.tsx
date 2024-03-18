@@ -1,8 +1,10 @@
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { useProductDetail } from "@/features/marketplace/hooks/useProductDetail"
 import { useProductListingsList } from "@/features/marketplace/hooks/useProductListingsList"
+import { useShoppingCartStore } from "@/features/marketplace/stores/useShoppingCartStore"
 import { ProductListingType } from "@/utils/types"
-import { Card, CardBody, CardFooter, Image } from "@nextui-org/react"
+import { Button, Card, CardBody, CardFooter, Image } from "@nextui-org/react"
+import { FaShoppingCart } from "react-icons/fa"
 import { useParams } from "react-router-dom"
 
 export const ProductDetail = () => {
@@ -54,6 +56,7 @@ type ProductListingProps = {
 }
 
 const ProductListing = ({ listing }: ProductListingProps) => {
+    const {addItem } = useShoppingCartStore()
     return (
         <Card shadow="sm" className="h-full">
             <CardBody className="overflow-visible p-0">
@@ -77,7 +80,15 @@ const ProductListing = ({ listing }: ProductListingProps) => {
                         </p>
                     </div>
                 </div>
-                <div className="flex">{/* TODO ADD TO CART */}</div>
+                <div className="flex">
+                    <Button
+                        isIconOnly
+                        color="primary"
+                        onPress={() => addItem({marketplaceProduct: listing.id!, quantity: 1})}
+                    >
+                        <FaShoppingCart />
+                    </Button>
+                </div>
             </CardFooter>
         </Card>
     )
