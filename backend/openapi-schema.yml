@@ -1845,6 +1845,11 @@ components:
             id:
               type: integer
               readOnly: true
+            primary_greenhouseId:
+              type: integer
+              maximum: 2147483647
+              minimum: -2147483648
+              nullable: true
             user:
               type: integer
           required:
@@ -1858,6 +1863,11 @@ components:
         id:
           type: integer
           readOnly: true
+        primary_greenhouseId:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
         user:
           type: integer
       required:

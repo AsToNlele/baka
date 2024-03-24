@@ -109,7 +109,8 @@ export type GreenhouseProductListResponse = Exclude<
 
 export type GreenhouseProductType = components["schemas"]["MarketplaceProduct"]
 
-export type GreenhouseDetailProductType = components["schemas"]["MarketplaceDetailProduct"]
+export type GreenhouseDetailProductType =
+    components["schemas"]["MarketplaceDetailProduct"]
 
 export type CreateSharedProductRequest = Omit<
     Exclude<
@@ -127,6 +128,29 @@ export type CreateGreenhouseProductFromSharedProductRequest = Omit<
     "id" | "greenhouse"
 >
 
-export type CreateProductOrderType = components["schemas"]["CreateProductOrderInput"]
+export type CreateProductOrderType =
+    components["schemas"]["CreateProductOrderInput"]
 
 export type ProductMinMaxPriceType = components["schemas"]["ProductMinMax"]
+
+export type SetPrimaryGreenhouseInput = {
+    greenhouseId: number
+}
+
+export type SetPrimaryGreenhouseResponse = Exclude<
+    ProfileType["profile"],
+    undefined
+>
+
+export type GetPickupOptionsInput = {
+    items: Array<ShoppingCartProductItem | ShoppingCartMarketplaceItem>
+    primaryGreenhouseId: number
+}
+
+export type PickupOptionType = {
+    title: string
+    items: Array<ShoppingCartMarketplaceItem>
+    sum: number
+}
+
+export type GetPickupOptionsOutput = Array<PickupOptionType>

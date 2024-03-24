@@ -32,7 +32,7 @@ export const useShoppingCartStore = create<ShoppingCartStore>()(
     devtools((set) => ({
         items: [
             {
-                marketplaceProduct: 14,
+                marketplaceProduct: 13,
                 quantity: 4,
             },
             {

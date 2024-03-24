@@ -10,6 +10,7 @@ from django.dispatch import receiver
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    primary_greenhouseId = models.IntegerField(null=True, blank=True)
 
 # Create your models here.
 class Book(models.Model):

@@ -173,11 +173,13 @@ export interface components {
       groups?: readonly string[];
       profile?: {
         readonly id?: number;
+        readonly primary_greenhouseId?: number | null;
         readonly user: number;
       };
     };
     Profile: {
       id?: number;
+      primary_greenhouseId?: number | null;
       user: number;
     };
     Group: {

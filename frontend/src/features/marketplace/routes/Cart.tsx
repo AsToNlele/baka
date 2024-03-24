@@ -7,6 +7,7 @@ import {
 } from "@/features/marketplace/types"
 import {
     GreenhouseDetailProductType,
+    PickupOptionType,
     ProductMinMaxPriceType,
 } from "@/utils/types"
 import { Button, Input, Spinner, Divider } from "@nextui-org/react"
@@ -21,6 +22,9 @@ import { QRPaymentStandalone } from "@/features/orders/components/QRPayment"
 import { AwaitPayment } from "@/features/orders/components/AwaitPayment"
 // import { useCreateProductOrder } from "@/features/marketplace/hooks/useCreateProductOrder"
 import { useProductMinMaxDetails } from "@/features/marketplace/hooks/useProductMinMaxDetails"
+import { PreferredGreenhouse } from "@/features/marketplace/routes/Marketplace"
+import { useGetPickupOptions } from "@/features/marketplace/hooks/useGetPickupOptions"
+import { useProfile } from "@/features/auth/hooks/useProfile"
 // import { useOrderDetail } from "@/features/orders/hooks/useOrderDetail"
 
 export const Cart = () => {
@@ -81,6 +85,8 @@ const CartStep = () => {
     return (
         <div className="flex flex-col gap-4">
             <PageTitle title="Cart" />
+            <PreferredGreenhouse />
+            <div className="mt-4 text-xl">Items</div>
             <div className="flex flex-col items-start gap-2">
                 {items.map((item) => {
                     if ("product" in item) {
@@ -124,15 +130,20 @@ const CartStep = () => {
 
 type CartItemProps =
     | {
-          type: "product"
-          item: ShoppingCartProductItem
-          data: ProductMinMaxPriceType | undefined
-      }
+        type: "product"
+        item: ShoppingCartProductItem
+        data: ProductMinMaxPriceType | undefined
+    }
     | {
-          type: "marketplaceProduct"
-          item: ShoppingCartMarketplaceItem
-          data: GreenhouseDetailProductType | undefined
-      }
+        type: "marketplaceProduct"
+        item: ShoppingCartMarketplaceItem
+        data: GreenhouseDetailProductType | undefined
+    }
+
+type CartItemLockedProps = {
+    item: ShoppingCartMarketplaceItem
+    data: GreenhouseDetailProductType | undefined
+}
 
 // const CartItemLocked = ({ type, item, data }: CartItemProps) => {
 //     if (!data) {
@@ -171,6 +182,31 @@ type CartItemProps =
 //         )
 //     }
 // }
+
+const CartItemLocked = ({ item, data }: CartItemLockedProps) => {
+    if (!data) {
+        return <Spinner color="primary" />
+    }
+    return (
+        <div className="flex items-center gap-4">
+            <div>{data?.product?.name}</div>
+            <p className="whitespace-nowrap">{item.quantity}x</p>
+            <p className="whitespace-nowrap">{data?.price} / piece</p>
+            <p>
+                From:{" "}
+                <Link
+                    className="text-secondary"
+                    to={`/app/greenhouses/${data.greenhouse.id}`}
+                >
+                    {data.greenhouse.title}
+                </Link>
+            </p>
+            <div className="text-lg font-bold text-primary">
+                {parseFloat(data?.price) * item.quantity}
+            </div>
+        </div>
+    )
+}
 
 const CartItem = ({ type, item, data }: CartItemProps) => {
     const { changeQuantity, removeItem } = useShoppingCartStore()
@@ -252,6 +288,49 @@ export const RentFlowerbed = () => {
 }
 
 const Step2 = () => {
+    const { items } = useShoppingCartStore()
+    const { data: profile } = useProfile()
+    const { mutate, data: pickupOptions } = useGetPickupOptions()
+    console.log(pickupOptions)
+
+    useEffect(() => {
+        mutate({
+            items,
+            primaryGreenhouseId: profile?.profile
+                ?.primary_greenhouseId as number,
+        })
+    }, [items])
+
+    if (!pickupOptions) {
+        return <Loading />
+    }
+
+    return pickupOptions.map((option) => <PickupOption key={option.title} option={option} />)
+}
+
+const PickupOption = ({ option }: { option: PickupOptionType }) => {
+    const marketplaceProductQuery = useMarketplaceProductDetails(option.items)
+
+    const allFinished = marketplaceProductQuery.every(
+        (query) => query.isSuccess,
+    )
+
+    if (!allFinished) {
+        return <Spinner color="primary" />
+    }
+
+    return option.items.map((item, index) => {
+        return (
+            <CartItemLocked
+                key={item.marketplaceProduct}
+                item={item}
+                data={marketplaceProductQuery[index]?.data}
+            />
+        )
+    })
+}
+
+export const StepStep2 = () => {
     return "Step2"
     // const { setCurrentStep, items, sum } = useShoppingCartStore()
     // const { mutate } = useCreateProductOrder()
@@ -332,7 +411,7 @@ const Step3 = () => {
     }
 
     return (
-        <div className="flex flex-col gap-4 items-center">
+        <div className="flex flex-col items-center gap-4">
             <QRPaymentStandalone orderId={orderId} />
             <AwaitPayment orderId={orderId} />
             {orderId && (
@@ -381,30 +460,26 @@ const MultistepForm = () => {
         <div>
             <div className="mb-2 flex justify-center gap-4">
                 <div
-                    className={`${
-                        currentStep === "step1" ? "text-black" : "text-gray-500"
-                    }`}
+                    className={`${currentStep === "step1" ? "text-black" : "text-gray-500"
+                        }`}
                 >
                     Cart
                 </div>
                 <div
-                    className={`${
-                        currentStep === "step2" ? "text-black" : "text-gray-500"
-                    }`}
+                    className={`${currentStep === "step2" ? "text-black" : "text-gray-500"
+                        }`}
                 >
-                    Summary
+                    Pickup options
                 </div>
                 <div
-                    className={`${
-                        currentStep === "step3" ? "text-black" : "text-gray-500"
-                    }`}
+                    className={`${currentStep === "step3" ? "text-black" : "text-gray-500"
+                        }`}
                 >
                     Payment
                 </div>
                 <div
-                    className={`${
-                        currentStep === "step4" ? "text-black" : "text-gray-500"
-                    }`}
+                    className={`${currentStep === "step4" ? "text-black" : "text-gray-500"
+                        }`}
                 >
                     Final
                 </div>

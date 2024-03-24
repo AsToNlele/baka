@@ -5,14 +5,20 @@ import {
     CardFooter,
     Image,
     Link,
+    Select,
+    SelectItem,
     useDisclosure,
 } from "@nextui-org/react"
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { ProductType } from "@/utils/types"
 import { useProductList } from "@/features/marketplace/hooks/useProductList"
-import { FaPlus, FaShoppingCart } from "react-icons/fa"
+import { FaPlus, FaSave, FaShoppingCart } from "react-icons/fa"
 import { CreateSharedProductModal } from "@/features/marketplace/components/CreateSharedProductModal"
 import { useShoppingCartStore } from "@/features/marketplace/stores/useShoppingCartStore"
+import { useSetPrimaryGreenhouse } from "@/features/marketplace/hooks/useSetPrimaryGreenhouse"
+import { useProfile } from "@/features/auth/hooks/useProfile"
+import { useGreenhouseList } from "@/features/greenhouses/hooks/useGreenhouseList"
+import { useState } from "react"
 
 export const Marketplace = () => {
     const { data: products } = useProductList()
@@ -22,6 +28,8 @@ export const Marketplace = () => {
     return (
         <div className="flex flex-col gap-4">
             <PageTitle title="Marketplace" />
+
+            <PreferredGreenhouse />
 
             <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-2">
@@ -87,6 +95,73 @@ const ProductList = ({ products }: { products: ProductType[] }) => {
             {products.map((product) => (
                 <Product key={product.id} product={product} />
             ))}
+        </div>
+    )
+}
+
+export const PreferredGreenhouse = () => {
+    const { mutate } = useSetPrimaryGreenhouse()
+    const { data: profileData } = useProfile()
+    const { data: greenhousesData } = useGreenhouseList()
+    const [selectedGreenhouse, setSelectedGreenhouse] = useState<
+        number | string | null
+    >(null)
+    return (
+        <div>
+            <h2 className="text-xl">Preferred greenhouse</h2>
+            <div className="flex gap-2">
+                {greenhousesData && profileData && (
+                    <Select
+                        aria-label="Preferred greenhouse"
+                        defaultSelectedKeys={
+                            profileData?.profile?.primary_greenhouseId !== null
+                                ? profileData?.profile?.primary_greenhouseId?.toString()
+                                : undefined
+                        }
+                        classNames={{
+                            base: "w-1/2",
+                        }}
+                        value={selectedGreenhouse!}
+                        onChange={(e) => {
+                            setSelectedGreenhouse(e.target.value)
+                        }}
+                    >
+                        {greenhousesData?.results ? (
+                            greenhousesData.results?.map((greenhouse) => {
+                                return greenhouse ? (
+                                    <SelectItem
+                                        key={greenhouse.id!.toString()}
+                                        value={greenhouse.id}
+                                    >
+                                        {greenhouse.title}
+                                    </SelectItem>
+                                ) : (
+                                    <SelectItem key={0} value={0}>
+                                        No Greenhouse
+                                    </SelectItem>
+                                )
+                            })
+                        ) : (
+                            <SelectItem key={-1} value={-1}>
+                                No Greenhouses
+                            </SelectItem>
+                        )}
+                    </Select>
+                )}
+                <div>
+                    <Button
+                        onPress={() =>
+                            mutate({
+                                greenhouseId: selectedGreenhouse as number,
+                            })
+                        }
+                        isIconOnly
+                        className="h-full"
+                    >
+                        <FaSave />
+                    </Button>
+                </div>
+            </div>
         </div>
     )
 }

@@ -21,7 +21,7 @@ export const Layout = ({ children }: { children?: ReactNode }) => {
             >
                 <div className="flex justify-between">
                     <NavBreadcrumbs />
-                    {location.pathname !== "/app/marketplace/cart" && location.pathname.includes('/app/marketplace') && (
+                    {location.pathname !== "/app/marketplace/cart" && (
                         <ShoppingCart />
                     )}
                 </div>
