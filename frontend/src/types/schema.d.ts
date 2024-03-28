@@ -73,6 +73,9 @@ export interface paths {
     get: operations["listFlowerbeds"];
     post: operations["createFlowerbed"];
   };
+  "/api/flowerbeds/my_flowerbeds/": {
+    get: operations["myFlowerbedsFlowerbed"];
+  };
   "/api/flowerbeds/{id}/": {
     get: operations["retrieveFlowerbed"];
     put: operations["updateFlowerbed"];
@@ -1126,6 +1129,15 @@ export interface operations {
     };
     responses: {
       201: {
+        content: {
+          "application/json": components["schemas"]["Flowerbed"];
+        };
+      };
+    };
+  };
+  myFlowerbedsFlowerbed: {
+    responses: {
+      200: {
         content: {
           "application/json": components["schemas"]["Flowerbed"];
         };

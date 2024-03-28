@@ -20,6 +20,7 @@ import { OrderDetail } from "@/features/orders/routes/OrderDetail"
 import { Marketplace } from "@/features/marketplace/routes/Marketplace"
 import { ProductDetail } from "@/features/marketplace/routes/ProductDetail"
 import { Cart } from "@/features/marketplace/routes/Cart"
+import { MyFlowerbedList } from "@/features/flowerbeds/routes/MyFlowerbedList"
 
 function App() {
     const navigate = useNavigate()
@@ -55,6 +56,10 @@ function App() {
                                 <Route
                                     path="/app/flowerbeds/:id"
                                     element={<FlowerbedDetail />}
+                                />
+                                <Route
+                                    path="/app/my-beds"
+                                    element={<MyFlowerbedList />}
                                 />
                                 <Route
                                     path="/app/flowerbeds/:id/rent"

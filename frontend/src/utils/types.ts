@@ -158,3 +158,5 @@ export type PickupOptionType = {
 export type GetPickupOptionsOutput = Array<PickupOptionType>
 
 export type GetPickupLocationsType = components["schemas"]["GetPickupLocations"]
+
+export type FlowerbedListType = paths["/api/flowerbeds/my_flowerbeds/"]["get"]["responses"][200]["content"]["application/json"][]

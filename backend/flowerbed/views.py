@@ -99,3 +99,9 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
 
         serializedRentItem = RentSerializer(rentItem)
         return Response(serializedRentItem.data, status=200)
+
+    @action(detail=False, methods=["get"], name="Get my flowerbeds", serializer_class=FlowerbedSerializer)
+    def my_flowerbeds(self, request):
+        queryset = Flowerbed.objects.filter(rent__user=request.user.profile)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

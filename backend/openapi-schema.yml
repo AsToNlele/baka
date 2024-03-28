@@ -855,6 +855,20 @@ paths:
           description: ''
       tags:
       - api
+  /api/flowerbeds/my_flowerbeds/:
+    get:
+      operationId: myFlowerbedsFlowerbed
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Flowerbed'
+          description: ''
+      tags:
+      - api
   /api/flowerbeds/{id}/:
     get:
       operationId: retrieveFlowerbed
