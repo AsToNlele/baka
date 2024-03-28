@@ -62,7 +62,6 @@ export const ShoppingCart = () => {
                     <div className="flex flex-col gap-2 px-1 py-2">
                         {items.map((item) => {
                             if ("product" in item) {
-                                console.log(item)
                                 return (
                                     <div className="flex" key={item.product}>
                                         {

@@ -1147,6 +1147,26 @@ paths:
           description: ''
       tags:
       - api
+  /api/orders/{id}/get_pickup/:
+    get:
+      operationId: getPickupOrder
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this order.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPickupLocations'
+          description: ''
+      tags:
+      - api
   /api/auth/profile:
     get:
       operationId: listUsers
@@ -1782,6 +1802,27 @@ paths:
           description: ''
       tags:
       - api
+  /api/marketplace/set-primary-greenhouse/:
+    post:
+      operationId: createSetPrimaryGreenhouse
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - api
   /api/greenhouses/{id}/edit_greenhouse/:
     put:
       operationId: editGreenhouseGreenhouse
@@ -2262,6 +2303,148 @@ components:
       - receiver
       - vs
       - amount
+    GetPickupLocations:
+      type: object
+      properties:
+        greenhouse:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            greenhouse_business_hours:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  greenhouse_business_hour_periods:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          readOnly: true
+                        open:
+                          type: string
+                        close:
+                          type: string
+                        business_hour:
+                          type: integer
+                          nullable: true
+                      required:
+                      - open
+                      - close
+                  day:
+                    type: integer
+                    maximum: 2147483647
+                    minimum: -2147483648
+                  greenhouse:
+                    type: integer
+                    nullable: true
+                required:
+                - greenhouse_business_hour_periods
+                - day
+            greenhouse_address:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  readOnly: true
+                country:
+                  type: string
+                  nullable: true
+                state:
+                  type: string
+                  nullable: true
+                city:
+                  type: string
+                  nullable: true
+                city_part:
+                  type: string
+                  nullable: true
+                street:
+                  type: string
+                  nullable: true
+                zipcode:
+                  type: string
+                  nullable: true
+                latitude:
+                  type: string
+                  nullable: true
+                longitude:
+                  type: string
+                  nullable: true
+            title:
+              type: string
+              nullable: true
+            description:
+              type: string
+              nullable: true
+            rules:
+              type: string
+              nullable: true
+            published:
+              type: boolean
+            bank_account_number:
+              type: string
+              nullable: true
+            owner:
+              type: integer
+            caretaker:
+              type: integer
+              nullable: true
+          required:
+          - greenhouse_business_hours
+          - greenhouse_address
+          - owner
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                readOnly: true
+              productOrder:
+                type: integer
+              quantity:
+                type: integer
+                maximum: 2147483647
+                minimum: -2147483648
+                nullable: true
+              price:
+                type: string
+                format: decimal
+                multipleOf: 0.01
+                maximum: 100000000
+                minimum: -100000000
+                nullable: true
+              greenhouseName:
+                type: string
+                nullable: true
+                maxLength: 255
+              greenhouseId:
+                type: integer
+                maximum: 2147483647
+                minimum: -2147483648
+                nullable: true
+              productName:
+                type: string
+                nullable: true
+                maxLength: 255
+              productImage:
+                type: string
+                nullable: true
+                maxLength: 255
+            required:
+            - productOrder
+      required:
+      - greenhouse
+      - items
     Product:
       type: object
       properties:

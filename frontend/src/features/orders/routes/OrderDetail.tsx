@@ -5,11 +5,36 @@ import { Divider } from "@nextui-org/react"
 import { useParams } from "react-router-dom"
 import { QRPaymentStandalone } from "@/features/orders/components/QRPayment"
 import { AwaitPayment } from "@/features/orders/components/AwaitPayment"
+import { useOrderPickup } from "@/features/orders/hooks/useOrderPickup"
+import { Loading } from "@/components/Loading"
+import { OrderPickupItem } from "@/features/orders/components/OrderPickupItem"
+
+const OrderPickupDetail = ({ productOrderId }: {productOrderId: number}) => {
+    const { data } = useOrderPickup(productOrderId)
+
+    if (!data) {
+        return <Loading />
+    }
+
+    return (
+        <div className="flex flex-col gap-16">
+            {data.map((pickup) => (
+                <OrderPickupItem key={pickup.greenhouse.id} pickup={pickup} />
+            ))}
+        </div>
+    )
+}
+    
+    
+    
+
 
 export const OrderDetail = () => {
     const { id } = useParams()
     const orderId = id ? parseInt(id) : null
     const { data } = useOrderDetail(orderId)
+
+
     return (
         <div className="flex flex-col gap-4">
             <PageTitle title={`Order #${orderId}`} />
@@ -30,8 +55,7 @@ export const OrderDetail = () => {
                             <div className="flex gap-4">
                                 <div className="flex-col">
                                     <p>
-                                        Greenhouse:{" "}
-                                        {data.rent.flowerbed.greenhouse.title}
+                                        Greenhouse:{" "} {data.rent.flowerbed.greenhouse.title}
                                     </p>
                                     <p>Flowerbed: {data.rent.flowerbed.name}</p>
                                 </div>
@@ -78,6 +102,10 @@ export const OrderDetail = () => {
                     <QRPaymentStandalone orderId={orderId} />
                     <AwaitPayment orderId={orderId} />
                 </div>
+            )}
+            <h2 className="mt-8 text-2xl">Pickup details</h2>
+            {data?.type === "product" && (
+                <OrderPickupDetail productOrderId={orderId!} />
             )}
         </div>
     )

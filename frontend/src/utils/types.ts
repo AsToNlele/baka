@@ -1,4 +1,5 @@
 // Import schema.d.ts file
+import { ShoppingCartMarketplaceItem, ShoppingCartProductItem } from "@/features/marketplace/types"
 import { components, paths } from "types/schema"
 
 export type ProfileType =
@@ -61,6 +62,7 @@ export type ProductOrderItemType = {
     quantity: number
     price: number
     greenhouseName: string
+    greenhouseId: number
     productName: string
     productImage: string
 }
@@ -154,3 +156,5 @@ export type PickupOptionType = {
 }
 
 export type GetPickupOptionsOutput = Array<PickupOptionType>
+
+export type GetPickupLocationsType = components["schemas"]["GetPickupLocations"]

@@ -95,6 +95,9 @@ export interface paths {
   "/api/orders/{id}/get_payment/": {
     get: operations["getPaymentOrder"];
   };
+  "/api/orders/{id}/get_pickup/": {
+    get: operations["getPickupOrder"];
+  };
   "/api/auth/profile": {
     get: operations["listUsers"];
   };
@@ -153,6 +156,9 @@ export interface paths {
   };
   "/api/marketplace/pickup-options/": {
     post: operations["createGetPickupOptionsFromCartItems"];
+  };
+  "/api/marketplace/set-primary-greenhouse/": {
+    post: operations["createSetPrimaryGreenhouse"];
   };
   "/api/greenhouses/{id}/edit_greenhouse/": {
     put: operations["editGreenhouseGreenhouse"];
@@ -319,6 +325,51 @@ export interface components {
       vs: number;
       /** Format: decimal */
       amount: string;
+    };
+    GetPickupLocations: {
+      greenhouse: {
+        id?: number;
+        greenhouse_business_hours: ({
+            id?: number;
+            greenhouse_business_hour_periods: ({
+                id?: number;
+                open: string;
+                close: string;
+                business_hour?: number | null;
+              })[];
+            day: number;
+            greenhouse?: number | null;
+          })[];
+        greenhouse_address: {
+          id?: number;
+          country?: string | null;
+          state?: string | null;
+          city?: string | null;
+          city_part?: string | null;
+          street?: string | null;
+          zipcode?: string | null;
+          latitude?: string | null;
+          longitude?: string | null;
+        };
+        title?: string | null;
+        description?: string | null;
+        rules?: string | null;
+        published?: boolean;
+        bank_account_number?: string | null;
+        owner: number;
+        caretaker?: number | null;
+      };
+      items: ({
+          id?: number;
+          productOrder: number;
+          quantity?: number | null;
+          /** Format: decimal */
+          price?: string | null;
+          greenhouseName?: string | null;
+          greenhouseId?: number | null;
+          productName?: string | null;
+          productImage?: string | null;
+        })[];
     };
     Product: {
       id?: number;
@@ -1300,6 +1351,21 @@ export interface operations {
       };
     };
   };
+  getPickupOrder: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this order. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetPickupLocations"];
+        };
+      };
+    };
+  };
   listProducts: {
     parameters: {
       query?: {
@@ -1721,6 +1787,22 @@ export interface operations {
     };
   };
   createGetPickupOptionsFromCartItems: {
+    requestBody?: {
+      content: {
+        "application/json": unknown;
+        "application/x-www-form-urlencoded": unknown;
+        "multipart/form-data": unknown;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+    };
+  };
+  createSetPrimaryGreenhouse: {
     requestBody?: {
       content: {
         "application/json": unknown;

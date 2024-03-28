@@ -296,8 +296,6 @@ const MultistepForm = () => {
     const { data: statusData } = useFlowerbedStatus(flowerbedId)
     const navigate = useNavigate()
 
-    console.log(statusData)
-
     useEffect(() => {
         if (statusData) {
             if (statusData?.status === "rented" && currentStep != "step3") {

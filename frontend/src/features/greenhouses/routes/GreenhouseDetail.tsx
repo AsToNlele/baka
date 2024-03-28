@@ -15,8 +15,8 @@ import { FlowerbedList } from "@/features/flowerbeds/components/FlowerbedList"
 import { FaEdit } from "react-icons/fa"
 import { EditGreenhouseModal } from "@/features/greenhouses/components/EditGreenhouseModal"
 import { useProfile } from "@/features/auth/hooks/useProfile"
-import { format } from "date-fns"
 import { GreenhouseProducts } from "@/features/marketplace/components/GreenhouseProducts"
+import { dayNumberToDay, formatTime } from "@/utils/utils"
 
 export const GreenhouseDetail = () => {
     const { id } = useParams()
@@ -55,39 +55,6 @@ export const GreenhouseDetail = () => {
     const userIsOwnerOrCareTaker = () =>
         user?.profile?.id === data.owner || user?.profile?.id === data.caretaker
 
-    const dayNumberToDay = (dayNumber: number) => {
-        switch (dayNumber) {
-            case 0:
-                return "Sunday"
-            case 1:
-                return "Monday"
-            case 2:
-                return "Tuesday"
-            case 3:
-                return "Wednesday"
-            case 4:
-                return "Thursday"
-            case 5:
-                return "Friday"
-            case 6:
-                return "Saturday"
-            default:
-                return "Unknown"
-        }
-    }
-
-    const formatTime = (timeString: string) => {
-        const date = new Date(
-            0,
-            0,
-            0,
-            parseInt(timeString.split(":")[0]),
-            parseInt(timeString.split(":")[1]),
-        )
-        return format(date, "HH:mm")
-        // const [hours, minutes] = timeString.split(":")
-        // return new Date(0, 0, 0, parseInt(hours), parseInt(minutes))
-    }
 
     return (
         <>
@@ -150,21 +117,6 @@ export const GreenhouseDetail = () => {
                                         </div>
                                     </div>
                                 ))}
-
-                                {/* <div className="flex flex-col"> */}
-                                {/*     <p>Monday</p> */}
-                                {/*     <p>Tuesday</p> */}
-                                {/*     <p>Wednesday</p> */}
-                                {/*     <p>Thursday</p> */}
-                                {/*     <p>Friday</p> */}
-                                {/* </div> */}
-                                {/* <div className="flex flex-col whitespace-nowrap"> */}
-                                {/*     <p>9:00 - 17:00</p> */}
-                                {/*     <p>9:00 - 17:00</p> */}
-                                {/*     <p>9:00 - 17:00</p> */}
-                                {/*     <p>9:00 - 17:00</p> */}
-                                {/*     <p>9:00 - 17:00</p> */}
-                                {/* </div> */}
                             </div>
                         </div>
                         <div className="flex justify-center md:col-span-1 md:col-start-3 xl:col-span-2">

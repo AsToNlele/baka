@@ -1,7 +1,9 @@
+from django.http.response import JsonResponse
 from greenhouse.models import Greenhouse
 from orders.models import FlowerbedOrders, Order, ProductOrders
 from orders.serializers import (
     FlowerbedOrderSerializer,
+    GetPickupLocationsSerializer,
     OrderSerializer,
     PaymentSerializer,
     ProductOrderSerializer,
@@ -68,3 +70,56 @@ class OrderViewSet(viewsets.ModelViewSet):
             return Response(payment_serializer.data)
         else:
             return Response(payment_serializer.errors)
+
+    @action(detail=True, methods=["get"], serializer_class=GetPickupLocationsSerializer)
+    def get_pickup(self, request, pk=None):
+        queryset = ProductOrders.objects.all()
+        productOrder = get_object_or_404(queryset, pk=pk)
+
+        if not productOrder:
+            return Response({"error": "Order not found"})
+
+
+        class GreenhouseWithItems:
+            def __init__(self, greenhouse):
+                self.greenhouse = greenhouse
+                self.items = []
+
+            def add_item(self, item):
+                self.items.append(item)
+
+            def __str__(self):
+                return f"{self.greenhouse.title} - {', '.join([item.productName for item in self.items])}"
+                
+
+        greenhousesWithItems = []
+
+        items = productOrder.productorderitems_set.all()
+
+        for item in items:
+            greenhouse = Greenhouse.objects.get(id=item.greenhouseId)
+            greenhouseWithItems = GreenhouseWithItems(greenhouse)
+            
+            isInList = False
+
+            for ghi in greenhousesWithItems:
+                if ghi.greenhouse.id == greenhouse.id:
+                    ghi.add_item(item)
+                    isInList = True
+                    break
+
+            if not isInList:
+                greenhouseWithItems.add_item(item)
+                greenhousesWithItems.append(greenhouseWithItems)
+
+        for greenhouseWithItems in greenhousesWithItems:
+            print(len( greenhousesWithItems ))
+            print(greenhouseWithItems)
+
+        
+        serializer = GetPickupLocationsSerializer(data=greenhousesWithItems, many=True)
+        serializer.is_valid()
+
+        return Response(serializer.data)
+        
+

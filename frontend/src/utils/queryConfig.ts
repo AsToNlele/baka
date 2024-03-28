@@ -19,7 +19,6 @@ export const queryConfig = {
     }),
     mutationCache: new MutationCache({
         onError: (error) => {
-            console.log(error)
             if (axios.isAxiosError(error)) {
                 if (error?.response?.data?.detail) {
                     toast.error(error.response.data.detail)
@@ -27,19 +26,24 @@ export const queryConfig = {
                     toast.error(error.response.data.message)
                 } else if (
                     error.response?.data &&
+                    error?.response?.data?.items &&
+                    error?.response?.data?.items[0] &&
+                    error?.response?.data?.items[0].non_field_errors
+                ) {
+                    toast.error(
+                        error.response.data.items[0].non_field_errors[0],
+                    )
+                } else if (
+                    error.response?.data &&
                     Object.keys(error.response.data).length > 0
                 ) {
-                    console.log(
-                        error.response.data[
-                            Object.keys(error.response.data)[0]
-                        ][0]
-                    )
-                    toast.error(
-                        error.response.data[
-                            Object.keys(error.response.data)[0]
-                        ][0]
-                    )
+                    console.log(JSON.stringify(error.response.data))
+                    toast.error(JSON.stringify(error.response.data))
+                } else {
+                    console.log(error)
                 }
+            } else {
+                console.log(error)
             }
         },
     }),

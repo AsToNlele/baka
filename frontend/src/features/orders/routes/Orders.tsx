@@ -87,7 +87,6 @@ export const ProductOrder = ({ order }: ProductOrderProps) => {
 
 export const Orders = () => {
     const { data, isLoading } = useOrderList()
-    console.log(data)
     return (
         <div>
             <PageTitle title="Orders" />

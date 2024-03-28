@@ -9,7 +9,6 @@ const createProductOrder = ({
 }: {
     data: CreateProductOrderType
 }) => {
-    console.log("DATA", data)
     return api.post(`/marketplace/order/`, data)
 }
 
@@ -22,6 +21,9 @@ export const useCreateProductOrder = () => {
             console.log("RESPONSE", resp.data)
             setOrderId(resp.data.id)
         },
+        onError: (error) => {
+            console.log("ERROR", error)
+        }
     })
     return mutation
 }

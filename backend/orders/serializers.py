@@ -1,6 +1,6 @@
 from django.db.models import Choices
 from flowerbed.models import Flowerbed, Rent
-from greenhouse.models import Greenhouse
+from greenhouse.models import Greenhouse, GreenhouseAddress, GreenhouseBusinessHour, GreenhouseBusinessHourPeriod
 from orders.models import FlowerbedOrders, Order, ProductOrderItems
 from rest_framework.schemas.coreapi import serializers
 
@@ -79,3 +79,40 @@ class PaymentSerializer(serializers.Serializer):
     receiver = serializers.CharField()
     vs = serializers.IntegerField()
     amount = serializers.DecimalField(max_digits=10, decimal_places=2)
+    
+class GreenhouseAddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GreenhouseAddress
+        fields = "__all__"
+
+
+class GreenhouseBusinessHourPeriodSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GreenhouseBusinessHourPeriod
+        fields = "__all__"
+
+
+class GreenhouseBusinessHourSerializer(serializers.ModelSerializer):
+    greenhouse_business_hour_periods = GreenhouseBusinessHourPeriodSerializer(
+        source="greenhousebusinesshourperiod_set", many=True
+    )
+
+    class Meta:
+        model = GreenhouseBusinessHour
+        fields = "__all__"
+
+
+
+class GreenhouseWithAddressSerializer(serializers.ModelSerializer):
+    greenhouse_business_hours = GreenhouseBusinessHourSerializer(
+        source="greenhousebusinesshour_set", many=True
+    )
+    greenhouse_address = GreenhouseAddressSerializer()
+    class Meta:
+        model = Greenhouse
+        fields = "__all__"
+
+
+class GetPickupLocationsSerializer(serializers.Serializer):
+    greenhouse = GreenhouseWithAddressSerializer()
+    items = ProductOrderItemSerializer(many=True)

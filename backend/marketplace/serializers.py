@@ -133,6 +133,7 @@ class CreateProductOrderInputSerializer(serializers.ModelSerializer):
                         quantity=item["quantity"],
                         price=item["marketplaceProduct"].price,
                         greenhouseName=item["marketplaceProduct"].greenhouse.title,
+                        greenhouseId=item["marketplaceProduct"].greenhouse.id,
                         productName=item["marketplaceProduct"].product.name,
                     )
                     item["marketplaceProduct"].quantity -= newItem.quantity

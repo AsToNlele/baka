@@ -6,26 +6,40 @@ import {
     ShoppingCartMarketplaceItem,
 } from "@/features/marketplace/types"
 import {
+    GetPickupLocationsType,
     GreenhouseDetailProductType,
     PickupOptionType,
     ProductMinMaxPriceType,
 } from "@/utils/types"
-import { Button, Input, Spinner, Divider } from "@nextui-org/react"
-import { useEffect } from "react"
+import {
+    Button,
+    Input,
+    Spinner,
+    Divider,
+    RadioGroup,
+    Radio,
+    Image,
+    Card,
+    CardBody,
+    CardFooter,
+} from "@nextui-org/react"
+import { useEffect, useState } from "react"
 import { FaTrash } from "react-icons/fa"
 
 import { Link } from "react-router-dom"
 
-// import { useProfile } from "@/features/auth/hooks/useProfile"
 import { Loading } from "@/components/Loading"
 import { QRPaymentStandalone } from "@/features/orders/components/QRPayment"
 import { AwaitPayment } from "@/features/orders/components/AwaitPayment"
-// import { useCreateProductOrder } from "@/features/marketplace/hooks/useCreateProductOrder"
 import { useProductMinMaxDetails } from "@/features/marketplace/hooks/useProductMinMaxDetails"
 import { PreferredGreenhouse } from "@/features/marketplace/routes/Marketplace"
 import { useGetPickupOptions } from "@/features/marketplace/hooks/useGetPickupOptions"
 import { useProfile } from "@/features/auth/hooks/useProfile"
-// import { useOrderDetail } from "@/features/orders/hooks/useOrderDetail"
+import { useCreateProductOrder } from "@/features/marketplace/hooks/useCreateProductOrder"
+import { toast } from "sonner"
+import { useOrderPickup } from "@/features/orders/hooks/useOrderPickup"
+import { dayNumberToDay, formatTime } from "@/utils/utils"
+import { OrderPickupItem } from "@/features/orders/components/OrderPickupItem"
 
 export const Cart = () => {
     return (
@@ -79,7 +93,7 @@ const CartStep = () => {
     }, [allFinished, setSum, items])
 
     const goToNext = () => {
-        setCurrentStep("step2")
+        if (items.length > 0) setCurrentStep("step2")
     }
 
     return (
@@ -120,7 +134,11 @@ const CartStep = () => {
             </div>
             <div>Celkem: {sum}</div>
             <div className="flex gap-4">
-                <Button color="secondary" onPress={goToNext}>
+                <Button
+                    color={items.length > 0 ? "secondary" : "default"}
+                    onPress={goToNext}
+                    disabled={items.length < 1}
+                >
                     Next
                 </Button>
             </div>
@@ -288,10 +306,28 @@ export const RentFlowerbed = () => {
 }
 
 const Step2 = () => {
-    const { items } = useShoppingCartStore()
+    const { items, setCurrentStep } = useShoppingCartStore()
     const { data: profile } = useProfile()
     const { mutate, data: pickupOptions } = useGetPickupOptions()
-    console.log(pickupOptions)
+    const [selected, setSelected] = useState<string>("")
+
+    const { mutate: createOrder } = useCreateProductOrder()
+
+    const goToNext = () => {
+        const finalPickupOption = pickupOptions?.find(
+            (option) => option.title === selected,
+        )
+        if (!finalPickupOption) {
+            toast.error("Invalid pickup option selected")
+            return
+        }
+        if (!finalPickupOption?.items) {
+            toast.error("No items in pickup option")
+            return
+        }
+        const items = finalPickupOption!.items!
+        createOrder({ data: { items } })
+    }
 
     useEffect(() => {
         mutate({
@@ -301,14 +337,73 @@ const Step2 = () => {
         })
     }, [items])
 
+    useEffect(() => {
+        if (pickupOptions) {
+            setSelected(pickupOptions[0].title)
+        }
+    }, [pickupOptions])
+
     if (!pickupOptions) {
         return <Loading />
     }
 
-    return pickupOptions.map((option) => <PickupOption key={option.title} option={option} />)
+    return (
+        <div className="flex flex-col items-start gap-2">
+            <PickupOptions
+                options={pickupOptions}
+                selectedOption={selected}
+                setSelectedOption={setSelected}
+            />
+
+            <div className="flex gap-4">
+                <Button onPress={() => setCurrentStep("step1")}>
+                    Previous
+                </Button>
+                <Button color="primary" onPress={goToNext}>
+                    Confirm order
+                </Button>
+            </div>
+        </div>
+    )
 }
 
-const PickupOption = ({ option }: { option: PickupOptionType }) => {
+type PickuOptionsProps = {
+    options: PickupOptionType[] | undefined
+    selectedOption: string
+    setSelectedOption: (option: string) => void
+}
+
+const PickupOptions = ({
+    options,
+    selectedOption,
+    setSelectedOption,
+}: PickuOptionsProps) => {
+    const selectedOptionData = options?.find(
+        (option) => option.title === selectedOption,
+    )
+    return (
+        <div className="flex flex-col gap-8">
+            <RadioGroup
+                label="Pickup options"
+                value={selectedOption}
+                onValueChange={setSelectedOption}
+            >
+                {options?.map((option) => (
+                    <Radio key={option.title} value={option.title}>
+                        {option.title.charAt(0).toUpperCase() +
+                            option.title.slice(1).toLowerCase()}
+                    </Radio>
+                ))}
+            </RadioGroup>
+
+            {selectedOptionData && (
+                <PickupOptionItems option={selectedOptionData!} />
+            )}
+        </div>
+    )
+}
+
+const PickupOptionItems = ({ option }: { option: PickupOptionType }) => {
     const marketplaceProductQuery = useMarketplaceProductDetails(option.items)
 
     const allFinished = marketplaceProductQuery.every(
@@ -319,15 +414,25 @@ const PickupOption = ({ option }: { option: PickupOptionType }) => {
         return <Spinner color="primary" />
     }
 
-    return option.items.map((item, index) => {
-        return (
-            <CartItemLocked
-                key={item.marketplaceProduct}
-                item={item}
-                data={marketplaceProductQuery[index]?.data}
-            />
-        )
-    })
+    return (
+        <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+                {option.items.map((item, index) => {
+                    return (
+                        <CartItemLocked
+                            key={item.marketplaceProduct}
+                            item={item}
+                            data={marketplaceProductQuery[index]?.data}
+                        />
+                    )
+                })}
+            </div>
+            <div className="flex">
+                <h2 className="text-lg font-bold">Total:</h2>
+                <p className="text-xl text-secondary">{option.sum}</p>
+            </div>
+        </div>
+    )
 }
 
 export const StepStep2 = () => {
@@ -424,35 +529,22 @@ const Step3 = () => {
 }
 
 const Step4 = () => {
-    return <div>TBD</div>
-    // const { orderId, items } = useShoppingCartStore()
-    // const { data } = useOrderDetail(orderId)
-    // console.log(data)
-    //
-    // // return <div>Step 4</div>
-    // return (
-    //     <div className="flex flex-col gap-8">
-    //         <h1 className="text-xl font-bold">Please pickup your order!</h1>
-    //         {data &&
-    //             data.items.map((item) => {
-    //                 return (
-    //                     <div key={item.id} className="flex gap-2">
-    //                         <Image
-    //                             shadow="sm"
-    //                             radius="lg"
-    //                             width="300px"
-    //                             className="w-full object-cover"
-    //                             src={`https://placedog.net/300/200?id=${item.id!}`}
-    //                         />
-    //                         <p>{item.productName}</p>
-    //                         <p>{item.quantity}x</p>
-    //                         <p>From {item.greenhouseName}</p>
-    //                     </div>
-    //                 )
-    //             })}
-    //     </div>
-    // )
+    const { orderId } = useShoppingCartStore()
+    const { data } = useOrderPickup(orderId)
+
+    if (!data) {
+        return <Loading />
+    }
+
+    return (
+        <div className="flex flex-col gap-16">
+            {data.map((pickup) => (
+                <OrderPickupItem key={pickup.greenhouse.id} pickup={pickup} />
+            ))}
+        </div>
+    )
 }
+
 
 const MultistepForm = () => {
     const { currentStep } = useShoppingCartStore()
@@ -481,7 +573,7 @@ const MultistepForm = () => {
                     className={`${currentStep === "step4" ? "text-black" : "text-gray-500"
                         }`}
                 >
-                    Final
+                    Pickup
                 </div>
             </div>
             <Divider />
