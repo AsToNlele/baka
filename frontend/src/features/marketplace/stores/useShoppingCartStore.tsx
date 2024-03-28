@@ -74,11 +74,11 @@ export const useShoppingCartStore = create<ShoppingCartStore>()(
                 ...state,
                 items: state.items.filter((item) => {
                     if (type === "product") {
-                        return "product" in item && item.product !== id
+                        return !("product" in item && item.product === id)
                     } else {
-                        return (
+                        return !(
                             "marketplaceProduct" in item &&
-                            item.marketplaceProduct !== id
+                            item.marketplaceProduct === id
                         )
                     }
                 }),
