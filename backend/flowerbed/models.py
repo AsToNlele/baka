@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.db import models
 from greenhouse.models import Greenhouse
-from quickstart.models import Profile
+from users.models import Profile
 
 # class FlowerbedIdealPlants(models.Model):
 #     flowerbed = models.ForeignKey("Flowerbed", models.DO_NOTHING, blank=True, null=True)

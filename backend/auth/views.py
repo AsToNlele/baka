@@ -7,7 +7,7 @@ from rest_framework import permissions, status
 from rest_framework import views, serializers
 from rest_framework.response import Response
 
-from quickstart.serializers import UserSerializer
+from users.serializers import UserSerializer
 
 from . import serializers as authSerializers
 

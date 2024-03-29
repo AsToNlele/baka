@@ -21,7 +21,7 @@
         {
           "column22": { "value": 26400363561, "name": "ID pohybu", "id": 22 },
           "column0": { "value": "2024-02-20+0100", "name": "Datum", "id": 0 },
-          "column1": { "value": 1.1, "name": "Objem", "id": 1 },
+          "column1": { "value": 10, "name": "Objem", "id": 1 },
           "column14": { "value": "CZK", "name": "Měna", "id": 14 },
           "column2": { "value": "1337", "name": "Protiúčet", "id": 2 },
           "column10": {
@@ -36,7 +36,7 @@
             "id": 12
           },
           "column4": null,
-          "column5": { "value": "1", "name": "VS", "id": 5 },
+          "column5": { "value": "1", "name": "VS", "id": 1 },
           "column6": null,
           "column7": {
             "value": "SURNAME NAME",

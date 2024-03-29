@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
-from quickstart.models import Book, Profile
+from .models import Profile
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -25,9 +25,3 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["url", "name"]
 
         from rest_framework import serializers
-
-
-class BookSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Book
-        fields = "__all__"

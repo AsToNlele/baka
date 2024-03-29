@@ -7,7 +7,7 @@ from greenhouse.models import (
     GreenhouseBusinessHour,
     GreenhouseBusinessHourPeriod,
 )
-from quickstart.models import Profile
+from users.models import Profile
 from rest_framework import serializers
 
 
@@ -66,6 +66,7 @@ class EditGreenhouseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Greenhouse
         fields = [
+            "id",
             "title",
             "description",
             "published",

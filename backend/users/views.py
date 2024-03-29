@@ -8,10 +8,9 @@ from django_filters import filterset
 from rest_framework import viewsets, generics, filters
 from rest_framework import permissions
 from rest_framework.decorators import action, api_view
-from quickstart.permissions import IsOwnerOrReadOnly
-from quickstart.models import Book, Profile
-from quickstart.serializers import (
-    BookSerializer,
+from .permissions import IsOwnerOrReadOnly
+from .models import Profile
+from .serializers import (
     ProfileSerializer,
     UserSerializer,
     GroupSerializer,
@@ -64,30 +63,30 @@ class GroupViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class BookViewSet(viewsets.ModelViewSet):
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [
-        django_filters.rest_framework.DjangoFilterBackend,
-        filters.SearchFilter,
-    ]
-    filterset_fields = ["title", "author"]
-    search_fields = ["title", "author"]
-
-    def perform_create(self, serializer):
-        serializer.save(profile=self.request.user.profile)
-
-    def filter_queryset(self, queryset):
-        queryset = super().filter_queryset(queryset)
-        return queryset
-
-    def list(self, request):
-        queryset = self.filter_queryset(self.get_queryset()).filter(
-            profile=request.user.profile
-        )
-        serializer = BookSerializer(queryset, many=True)
-        return Response(serializer.data)
+# class BookViewSet(viewsets.ModelViewSet):
+#     queryset = Book.objects.all()
+#     serializer_class = BookSerializer
+#     permission_classes = [permissions.IsAuthenticated]
+#     filter_backends = [
+#         django_filters.rest_framework.DjangoFilterBackend,
+#         filters.SearchFilter,
+#     ]
+#     filterset_fields = ["title", "author"]
+#     search_fields = ["title", "author"]
+#
+#     def perform_create(self, serializer):
+#         serializer.save(profile=self.request.user.profile)
+#
+#     def filter_queryset(self, queryset):
+#         queryset = super().filter_queryset(queryset)
+#         return queryset
+#
+#     def list(self, request):
+#         queryset = self.filter_queryset(self.get_queryset()).filter(
+#             profile=request.user.profile
+#         )
+#         serializer = BookSerializer(queryset, many=True)
+#         return Response(serializer.data)
 
 
 # class BookList(generics.ListCreateAPIView):

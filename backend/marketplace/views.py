@@ -13,7 +13,7 @@ from marketplace.serializers import (
     SharedProductSerializer,
 )
 from orders.models import ProductOrders
-from quickstart.serializers import ProfileSerializer
+from users.serializers import ProfileSerializer
 from rest_framework import generics, permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import JsonResponse

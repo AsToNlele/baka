@@ -1,7 +1,7 @@
 from django.db import models
 from rest_framework.fields import timezone
 from flowerbed.models import Rent
-from quickstart.models import Profile
+from users.models import Profile
 
 
 class Discounts(models.Model):

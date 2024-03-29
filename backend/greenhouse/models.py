@@ -1,5 +1,5 @@
 from django.db import models
-from quickstart.models import Profile
+from users.models import Profile
 
 
 class GreenhouseBusinessHourPeriod(models.Model):

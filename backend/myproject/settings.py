@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     "flowerbed",
     "orders",
     "marketplace",
-    "api"
+    "api",
+    "users"
 ]
 
 MIDDLEWARE = [

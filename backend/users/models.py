@@ -12,16 +12,6 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     primary_greenhouseId = models.IntegerField(null=True, blank=True)
 
-# Create your models here.
-class Book(models.Model):
-    title = models.CharField(max_length=255)
-    author = models.CharField(max_length=255)
-    # create a relation to Profile
-    profile = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, blank=True, null=True
-    )
-    
-
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

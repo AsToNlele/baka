@@ -32,14 +32,14 @@ type ShoppingCartStore = {
 export const useShoppingCartStore = create<ShoppingCartStore>()(
     devtools((set) => ({
         items: [
-            {
-                marketplaceProduct: 13,
-                quantity: 4,
-            },
-            {
-                marketplaceProduct: 15,
-                quantity: 10,
-            },
+            // {
+            //     marketplaceProduct: 13,
+            //     quantity: 4,
+            // },
+            // {
+            //     marketplaceProduct: 15,
+            //     quantity: 10,
+            // },
         ],
         sum: 0,
         addItem: (
