@@ -15,14 +15,14 @@ export const PageTitle = ({
     const navigate = useNavigate()
 
     return (
-        <div className="flex items-center">
+        <div className="mb-8 flex items-center">
             {!hideBackButton && (
                 <button
                     className="mr-2 flex size-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 focus:outline-none"
                     onClick={() =>
                         navigate(
                             backPath,
-                            backPath === ".." ? { relative: "path" } : {}
+                            backPath === ".." ? { relative: "path" } : {},
                         )
                     }
                 >

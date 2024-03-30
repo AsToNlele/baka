@@ -21,6 +21,8 @@ import { Marketplace } from "@/features/marketplace/routes/Marketplace"
 import { ProductDetail } from "@/features/marketplace/routes/ProductDetail"
 import { Cart } from "@/features/marketplace/routes/Cart"
 import { MyFlowerbedList } from "@/features/flowerbeds/routes/MyFlowerbedList"
+import { Users } from "@/features/users/routes/Users"
+import { UserDetail } from "@/features/users/routes/UserDetail"
 
 function App() {
     const navigate = useNavigate()
@@ -84,6 +86,11 @@ function App() {
                                 <Route
                                     path="/app/marketplace/cart"
                                     element={<Cart />}
+                                />
+                                <Route path="/app/users" element={<Users />} />
+                                <Route
+                                    path="/app/users/:id"
+                                    element={<UserDetail />}
                                 />
                                 <Route path="*" element={<h1>404</h1>} />
                             </Route>

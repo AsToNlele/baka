@@ -1,9 +1,9 @@
 // Import schema.d.ts file
-import { ShoppingCartMarketplaceItem, ShoppingCartProductItem } from "@/features/marketplace/types"
+import {
+    ShoppingCartMarketplaceItem,
+    ShoppingCartProductItem,
+} from "@/features/marketplace/types"
 import { components, paths } from "types/schema"
-
-export type ProfileType =
-    paths["/api/users/me/"]["get"]["responses"][200]["content"]["application/json"]
 
 export type GreenhouseType = components["schemas"]["Greenhouse"]
 export type GreenhouseListResponse =
@@ -159,4 +159,20 @@ export type GetPickupOptionsOutput = Array<PickupOptionType>
 
 export type GetPickupLocationsType = components["schemas"]["GetPickupLocations"]
 
-export type FlowerbedListType = paths["/api/flowerbeds/my_flowerbeds/"]["get"]["responses"][200]["content"]["application/json"][]
+export type FlowerbedListType =
+    paths["/api/flowerbeds/my_flowerbeds/"]["get"]["responses"][200]["content"]["application/json"][]
+
+export type UserType = components["schemas"]["User"] & {
+    owned_greenhouses: GreenhouseType[]
+    caretaker_greenhouses: GreenhouseType[]
+    profile: {
+        id: number
+        primaryGreenhouseId: number | null
+        user: number
+    }
+    superuser: boolean
+}
+
+export type UserListType = UserType[]
+
+export type ProfileType = UserType

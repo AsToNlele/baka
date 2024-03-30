@@ -23,6 +23,14 @@ import { useLocation } from "react-router-dom"
 
 export const AppNavbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const { data: profileData } = useProfile()
+
+    const location = useLocation()
+
+    const { data, isLoading } = useProfile()
+
+    const signOut = useSignOut()
+
     const menuLinks = [
         {
             name: "Home",
@@ -44,29 +52,34 @@ export const AppNavbar = () => {
             name: "My greenhouses",
             href: "/app/my-greenhouses",
         },
-        {
-            name: "Timesheet",
-            href: "/app/timesheet",
-        },
-        {
-            name: "Users",
-            href: "/app/users",
-        },
-        {
-            name: "Send Newsletter",
-            href: "/app/newsletter",
-        },
+        ...((profileData && profileData.owned_greenhouses.length > 0) ||
+            (profileData && profileData.caretaker_greenhouses.length > 0)
+            ? [
+                {
+                    name: "Timesheet",
+                    href: "/app/timesheet",
+                },
+            ]
+            : []),
+        ...(profileData && profileData.superuser
+            ? [
+                {
+                    name: "Users",
+                    href: "/app/users",
+                },
+                {
+                    name: "Send Newsletter",
+                    href: "/app/newsletter",
+                },
+            ]
+            : []),
         {
             name: "Orders",
             href: "/app/orders",
         },
     ]
 
-    const location = useLocation()
-
-    const { data, isLoading } = useProfile()
-
-    const signOut = useSignOut()
+    console.log(menuLinks)
 
     return (
         <Navbar
@@ -98,7 +111,7 @@ export const AppNavbar = () => {
                                 size="lg"
                                 color={
                                     location.pathname === item.href ||
-                                    `${location.pathname}/` === item.href
+                                        `${location.pathname}/` === item.href
                                         ? "secondary"
                                         : "foreground"
                                 }

@@ -5,3 +5,5 @@ export const Loading = () => (
         <Spinner size="lg" />
     </div>
 )
+
+export const SmallLoading = () => <Spinner size="lg" />
