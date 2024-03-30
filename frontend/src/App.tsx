@@ -23,6 +23,10 @@ import { Cart } from "@/features/marketplace/routes/Cart"
 import { MyFlowerbedList } from "@/features/flowerbeds/routes/MyFlowerbedList"
 import { Users } from "@/features/users/routes/Users"
 import { UserDetail } from "@/features/users/routes/UserDetail"
+import { ResetPassword } from "@/features/auth/routes/ResetPassword"
+import { ResetPasswordRequested } from "@/features/auth/routes/ResetPasswordRequested"
+import { ResetPasswordConfirm } from "@/features/auth/routes/ResetPasswordConfirm"
+import { ResetPasswordReseted } from "@/features/auth/routes/ResetPasswordReseted"
 
 function App() {
     const navigate = useNavigate()
@@ -40,6 +44,22 @@ function App() {
                             <Route element={<RedirectRoute />}>
                                 <Route path="/signup" element={<SignUp />} />
                                 <Route path="/signin" element={<SignIn />} />
+                                <Route
+                                    path="/reset-password"
+                                    element={<ResetPassword />}
+                                />
+                                <Route
+                                    path="/reset-password/:token"
+                                    element={<ResetPasswordConfirm />}
+                                />
+                                <Route
+                                    path="/reset-password-requested"
+                                    element={<ResetPasswordRequested />}
+                                />
+                                <Route
+                                    path="/reset-password-reseted"
+                                    element={<ResetPasswordReseted />}
+                                />
                             </Route>
                             <Route element={<ProtectedRoute />}>
                                 <Route path="/app" element={<Menu />} />

@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
 import django_filters.rest_framework
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,9 +30,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-aam1o7u%1@+=jlz3-l=2ns_elblq!n!^6$8e7ix^jby(2#!4i9"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-PROD = os.environ.get('PROD', False)
+PROD = os.environ.get("PROD", False)
 DEBUG = not PROD
-DB_HOST = os.environ.get('DB_HOST', 'localhost')
+DB_HOST = os.environ.get("DB_HOST", "localhost")
 
 ALLOWED_HOSTS = ["baka.docker", "localhost"]
 
@@ -45,8 +50,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "django_celery_beat",
     "django_seed",
-    'django_rest_passwordreset',
-    "quickstart",
+    "django_rest_passwordreset",
     "corsheaders",
     "django_filters",
     "greenhouse",
@@ -54,7 +58,7 @@ INSTALLED_APPS = [
     "orders",
     "marketplace",
     "api",
-    "users"
+    "users",
 ]
 
 MIDDLEWARE = [
@@ -184,3 +188,29 @@ CSRF_TRUSTED_ORIGINS = [
 CELERY_BROKER_URL = "redis://localhost:6379"
 CELERY_RESULT_BACKEND = "redis://localhost:6379"
 CELERY_TIMEZONE = TIME_ZONE
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.seznam.cz")
+EMAIL_PORT = os.getenv("EMAIL_PORT", 465)
+EMAIL_USE_SSL = True
+# EMAIL_USE_TLS = False
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+
+DJANGO_REST_MULTITOKENAUTH_RESET_TOKEN_EXPIRY_TIME=1
+
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR, os.path.join(BASE_DIR, "templates")],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
+    },
+]

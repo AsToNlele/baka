@@ -19,9 +19,9 @@ add_reset_password_urls_to_router(router, base_path='password-reset')
 urlpatterns = [
     path("", include(router.urls)),
     path("auth/", include("auth.urls"), name="auth"),
-    # path(
-    #     "password_reset/",
-    #     include("django_rest_passwordreset.urls", namespace="password_reset"),
-    # ),
+    path(
+        "password_reset/",
+        include("django_rest_passwordreset.urls", namespace="password_reset"),
+    ),
     path("marketplace/", include("marketplace.urls"), name="marketplace"),
 ]
