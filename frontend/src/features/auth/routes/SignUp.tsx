@@ -1,6 +1,4 @@
-import { Button, Card, CardBody, CardHeader, Link } from "@nextui-org/react"
-import { FcGoogle } from "react-icons/fc"
-import { FaDiscord } from "react-icons/fa"
+import { Card, CardBody, CardHeader, Link } from "@nextui-org/react"
 import { SignUpForm } from "../components/SignUpForm"
 
 export const SignUp = () => {

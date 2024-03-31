@@ -162,17 +162,21 @@ export type GetPickupLocationsType = components["schemas"]["GetPickupLocations"]
 export type FlowerbedListType =
     paths["/api/flowerbeds/my_flowerbeds/"]["get"]["responses"][200]["content"]["application/json"][]
 
-export type UserType = components["schemas"]["User"] & {
+export type UserType = components["schemas"]["UserDetailed"] & {
     owned_greenhouses: GreenhouseType[]
     caretaker_greenhouses: GreenhouseType[]
+    // superuser: boolean
     profile: {
         id: number
         primaryGreenhouseId: number | null
         user: number
+    } & {
+        superuser: boolean
     }
-    superuser: boolean
 }
 
 export type UserListType = UserType[]
 
 export type ProfileType = UserType
+
+export type EditUserRequest = components["schemas"]["EditUser"]

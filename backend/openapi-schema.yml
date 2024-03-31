@@ -582,7 +582,7 @@ paths:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/User'
+                      $ref: '#/components/schemas/UserDetailed'
           description: ''
       tags:
       - api
@@ -602,7 +602,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/UserDetailed'
           description: ''
       tags:
       - api
@@ -1070,6 +1070,118 @@ paths:
           description: ''
       tags:
       - api
+  /api/users/{id}/edit/:
+    post:
+      operationId: editUser
+      description: API endpoint that allows users to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EditUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EditUser'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EditUser'
+          description: ''
+      tags:
+      - api
+  /api/password-reset/validate_token/:
+    post:
+      operationId: createResetToken
+      description: An Api ViewSet which provides a method to verify that a token is
+        valid
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetToken'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResetToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResetToken'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResetToken'
+          description: ''
+      tags:
+      - api
+  /api/password-reset/confirm/:
+    post:
+      operationId: createPasswordToken
+      description: An Api ViewSet which provides a method to reset a password based
+        on a unique token
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordToken'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordToken'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordToken'
+          description: ''
+      tags:
+      - api
+  /api/password-reset/:
+    post:
+      operationId: createEmail
+      description: 'An Api ViewSet which provides a method to request a password reset
+        token based on an e-mail address
+
+
+        Sends a signal reset_password_token_created when a reset token was created'
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Email'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Email'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Email'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Email'
+          description: ''
+      tags:
+      - api
   /api/auth/login:
     post:
       operationId: createLogin
@@ -1130,6 +1242,86 @@ paths:
           content:
             application/json:
               schema: {}
+          description: ''
+      tags:
+      - api
+  /api/password_reset/validate_token/:
+    post:
+      operationId: createResetToken
+      description: An Api View which provides a method to verify that a token is valid
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetToken'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResetToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResetToken'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResetToken'
+          description: ''
+      tags:
+      - api
+  /api/password_reset/confirm/:
+    post:
+      operationId: createPasswordToken
+      description: An Api View which provides a method to reset a password based on
+        a unique token
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordToken'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordToken'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordToken'
+          description: ''
+      tags:
+      - api
+  /api/password_reset/:
+    post:
+      operationId: createEmail
+      description: 'An Api View which provides a method to request a password reset
+        token based on an e-mail address
+
+
+        Sends a signal reset_password_token_created when a reset token was created'
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Email'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Email'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Email'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Email'
           description: ''
       tags:
       - api
@@ -1798,7 +1990,7 @@ components:
       required:
       - greenhouse
       - items
-    User:
+    UserDetailed:
       type: object
       properties:
         first_name:
@@ -1842,6 +2034,12 @@ components:
           type: string
           readOnly: true
         caretaker_greenhouses:
+          type: string
+          readOnly: true
+        orders:
+          type: string
+          readOnly: true
+        superuser:
           type: string
           readOnly: true
       required:
@@ -2105,6 +2303,52 @@ components:
       required:
       - rented_from
       - rented_to
+    EditUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+\z
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          maxLength: 254
+      required:
+      - username
+    ResetToken:
+      type: object
+      properties:
+        token:
+          type: string
+      required:
+      - token
+    PasswordToken:
+      type: object
+      properties:
+        password:
+          type: string
+        token:
+          type: string
+      required:
+      - password
+      - token
+    Email:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+      - email
     CreateGreenhouseProductFromSharedProduct:
       type: object
       properties:

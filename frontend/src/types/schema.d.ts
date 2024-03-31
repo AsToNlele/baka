@@ -93,6 +93,26 @@ export interface paths {
   "/api/flowerbeds/{id}/rent/": {
     post: operations["rentFlowerbed"];
   };
+  "/api/users/{id}/edit/": {
+    /** @description API endpoint that allows users to be viewed or edited. */
+    post: operations["editUser"];
+  };
+  "/api/password-reset/validate_token/": {
+    /** @description An Api ViewSet which provides a method to verify that a token is valid */
+    post: operations["createResetToken"];
+  };
+  "/api/password-reset/confirm/": {
+    /** @description An Api ViewSet which provides a method to reset a password based on a unique token */
+    post: operations["createPasswordToken"];
+  };
+  "/api/password-reset/": {
+    /**
+     * @description An Api ViewSet which provides a method to request a password reset token based on an e-mail address
+     *
+     * Sends a signal reset_password_token_created when a reset token was created
+     */
+    post: operations["createEmail"];
+  };
   "/api/auth/login": {
     post: operations["createLogin"];
   };
@@ -101,6 +121,22 @@ export interface paths {
   };
   "/api/auth/logout": {
     post: operations["createLogout"];
+  };
+  "/api/password_reset/validate_token/": {
+    /** @description An Api View which provides a method to verify that a token is valid */
+    post: operations["createResetToken"];
+  };
+  "/api/password_reset/confirm/": {
+    /** @description An Api View which provides a method to reset a password based on a unique token */
+    post: operations["createPasswordToken"];
+  };
+  "/api/password_reset/": {
+    /**
+     * @description An Api View which provides a method to request a password reset token based on an e-mail address
+     *
+     * Sends a signal reset_password_token_created when a reset token was created
+     */
+    post: operations["createEmail"];
   };
   "/api/marketplace/greenhouses/{id}/products/from-shared/": {
     post: operations["createMarketplaceProduct"];
@@ -299,7 +335,7 @@ export interface components {
           productImage?: string | null;
         })[];
     };
-    User: {
+    UserDetailed: {
       first_name?: string;
       last_name?: string;
       /** @description Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only. */
@@ -314,6 +350,8 @@ export interface components {
       };
       owned_greenhouses?: string;
       caretaker_greenhouses?: string;
+      orders?: string;
+      superuser?: string;
     };
     Product: {
       id?: number;
@@ -412,6 +450,25 @@ export interface components {
       rented_from: string | null;
       /** Format: date-time */
       rented_to: string | null;
+    };
+    EditUser: {
+      first_name?: string;
+      last_name?: string;
+      /** @description Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only. */
+      username: string;
+      /** Format: email */
+      email?: string;
+    };
+    ResetToken: {
+      token: string;
+    };
+    PasswordToken: {
+      password: string;
+      token: string;
+    };
+    Email: {
+      /** Format: email */
+      email: string;
     };
     CreateGreenhouseProductFromSharedProduct: {
       product: number;
@@ -904,7 +961,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["User"];
+          "application/json": components["schemas"]["UserDetailed"];
         };
       };
     };
@@ -1239,6 +1296,84 @@ export interface operations {
       201: {
         content: {
           "application/json": components["schemas"]["CreateRent"];
+        };
+      };
+    };
+  };
+  /** @description API endpoint that allows users to be viewed or edited. */
+  editUser: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this user. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["EditUser"];
+        "application/x-www-form-urlencoded": components["schemas"]["EditUser"];
+        "multipart/form-data": components["schemas"]["EditUser"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["EditUser"];
+        };
+      };
+    };
+  };
+  /** @description An Api View which provides a method to verify that a token is valid */
+  createResetToken: {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["ResetToken"];
+        "application/x-www-form-urlencoded": components["schemas"]["ResetToken"];
+        "multipart/form-data": components["schemas"]["ResetToken"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["ResetToken"];
+        };
+      };
+    };
+  };
+  /** @description An Api View which provides a method to reset a password based on a unique token */
+  createPasswordToken: {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["PasswordToken"];
+        "application/x-www-form-urlencoded": components["schemas"]["PasswordToken"];
+        "multipart/form-data": components["schemas"]["PasswordToken"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["PasswordToken"];
+        };
+      };
+    };
+  };
+  /**
+   * @description An Api View which provides a method to request a password reset token based on an e-mail address
+   *
+   * Sends a signal reset_password_token_created when a reset token was created
+   */
+  createEmail: {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["Email"];
+        "application/x-www-form-urlencoded": components["schemas"]["Email"];
+        "multipart/form-data": components["schemas"]["Email"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["Email"];
         };
       };
     };

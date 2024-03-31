@@ -6,7 +6,6 @@ import {
     ShoppingCartMarketplaceItem,
 } from "@/features/marketplace/types"
 import {
-    GetPickupLocationsType,
     GreenhouseDetailProductType,
     PickupOptionType,
     ProductMinMaxPriceType,
@@ -18,10 +17,6 @@ import {
     Divider,
     RadioGroup,
     Radio,
-    Image,
-    Card,
-    CardBody,
-    CardFooter,
 } from "@nextui-org/react"
 import { useEffect, useState } from "react"
 import { FaTrash } from "react-icons/fa"
@@ -38,7 +33,6 @@ import { useProfile } from "@/features/auth/hooks/useProfile"
 import { useCreateProductOrder } from "@/features/marketplace/hooks/useCreateProductOrder"
 import { toast } from "sonner"
 import { useOrderPickup } from "@/features/orders/hooks/useOrderPickup"
-import { dayNumberToDay, formatTime } from "@/utils/utils"
 import { OrderPickupItem } from "@/features/orders/components/OrderPickupItem"
 
 export const Cart = () => {

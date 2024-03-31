@@ -22,7 +22,9 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = EditUserSerializer(user, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data)
+        user.refresh_from_db()
+        responseSerializer = UserDetailedSerializer(user)
+        return Response(responseSerializer.data)
 
     # Reset password
     

@@ -16,7 +16,7 @@ export const Users = () => {
                 {isLoading ? (
                     <SmallLoading />
                 ) : (
-                    data?.map((user) => <User key={user.id} user={user} />)
+                    data?.map((user) => <User key={user.profile.id} user={user} />)
                 )}
             </div>
         </div>
