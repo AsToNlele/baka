@@ -1,4 +1,5 @@
 import { EditUserModal } from "@/features/users/components/EditUserModal"
+import { UserActivity } from "@/features/users/components/UserActivity"
 import { UserType } from "@/utils/types"
 import { Button, useDisclosure } from "@nextui-org/react"
 import { FaEdit } from "react-icons/fa"
@@ -17,7 +18,7 @@ export const UserDetails = ({ data }: UserDetailProps) => {
                     <FaEdit />
                 </Button>
             </div>
-            <div className="flex gap-4">
+            <div className="flex items-center gap-4">
                 <div>
                     <p>Username: {data.username}</p>
                     <p>Email: {data.email}</p>
@@ -25,6 +26,9 @@ export const UserDetails = ({ data }: UserDetailProps) => {
                 <div>
                     <p>First name: {data.first_name}</p>
                     <p>Last name: {data.last_name}</p>
+                </div>
+                <div>
+                    <UserActivity data={data} />
                 </div>
             </div>
             <EditUserModal isOpen={isOpen} onClose={onClose} onOpenChange={onOpenChange} />

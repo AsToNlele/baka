@@ -97,6 +97,10 @@ export interface paths {
     /** @description API endpoint that allows users to be viewed or edited. */
     post: operations["editUser"];
   };
+  "/api/users/{id}/set_activity/": {
+    /** @description API endpoint that allows users to be viewed or edited. */
+    post: operations["setActivityUser"];
+  };
   "/api/password-reset/validate_token/": {
     /** @description An Api ViewSet which provides a method to verify that a token is valid */
     post: operations["createResetToken"];
@@ -352,6 +356,8 @@ export interface components {
       caretaker_greenhouses?: string;
       orders?: string;
       superuser?: string;
+      /** @description Designates whether this user should be treated as active. Unselect this instead of deleting accounts. */
+      is_active?: boolean;
     };
     Product: {
       id?: number;
@@ -458,6 +464,10 @@ export interface components {
       username: string;
       /** Format: email */
       email?: string;
+    };
+    SetUserActivity: {
+      /** @description Designates whether this user should be treated as active. Unselect this instead of deleting accounts. */
+      is_active?: boolean;
     };
     ResetToken: {
       token: string;
@@ -1319,6 +1329,29 @@ export interface operations {
       201: {
         content: {
           "application/json": components["schemas"]["EditUser"];
+        };
+      };
+    };
+  };
+  /** @description API endpoint that allows users to be viewed or edited. */
+  setActivityUser: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this user. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["SetUserActivity"];
+        "application/x-www-form-urlencoded": components["schemas"]["SetUserActivity"];
+        "multipart/form-data": components["schemas"]["SetUserActivity"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["SetUserActivity"];
         };
       };
     };

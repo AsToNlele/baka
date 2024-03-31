@@ -101,7 +101,8 @@ class UserDetailedSerializer(serializers.ModelSerializer):
             "owned_greenhouses",
             "caretaker_greenhouses",
             "orders",
-            "superuser"
+            "superuser",
+            "is_active"
         ]
     
 class EditUserSerializer(serializers.ModelSerializer):
@@ -120,3 +121,8 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["url", "name"]
 
         from rest_framework import serializers
+
+class SetUserActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["is_active"]

@@ -1,21 +1,21 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { api } from "../../../utils/api"
-import { EditUserDetailType } from "@/features/users/types"
+import { SetUserActivityRequest } from "@/utils/types"
 
-const editUserDetail = ({
+const setUserActivity = ({
     id,
     data,
 }: {
     id: number | string
-    data: EditUserDetailType
+    data: SetUserActivityRequest
 }) => {
-    return api.post(`/users/${id}/edit/`, data)
+    return api.post(`/users/${id}/set_activity/`, data)
 }
 
-export const useEditUserDetail = () => {
+export const useSetUserActivity= () => {
     const queryClient = useQueryClient()
     const mutation = useMutation({
-        mutationFn: editUserDetail,
+        mutationFn: setUserActivity,
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ["userList", data.data.profile.id] })
         },

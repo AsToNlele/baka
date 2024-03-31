@@ -180,3 +180,5 @@ export type UserListType = UserType[]
 export type ProfileType = UserType
 
 export type EditUserRequest = components["schemas"]["EditUser"]
+
+export type SetUserActivityRequest = components["schemas"]["SetUserActivity"]

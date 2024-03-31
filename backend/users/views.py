@@ -3,7 +3,7 @@ from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .serializers import EditUserSerializer, GroupSerializer, UserDetailedSerializer, UserSerializer
+from .serializers import EditUserSerializer, GroupSerializer, SetUserActivitySerializer, UserDetailedSerializer, UserSerializer
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
@@ -26,5 +26,12 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         responseSerializer = UserDetailedSerializer(user)
         return Response(responseSerializer.data)
 
-    # Reset password
-    
+    @action(detail=True, methods=["post"], serializer_class=SetUserActivitySerializer)
+    def set_activity(self, request, pk=None):
+        user = self.get_object()
+        serializer = SetUserActivitySerializer(user, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        user.refresh_from_db()
+        responseSerializer = UserDetailedSerializer(user)
+        return Response(responseSerializer.data)

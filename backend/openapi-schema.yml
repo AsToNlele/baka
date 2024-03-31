@@ -1101,6 +1101,37 @@ paths:
           description: ''
       tags:
       - api
+  /api/users/{id}/set_activity/:
+    post:
+      operationId: setActivityUser
+      description: API endpoint that allows users to be viewed or edited.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this user.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetUserActivity'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetUserActivity'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SetUserActivity'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetUserActivity'
+          description: ''
+      tags:
+      - api
   /api/password-reset/validate_token/:
     post:
       operationId: createResetToken
@@ -2042,6 +2073,10 @@ components:
         superuser:
           type: string
           readOnly: true
+        is_active:
+          type: boolean
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
       required:
       - username
     Product:
@@ -2324,6 +2359,13 @@ components:
           maxLength: 254
       required:
       - username
+    SetUserActivity:
+      type: object
+      properties:
+        is_active:
+          type: boolean
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
     ResetToken:
       type: object
       properties:
