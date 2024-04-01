@@ -8,7 +8,6 @@ import { Link } from "react-router-dom"
 
 export const Users = () => {
     const { data, isLoading } = useUserList()
-    console.log(data)
     return (
         <div>
             <PageTitle title="Users" />
@@ -16,7 +15,9 @@ export const Users = () => {
                 {isLoading ? (
                     <SmallLoading />
                 ) : (
-                    data?.map((user) => <User key={user.profile.id} user={user} />)
+                    data?.map((user) => (
+                        <User key={user.profile.id} user={user} />
+                    ))
                 )}
             </div>
         </div>
@@ -73,36 +74,36 @@ const User = ({ user }: { user: UserType }) => {
                     user.first_name ||
                     user.owned_greenhouses.length > 0 ||
                     user.caretaker_greenhouses.length > 0) && (
-                        <>
-                            <Divider />
-                            <CardBody>
-                                <div className="flex gap-4">
-                                    {(user.last_name || user.first_name) && (
-                                        <div className="flex-col">
-                                            <>
-                                                <p>First Name: {user.first_name}</p>
-                                                <p>Last Name: {user.last_name}</p>
-                                            </>
-                                        </div>
-                                    )}
+                    <>
+                        <Divider />
+                        <CardBody>
+                            <div className="flex gap-4">
+                                {(user.last_name || user.first_name) && (
+                                    <div className="flex-col">
+                                        <>
+                                            <p>First Name: {user.first_name}</p>
+                                            <p>Last Name: {user.last_name}</p>
+                                        </>
+                                    </div>
+                                )}
 
-                                    {(user.owned_greenhouses.length > 0 ||
-                                        user.caretaker_greenhouses.length > 0) && (
-                                            <div className="flex-col">
-                                                <p>
-                                                    Owned Greenhouses:{" "}
-                                                    {user.owned_greenhouses.length}
-                                                </p>
-                                                <p>
-                                                    Caretaker of Greenhouses:{" "}
-                                                    {user.caretaker_greenhouses.length}
-                                                </p>
-                                            </div>
-                                        )}
-                                </div>
-                            </CardBody>
-                        </>
-                    )}
+                                {(user.owned_greenhouses.length > 0 ||
+                                    user.caretaker_greenhouses.length > 0) && (
+                                    <div className="flex-col">
+                                        <p>
+                                            Owned Greenhouses:{" "}
+                                            {user.owned_greenhouses.length}
+                                        </p>
+                                        <p>
+                                            Caretaker of Greenhouses:{" "}
+                                            {user.caretaker_greenhouses.length}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        </CardBody>
+                    </>
+                )}
             </Card>
         </Link>
     )

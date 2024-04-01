@@ -11,16 +11,20 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect } from "react"
 import { useEditUserDetail } from "@/features/users/hooks/useEditUserDetail"
-import { EditUserDetailSchema, EditUserDetailType } from "@/features/users/types"
+import {
+    EditUserDetailSchema,
+    EditUserDetailType,
+} from "@/features/users/types"
 import { useUserDetail } from "@/features/users/hooks/useUserDetail"
 import { useParams } from "react-router-dom"
 
 type EditUserModalProps = {
     isOpen: boolean
     onOpenChange: (open: boolean) => void
-    onClose: () => void }
+    onClose: () => void
+}
 
-export const EditUserModal= ({
+export const EditUserModal = ({
     isOpen,
     onOpenChange,
     onClose,
@@ -43,13 +47,11 @@ export const EditUserModal= ({
             email: data?.email,
             first_name: data?.first_name,
             last_name: data?.last_name,
-        }
+        },
     })
 
-    const onSubmit: SubmitHandler<EditUserDetailType> = (
-        data,
-    ) => {
-        editUser.mutate({id: userId!, data})
+    const onSubmit: SubmitHandler<EditUserDetailType> = (data) => {
+        editUser.mutate({ id: userId!, data })
     }
 
     const submit = () => {
@@ -65,8 +67,6 @@ export const EditUserModal= ({
     useEffect(() => {
         reset()
     }, [onOpenChange, reset])
-
-    console.log({ errors })
 
     return (
         <Modal
@@ -114,7 +114,9 @@ export const EditUserModal= ({
                                         {...register("first_name", {
                                             required: true,
                                         })}
-                                        errorMessage={errors.first_name?.message}
+                                        errorMessage={
+                                            errors.first_name?.message
+                                        }
                                         defaultValue={data?.first_name ?? ""}
                                     />
                                     <Input

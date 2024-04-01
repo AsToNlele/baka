@@ -29,6 +29,8 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     @action(detail=True, methods=["post"], serializer_class=SetUserActivitySerializer)
     def set_activity(self, request, pk=None):
         user = self.get_object()
+        if user.is_superuser:
+            return Response({"message": "Cannot change activity of superuser"}, status=400)
         serializer = SetUserActivitySerializer(user, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()

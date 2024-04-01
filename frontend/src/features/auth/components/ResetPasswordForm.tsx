@@ -1,8 +1,10 @@
 import { SubmitHandler, useForm } from "react-hook-form"
 import { Button, Input } from "@nextui-org/react"
 import { useResetPassword } from "@/features/auth/hooks/useResetPassword"
+import { useNavigate } from "react-router-dom"
 
 export const ResetPasswordForm = () => {
+    const navigate = useNavigate()
     const resetPassword = useResetPassword()
 
     type ResetPasswordInputs = {
@@ -10,7 +12,11 @@ export const ResetPasswordForm = () => {
     }
     const { register, handleSubmit } = useForm<ResetPasswordInputs>()
     const onSubmit: SubmitHandler<ResetPasswordInputs> = (data) => {
-        resetPassword.mutate(data)
+        resetPassword.mutate(data, {
+            onSuccess: () => {
+                navigate("/reset-password-requested")
+            },
+        })
     }
     return (
         <form
