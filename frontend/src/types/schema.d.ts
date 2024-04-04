@@ -160,6 +160,18 @@ export interface paths {
   "/api/greenhouses/{id}/edit_greenhouse/": {
     put: operations["editGreenhouseGreenhouse"];
   };
+  "/api/greenhouses/{id}/set_caretaker/": {
+    put: operations["setCaretakerGreenhouse"];
+  };
+  "/api/greenhouses/{id}/set_owner/": {
+    put: operations["setOwnerGreenhouse"];
+  };
+  "/api/greenhouses/{id}/unset_caretaker/": {
+    put: operations["unsetCaretakerGreenhouse"];
+  };
+  "/api/greenhouses/{id}/unset_owner/": {
+    put: operations["unsetOwnerGreenhouse"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -233,7 +245,7 @@ export interface components {
       rules?: string | null;
       published?: boolean;
       bank_account_number?: string | null;
-      owner: number;
+      owner?: number | null;
       caretaker?: number | null;
     };
     Flowerbed: {
@@ -324,7 +336,7 @@ export interface components {
         rules?: string | null;
         published?: boolean;
         bank_account_number?: string | null;
-        owner: number;
+        owner?: number | null;
         caretaker?: number | null;
       };
       items: ({
@@ -375,7 +387,7 @@ export interface components {
         rules?: string | null;
         published?: boolean;
         bank_account_number?: string | null;
-        owner: number;
+        owner?: number | null;
         greenhouse_address?: number | null;
         caretaker?: number | null;
       };
@@ -439,7 +451,7 @@ export interface components {
         rules?: string | null;
         published?: boolean;
         bank_account_number?: string | null;
-        owner: number;
+        owner?: number | null;
         greenhouse_address?: number | null;
         caretaker?: number | null;
       };
@@ -532,6 +544,13 @@ export interface components {
           greenhouse?: number | null;
         })[];
     };
+    SetCaretaker: {
+      caretaker: number;
+    };
+    SetOwner: {
+      owner: number;
+    };
+    Empty: Record<string, never>;
   };
   responses: never;
   parameters: never;
@@ -1547,6 +1566,94 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["EditGreenhouse"];
+        };
+      };
+    };
+  };
+  setCaretakerGreenhouse: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this greenhouse. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["SetCaretaker"];
+        "application/x-www-form-urlencoded": components["schemas"]["SetCaretaker"];
+        "multipart/form-data": components["schemas"]["SetCaretaker"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["SetCaretaker"];
+        };
+      };
+    };
+  };
+  setOwnerGreenhouse: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this greenhouse. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["SetOwner"];
+        "application/x-www-form-urlencoded": components["schemas"]["SetOwner"];
+        "multipart/form-data": components["schemas"]["SetOwner"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["SetOwner"];
+        };
+      };
+    };
+  };
+  unsetCaretakerGreenhouse: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this greenhouse. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["Empty"];
+        "application/x-www-form-urlencoded": components["schemas"]["Empty"];
+        "multipart/form-data": components["schemas"]["Empty"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Empty"];
+        };
+      };
+    };
+  };
+  unsetOwnerGreenhouse: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this greenhouse. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["Empty"];
+        "application/x-www-form-urlencoded": components["schemas"]["Empty"];
+        "multipart/form-data": components["schemas"]["Empty"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Empty"];
         };
       };
     };

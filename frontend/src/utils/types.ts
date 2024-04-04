@@ -182,3 +182,7 @@ export type ProfileType = UserType
 export type EditUserRequest = components["schemas"]["EditUser"]
 
 export type SetUserActivityRequest = components["schemas"]["SetUserActivity"]
+
+export type SetCaretakerRequest = components["schemas"]["SetCaretaker"]
+
+export type SetOwnerRequest = components["schemas"]["SetOwner"]

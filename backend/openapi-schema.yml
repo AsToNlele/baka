@@ -1516,6 +1516,130 @@ paths:
           description: ''
       tags:
       - api
+  /api/greenhouses/{id}/set_caretaker/:
+    put:
+      operationId: setCaretakerGreenhouse
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this greenhouse.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetCaretaker'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetCaretaker'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SetCaretaker'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetCaretaker'
+          description: ''
+      tags:
+      - api
+  /api/greenhouses/{id}/set_owner/:
+    put:
+      operationId: setOwnerGreenhouse
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this greenhouse.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetOwner'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetOwner'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SetOwner'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetOwner'
+          description: ''
+      tags:
+      - api
+  /api/greenhouses/{id}/unset_caretaker/:
+    put:
+      operationId: unsetCaretakerGreenhouse
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this greenhouse.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Empty'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Empty'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Empty'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Empty'
+          description: ''
+      tags:
+      - api
+  /api/greenhouses/{id}/unset_owner/:
+    put:
+      operationId: unsetOwnerGreenhouse
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this greenhouse.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Empty'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Empty'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Empty'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Empty'
+          description: ''
+      tags:
+      - api
 components:
   schemas:
     Greenhouse:
@@ -1714,13 +1838,13 @@ components:
           nullable: true
         owner:
           type: integer
+          nullable: true
         caretaker:
           type: integer
           nullable: true
       required:
       - greenhouse_address
       - greenhouse_business_hours
-      - owner
     Flowerbed:
       type: object
       properties:
@@ -1970,13 +2094,13 @@ components:
               nullable: true
             owner:
               type: integer
+              nullable: true
             caretaker:
               type: integer
               nullable: true
           required:
           - greenhouse_business_hours
           - greenhouse_address
-          - owner
         items:
           type: array
           items:
@@ -2124,14 +2248,13 @@ components:
               nullable: true
             owner:
               type: integer
+              nullable: true
             greenhouse_address:
               type: integer
               nullable: true
             caretaker:
               type: integer
               nullable: true
-          required:
-          - owner
         price:
           type: string
           format: decimal
@@ -2294,14 +2417,13 @@ components:
               nullable: true
             owner:
               type: integer
+              nullable: true
             greenhouse_address:
               type: integer
               nullable: true
             caretaker:
               type: integer
               nullable: true
-          required:
-          - owner
         price:
           type: string
           format: decimal
@@ -2545,3 +2667,20 @@ components:
       - title
       - description
       - published
+    SetCaretaker:
+      type: object
+      properties:
+        caretaker:
+          type: integer
+      required:
+      - caretaker
+    SetOwner:
+      type: object
+      properties:
+        owner:
+          type: integer
+      required:
+      - owner
+    Empty:
+      type: object
+      properties: {}

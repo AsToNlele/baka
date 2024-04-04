@@ -6,6 +6,8 @@ from greenhouse.models import (
     GreenhouseAddress,
     GreenhouseBusinessHour,
     GreenhouseBusinessHourPeriod,
+    WorkStatement,
+    WorkStatementItem,
 )
 from users.models import Profile
 from rest_framework import serializers
@@ -132,13 +134,23 @@ class EditGreenhouseSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class SetCaretakerSerializer(serializers.Serializer):
+    caretaker = serializers.PrimaryKeyRelatedField(queryset=Profile.objects.all())
 
-# class GreenhouseCareTakerSerializer(serializers.ModelSerializer):
-#     caretaker = serializers.PrimaryKeyRelatedField(queryset=Profile.objects.all(), required=True)
-#
-#     class Meta:
-#         model = Greenhouse
-#         fields = ["caretaker"]
-#
-#     def validate(self, attrs):
-#         return attrs
+class SetOwnerSerializer(serializers.Serializer):
+    owner = serializers.PrimaryKeyRelatedField(queryset=Profile.objects.all())
+
+class WorkStatementItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkStatementItem
+        fields = "__all__"
+
+class WorkStatementSerializer(serializers.ModelSerializer):
+    items = WorkStatementItemSerializer(source="workstatementitem_set", many=True)
+    class Meta:
+        model = WorkStatement
+        fields = "__all__"
+        
+class EmptySerializer(serializers.Serializer):
+    
+    pass

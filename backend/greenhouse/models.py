@@ -1,4 +1,5 @@
 from django.db import models
+from rest_framework.fields import timezone
 from users.models import Profile
 
 
@@ -14,9 +15,7 @@ class GreenhouseBusinessHourPeriod(models.Model):
 
 
 class GreenhouseBusinessHour(models.Model):
-    greenhouse = models.ForeignKey(
-        "Greenhouse", models.CASCADE, blank=True, null=True
-    )
+    greenhouse = models.ForeignKey("Greenhouse", models.CASCADE, blank=True, null=True)
     day = models.IntegerField(null=False)
 
     class Meta:
@@ -51,7 +50,7 @@ class Greenhouse(models.Model):
     title = models.CharField(blank=True, null=True)
     description = models.TextField(blank=True, null=True, db_comment="Description")
     owner = models.ForeignKey(
-        Profile, models.DO_NOTHING, blank=False, null=False, related_name="owner"
+        Profile, models.DO_NOTHING, blank=True, null=True, related_name="owner"
     )
     rules = models.CharField(blank=True, null=True)
     greenhouse_address = models.OneToOneField(
@@ -65,3 +64,32 @@ class Greenhouse(models.Model):
 
     class Meta:
         db_table = "greenhouses"
+
+
+class WorkStatement(models.Model):
+    greenhouse = models.ForeignKey(
+        "Greenhouse", models.DO_NOTHING, blank=True, null=True
+    )
+    title = models.CharField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    status = models.CharField(default="submitted", blank=True, null=True)
+    author = models.ForeignKey(
+        Profile, models.DO_NOTHING, blank=True, null=True, related_name="author"
+    )
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "work_statements"
+
+
+class WorkStatementItem(models.Model):
+    work_statement = models.ForeignKey(
+        "WorkStatement", models.DO_NOTHING, blank=True, null=True
+    )
+    title = models.CharField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    hours = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        db_table = "work_statement_items"

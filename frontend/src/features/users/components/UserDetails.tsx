@@ -19,7 +19,7 @@ export const UserDetails = ({ data }: UserDetailProps) => {
                     <FaEdit />
                 </Button>
             </div>
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="mj:justify-start flex flex-wrap items-center justify-center gap-8">
                 <div>
                     <p>Username: {data.username}</p>
                     <p>Email: {data.email}</p>

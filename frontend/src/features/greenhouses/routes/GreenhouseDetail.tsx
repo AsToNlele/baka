@@ -12,11 +12,12 @@ import {
 } from "@nextui-org/react"
 import { Key, useEffect } from "react"
 import { FlowerbedList } from "@/features/flowerbeds/components/FlowerbedList"
-import { FaEdit } from "react-icons/fa"
+import { FaEdit , FaUsersCog} from "react-icons/fa"
 import { EditGreenhouseModal } from "@/features/greenhouses/components/EditGreenhouseModal"
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { GreenhouseProducts } from "@/features/marketplace/components/GreenhouseProducts"
 import { dayNumberToDay, formatTime } from "@/utils/utils"
+import { SetGreenhouseUsersModal } from "@/features/greenhouses/components/SetGreenhouseUsersModal"
 
 export const GreenhouseDetail = () => {
     const { id } = useParams()
@@ -41,6 +42,7 @@ export const GreenhouseDetail = () => {
     const greenhouseId = id ? parseInt(id) : null
     const { data, isLoading } = useGreenhouseDetail(greenhouseId)
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
+    const { isOpen: isUsersOpen, onOpen: onOpenUsers, onClose: onCloseUsers } = useDisclosure()
 
     const { data: user } = useProfile()
 
@@ -52,18 +54,23 @@ export const GreenhouseDetail = () => {
         return <div>Greenhouse not found</div>
     }
 
-    const userIsOwnerOrCareTaker = () =>
-        user?.profile?.id === data.owner || user?.profile?.id === data.caretaker
+    const userIsAdminOrOwnerOrCareTaker = () =>
+        user?.superuser || user?.profile?.id === data.owner || user?.profile?.id === data.caretaker
 
 
     return (
         <>
             <div className="mb-8 flex gap-2">
                 <PageTitle title={data.title!} />
-                {userIsOwnerOrCareTaker() && (
-                    <Button color="secondary" isIconOnly onPress={onOpen}>
-                        <FaEdit />
-                    </Button>
+                {userIsAdminOrOwnerOrCareTaker() && (
+                    <>
+                        <Button color="secondary" isIconOnly onPress={onOpen}>
+                            <FaEdit />
+                        </Button>
+                        <Button color="warning" isIconOnly onPress={onOpenUsers} size="md">
+                            <FaUsersCog size={20} />
+                        </Button>
+                    </>
                 )}
             </div>
 
@@ -71,6 +78,12 @@ export const GreenhouseDetail = () => {
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 onClose={onClose}
+            />
+
+            <SetGreenhouseUsersModal
+                isOpen={isUsersOpen}
+                onOpenChange={onOpenUsers}
+                onClose={onCloseUsers}
             />
 
             <div className="flex flex-col gap-8 md:flex-row">
