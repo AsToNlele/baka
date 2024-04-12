@@ -1,6 +1,6 @@
 from django.urls import include, path
 from flowerbed.views import FlowerbedViewSet
-from greenhouse.views import GreenhouseViewSet
+from greenhouse.views import GreenhouseViewSet, TimesheetViewSet
 from orders.views import OrderViewSet
 from rest_framework import routers
 from users import views
@@ -13,6 +13,7 @@ router.register(r"greenhouses", GreenhouseViewSet)
 router.register(r"flowerbeds", FlowerbedViewSet)
 router.register(r"orders", OrderViewSet)
 router.register(r"users", views.UserViewSet)
+router.register(r"timesheets", TimesheetViewSet)
 # router.register(r"marketplace", MarketplaceView)
 add_reset_password_urls_to_router(router, base_path='password-reset')
 

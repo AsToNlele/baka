@@ -66,12 +66,13 @@ class Greenhouse(models.Model):
         db_table = "greenhouses"
 
 
-class WorkStatement(models.Model):
+class Timesheet(models.Model):
     greenhouse = models.ForeignKey(
         "Greenhouse", models.DO_NOTHING, blank=True, null=True
     )
     title = models.CharField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
+    pay = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     status = models.CharField(default="submitted", blank=True, null=True)
     author = models.ForeignKey(
         Profile, models.DO_NOTHING, blank=True, null=True, related_name="author"
@@ -80,16 +81,49 @@ class WorkStatement(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = "work_statements"
+        db_table = "timesheets"
 
 
-class WorkStatementItem(models.Model):
-    work_statement = models.ForeignKey(
-        "WorkStatement", models.DO_NOTHING, blank=True, null=True
+class TimesheetItem(models.Model):
+    timesheet = models.ForeignKey(
+        "Timesheet", models.DO_NOTHING, blank=True, null=True
+    )
+    timesheet_update = models.ForeignKey(
+        "TimesheetUpdate", models.DO_NOTHING, blank=True, null=True
     )
     title = models.CharField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
-    hours = models.IntegerField(blank=True, null=True)
+    # hours = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        db_table = "work_statement_items"
+        db_table = "timesheet_items"
+
+class TimesheetUpdate(models.Model):
+    timesheet = models.ForeignKey(
+        "Timesheet", models.DO_NOTHING, blank=True, null=True
+    )
+    message = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    pay = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    status = models.CharField(default="submitted", blank=True, null=True)
+    author = models.ForeignKey(
+        Profile, models.DO_NOTHING, blank=True, null=True, related_name="update_author"
+    )
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "timesheet_updates"
+
+class TimesheetWorkingHour(models.Model):
+    timesheet = models.ForeignKey(
+        "Timesheet", models.DO_NOTHING, blank=True, null=True
+    )
+    timesheet_update = models.ForeignKey(
+        "TimesheetUpdate", models.DO_NOTHING, blank=True, null=True
+    )
+    start = models.DateTimeField(blank=True, null=True)
+    end = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        db_table = "timesheet_working_hours"

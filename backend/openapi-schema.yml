@@ -160,6 +160,26 @@ paths:
           description: ''
       tags:
       - api
+  /api/greenhouses/{id}/get_timesheets/:
+    get:
+      operationId: getTimesheetsGreenhouse
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this greenhouse.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Timesheet'
+          description: ''
+      tags:
+      - api
   /api/flowerbeds/:
     get:
       operationId: listFlowerbeds
@@ -603,6 +623,163 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserDetailed'
+          description: ''
+      tags:
+      - api
+  /api/timesheets/:
+    get:
+      operationId: listTimesheets
+      description: ''
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TimesheetWithGreenhouse'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createTimesheet
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimesheetWithGreenhouse'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TimesheetWithGreenhouse'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TimesheetWithGreenhouse'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimesheetWithGreenhouse'
+          description: ''
+      tags:
+      - api
+  /api/timesheets/{id}/:
+    get:
+      operationId: retrieveTimesheet
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this timesheet.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimesheetWithGreenhouse'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateTimesheet
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this timesheet.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimesheetWithGreenhouse'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TimesheetWithGreenhouse'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TimesheetWithGreenhouse'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimesheetWithGreenhouse'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateTimesheet
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this timesheet.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimesheetWithGreenhouse'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TimesheetWithGreenhouse'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TimesheetWithGreenhouse'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimesheetWithGreenhouse'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyTimesheet
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this timesheet.
+        schema:
+          type: string
+      responses:
+        '204':
           description: ''
       tags:
       - api
@@ -1132,6 +1309,31 @@ paths:
           description: ''
       tags:
       - api
+  /api/timesheets/create_timesheet/:
+    post:
+      operationId: createTimesheetTimesheet
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTimesheet'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateTimesheet'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateTimesheet'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTimesheet'
+          description: ''
+      tags:
+      - api
   /api/password-reset/validate_token/:
     post:
       operationId: createResetToken
@@ -1640,6 +1842,37 @@ paths:
           description: ''
       tags:
       - api
+  /api/timesheets/{id}/update_timesheet/:
+    put:
+      operationId: updateTimesheetTimesheet
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this timesheet.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTimesheet'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateTimesheet'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateTimesheet'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateTimesheet'
+          description: ''
+      tags:
+      - api
 components:
   schemas:
     Greenhouse:
@@ -1845,6 +2078,63 @@ components:
       required:
       - greenhouse_address
       - greenhouse_business_hours
+    Timesheet:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                readOnly: true
+              title:
+                type: string
+                nullable: true
+              description:
+                type: string
+                nullable: true
+              timesheet:
+                type: integer
+                nullable: true
+              timesheet_update:
+                type: integer
+                nullable: true
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        pay:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        greenhouse:
+          type: integer
+          nullable: true
+        author:
+          type: integer
+          nullable: true
+      required:
+      - items
     Flowerbed:
       type: object
       properties:
@@ -2203,6 +2493,384 @@ components:
             this instead of deleting accounts.
       required:
       - username
+    TimesheetWithGreenhouse:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                readOnly: true
+              title:
+                type: string
+                nullable: true
+              description:
+                type: string
+                nullable: true
+              timesheet:
+                type: integer
+                nullable: true
+              timesheet_update:
+                type: integer
+                nullable: true
+        greenhouse:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            greenhouse_address:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  readOnly: true
+                country:
+                  type: string
+                  nullable: true
+                state:
+                  type: string
+                  nullable: true
+                city:
+                  type: string
+                  nullable: true
+                city_part:
+                  type: string
+                  nullable: true
+                street:
+                  type: string
+                  nullable: true
+                zipcode:
+                  type: string
+                  nullable: true
+                latitude:
+                  type: string
+                  nullable: true
+                longitude:
+                  type: string
+                  nullable: true
+            flowerbeds:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  rents:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          readOnly: true
+                        rented_from:
+                          type: string
+                          format: date-time
+                          nullable: true
+                        rented_to:
+                          type: string
+                          format: date-time
+                          nullable: true
+                        flowerbed:
+                          type: integer
+                          nullable: true
+                        user:
+                          type: integer
+                          nullable: true
+                    readOnly: true
+                  currentRent:
+                    type: string
+                    readOnly: true
+                  greenhouse:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        readOnly: true
+                      title:
+                        type: string
+                        nullable: true
+                      description:
+                        type: string
+                        nullable: true
+                      greenhouse_address:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            readOnly: true
+                          country:
+                            type: string
+                            nullable: true
+                          state:
+                            type: string
+                            nullable: true
+                          city:
+                            type: string
+                            nullable: true
+                          city_part:
+                            type: string
+                            nullable: true
+                          street:
+                            type: string
+                            nullable: true
+                          zipcode:
+                            type: string
+                            nullable: true
+                          latitude:
+                            type: string
+                            nullable: true
+                          longitude:
+                            type: string
+                            nullable: true
+                    required:
+                    - greenhouse_address
+                  name:
+                    type: string
+                    nullable: true
+                  disabled:
+                    type: boolean
+                    nullable: true
+                  dimension_width:
+                    type: number
+                  dimension_height:
+                    type: number
+                  idealPlants:
+                    type: string
+                    nullable: true
+                    maxLength: 100
+                  tools:
+                    type: string
+                    nullable: true
+                    maxLength: 100
+                  pricePerDay:
+                    type: string
+                    format: decimal
+                    multipleOf: 1.0e-05
+                    maximum: 100000
+                    minimum: -100000
+                required:
+                - greenhouse
+              readOnly: true
+            greenhouse_business_hours:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  greenhouse_business_hour_periods:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          readOnly: true
+                        open:
+                          type: string
+                        close:
+                          type: string
+                        business_hour:
+                          type: integer
+                          nullable: true
+                      required:
+                      - open
+                      - close
+                  day:
+                    type: integer
+                    maximum: 2147483647
+                    minimum: -2147483648
+                  greenhouse:
+                    type: integer
+                    nullable: true
+                required:
+                - greenhouse_business_hour_periods
+                - day
+            available_flowerbeds:
+              type: string
+              readOnly: true
+            title:
+              type: string
+              nullable: true
+            description:
+              type: string
+              nullable: true
+            rules:
+              type: string
+              nullable: true
+            published:
+              type: boolean
+            bank_account_number:
+              type: string
+              nullable: true
+            owner:
+              type: integer
+              nullable: true
+            caretaker:
+              type: integer
+              nullable: true
+          required:
+          - greenhouse_address
+          - greenhouse_business_hours
+        working_hours:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                readOnly: true
+              start:
+                type: string
+                format: date-time
+                nullable: true
+              end:
+                type: string
+                format: date-time
+                nullable: true
+              timesheet:
+                type: integer
+                nullable: true
+              timesheet_update:
+                type: integer
+                nullable: true
+        updates:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                readOnly: true
+              items:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    title:
+                      type: string
+                      nullable: true
+                    description:
+                      type: string
+                      nullable: true
+                    timesheet:
+                      type: integer
+                      nullable: true
+                    timesheet_update:
+                      type: integer
+                      nullable: true
+              working_hours:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    start:
+                      type: string
+                      format: date-time
+                      nullable: true
+                    end:
+                      type: string
+                      format: date-time
+                      nullable: true
+                    timesheet:
+                      type: integer
+                      nullable: true
+                    timesheet_update:
+                      type: integer
+                      nullable: true
+              author:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    readOnly: true
+                  user:
+                    type: string
+                    readOnly: true
+              message:
+                type: string
+                nullable: true
+              description:
+                type: string
+                nullable: true
+              pay:
+                type: string
+                format: decimal
+                multipleOf: 0.01
+                maximum: 100000000
+                minimum: -100000000
+                nullable: true
+              status:
+                type: string
+                nullable: true
+              created_at:
+                type: string
+                format: date-time
+              updated_at:
+                type: string
+                format: date-time
+                readOnly: true
+              timesheet:
+                type: integer
+                nullable: true
+            required:
+            - items
+            - working_hours
+            - author
+        author:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            user:
+              type: string
+              readOnly: true
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        pay:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - items
+      - greenhouse
+      - working_hours
+      - updates
+      - author
     Product:
       type: object
       properties:
@@ -2488,6 +3156,73 @@ components:
           type: boolean
           description: Designates whether this user should be treated as active. Unselect
             this instead of deleting accounts.
+    CreateTimesheet:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                readOnly: true
+              title:
+                type: string
+                nullable: true
+              description:
+                type: string
+                nullable: true
+              timesheet:
+                type: integer
+                nullable: true
+              timesheet_update:
+                type: integer
+                nullable: true
+        greenhouse:
+          type: integer
+        working_hours:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                readOnly: true
+              start:
+                type: string
+                format: date-time
+                nullable: true
+              end:
+                type: string
+                format: date-time
+                nullable: true
+              timesheet:
+                type: integer
+                nullable: true
+              timesheet_update:
+                type: integer
+                nullable: true
+        title:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        pay:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+          nullable: true
+        status:
+          type: string
+          nullable: true
+      required:
+      - items
+      - greenhouse
+      - working_hours
     ResetToken:
       type: object
       properties:
@@ -2684,3 +3419,64 @@ components:
     Empty:
       type: object
       properties: {}
+    UpdateTimesheet:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                readOnly: true
+              title:
+                type: string
+                nullable: true
+              description:
+                type: string
+                nullable: true
+              timesheet:
+                type: integer
+                nullable: true
+              timesheet_update:
+                type: integer
+                nullable: true
+        working_hours:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                readOnly: true
+              start:
+                type: string
+                format: date-time
+                nullable: true
+              end:
+                type: string
+                format: date-time
+                nullable: true
+              timesheet:
+                type: integer
+                nullable: true
+              timesheet_update:
+                type: integer
+                nullable: true
+        message:
+          type: string
+          writeOnly: true
+        description:
+          type: string
+          nullable: true
+        pay:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+          nullable: true
+        status:
+          type: string
+          nullable: true

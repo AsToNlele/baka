@@ -27,6 +27,8 @@ import { ResetPassword } from "@/features/auth/routes/ResetPassword"
 import { ResetPasswordRequested } from "@/features/auth/routes/ResetPasswordRequested"
 import { ResetPasswordConfirm } from "@/features/auth/routes/ResetPasswordConfirm"
 import { ResetPasswordReseted } from "@/features/auth/routes/ResetPasswordReseted"
+import { Timesheets } from "@/features/timesheets/routes/Timesheets"
+import { TimesheetDetail } from "@/features/timesheets/routes/TimesheetDetail"
 
 function App() {
     const navigate = useNavigate()
@@ -111,6 +113,14 @@ function App() {
                                 <Route
                                     path="/app/users/:id"
                                     element={<UserDetail />}
+                                />
+                                <Route
+                                    path="/app/timesheets"
+                                    element={<Timesheets />}
+                                />
+                                <Route
+                                    path="/app/timesheets/:id"
+                                    element={<TimesheetDetail />}
                                 />
                                 <Route path="*" element={<h1>404</h1>} />
                             </Route>

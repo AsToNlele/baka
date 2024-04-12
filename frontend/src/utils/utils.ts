@@ -1,13 +1,20 @@
 import { format, isValid, parseISO } from "date-fns"
 
 export const dateFormat = "dd.MM.yyyy"
+export const dateTimeFormat = "dd.MM.yyyy HH:mm"
 export const formatDate = (date: Date | undefined) =>
     date && isValid(date) ? format(date, dateFormat) : ""
 
-export const parseIsoAndFormat = (date: string) => formatDate(parseISO(date))
+export const formatDateTime = (date: Date | undefined) =>
+    date && isValid(date) ? format(date, dateTimeFormat) : ""
 
-export const upperCaseFirstLetter = (string: string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1)
+export const parseIsoAndFormat = (date: string) => formatDate(parseISO(date))
+export const parseIsoAndFormatDateTime = (date: string) =>
+    formatDateTime(parseISO(date))
+
+export const upperCaseFirstLetter = (string : string) => {
+    const altString = string ?? "  "
+    return altString.charAt(0).toUpperCase() + altString.slice(1)
 }
 
 export const dayNumberToDay = (dayNumber: number) => {
@@ -43,3 +50,10 @@ export const formatTime = (timeString: string) => {
     // const [hours, minutes] = timeString.split(":")
     // return new Date(0, 0, 0, parseInt(hours), parseInt(minutes))
 }
+
+export const inSameTimePeriod = (date1: string, date2: string) => {
+    const convertedDate1 = parseISO(date1).setMilliseconds(0)
+    const convertedDate2 = parseISO(date2).setMilliseconds(0)
+    return convertedDate1 === convertedDate2
+}
+

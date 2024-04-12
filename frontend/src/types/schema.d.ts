@@ -15,6 +15,9 @@ export interface paths {
     delete: operations["destroyGreenhouse"];
     patch: operations["partialUpdateGreenhouse"];
   };
+  "/api/greenhouses/{id}/get_timesheets/": {
+    get: operations["getTimesheetsGreenhouse"];
+  };
   "/api/flowerbeds/": {
     get: operations["listFlowerbeds"];
     post: operations["createFlowerbed"];
@@ -54,6 +57,16 @@ export interface paths {
   "/api/users/{id}/": {
     /** @description API endpoint that allows users to be viewed or edited. */
     get: operations["retrieveUser"];
+  };
+  "/api/timesheets/": {
+    get: operations["listTimesheets"];
+    post: operations["createTimesheet"];
+  };
+  "/api/timesheets/{id}/": {
+    get: operations["retrieveTimesheet"];
+    put: operations["updateTimesheet"];
+    delete: operations["destroyTimesheet"];
+    patch: operations["partialUpdateTimesheet"];
   };
   "/api/auth/profile": {
     get: operations["listUsers"];
@@ -100,6 +113,9 @@ export interface paths {
   "/api/users/{id}/set_activity/": {
     /** @description API endpoint that allows users to be viewed or edited. */
     post: operations["setActivityUser"];
+  };
+  "/api/timesheets/create_timesheet/": {
+    post: operations["createTimesheetTimesheet"];
   };
   "/api/password-reset/validate_token/": {
     /** @description An Api ViewSet which provides a method to verify that a token is valid */
@@ -171,6 +187,9 @@ export interface paths {
   };
   "/api/greenhouses/{id}/unset_owner/": {
     put: operations["unsetOwnerGreenhouse"];
+  };
+  "/api/timesheets/{id}/update_timesheet/": {
+    put: operations["updateTimesheetTimesheet"];
   };
 }
 
@@ -247,6 +266,27 @@ export interface components {
       bank_account_number?: string | null;
       owner?: number | null;
       caretaker?: number | null;
+    };
+    Timesheet: {
+      id?: number;
+      items: ({
+          id?: number;
+          title?: string | null;
+          description?: string | null;
+          timesheet?: number | null;
+          timesheet_update?: number | null;
+        })[];
+      title?: string | null;
+      description?: string | null;
+      /** Format: decimal */
+      pay?: string | null;
+      status?: string | null;
+      /** Format: date-time */
+      created_at?: string;
+      /** Format: date-time */
+      updated_at?: string;
+      greenhouse?: number | null;
+      author?: number | null;
     };
     Flowerbed: {
       id?: number;
@@ -371,6 +411,141 @@ export interface components {
       /** @description Designates whether this user should be treated as active. Unselect this instead of deleting accounts. */
       is_active?: boolean;
     };
+    TimesheetWithGreenhouse: {
+      id?: number;
+      items: ({
+          id?: number;
+          title?: string | null;
+          description?: string | null;
+          timesheet?: number | null;
+          timesheet_update?: number | null;
+        })[];
+      greenhouse: {
+        id?: number;
+        greenhouse_address: {
+          id?: number;
+          country?: string | null;
+          state?: string | null;
+          city?: string | null;
+          city_part?: string | null;
+          street?: string | null;
+          zipcode?: string | null;
+          latitude?: string | null;
+          longitude?: string | null;
+        };
+        flowerbeds?: readonly ({
+            id?: number;
+            rents?: readonly ({
+                id?: number;
+                /** Format: date-time */
+                rented_from?: string | null;
+                /** Format: date-time */
+                rented_to?: string | null;
+                flowerbed?: number | null;
+                user?: number | null;
+              })[];
+            currentRent?: string;
+            greenhouse: {
+              id?: number;
+              title?: string | null;
+              description?: string | null;
+              greenhouse_address: {
+                id?: number;
+                country?: string | null;
+                state?: string | null;
+                city?: string | null;
+                city_part?: string | null;
+                street?: string | null;
+                zipcode?: string | null;
+                latitude?: string | null;
+                longitude?: string | null;
+              };
+            };
+            name?: string | null;
+            disabled?: boolean | null;
+            dimension_width?: number;
+            dimension_height?: number;
+            idealPlants?: string | null;
+            tools?: string | null;
+            /** Format: decimal */
+            pricePerDay?: string;
+          })[];
+        greenhouse_business_hours: ({
+            id?: number;
+            greenhouse_business_hour_periods: ({
+                id?: number;
+                open: string;
+                close: string;
+                business_hour?: number | null;
+              })[];
+            day: number;
+            greenhouse?: number | null;
+          })[];
+        available_flowerbeds?: string;
+        title?: string | null;
+        description?: string | null;
+        rules?: string | null;
+        published?: boolean;
+        bank_account_number?: string | null;
+        owner?: number | null;
+        caretaker?: number | null;
+      };
+      working_hours: ({
+          id?: number;
+          /** Format: date-time */
+          start?: string | null;
+          /** Format: date-time */
+          end?: string | null;
+          timesheet?: number | null;
+          timesheet_update?: number | null;
+        })[];
+      updates: ({
+          id?: number;
+          items: ({
+              id?: number;
+              title?: string | null;
+              description?: string | null;
+              timesheet?: number | null;
+              timesheet_update?: number | null;
+            })[];
+          working_hours: ({
+              id?: number;
+              /** Format: date-time */
+              start?: string | null;
+              /** Format: date-time */
+              end?: string | null;
+              timesheet?: number | null;
+              timesheet_update?: number | null;
+            })[];
+          author: {
+            id?: number;
+            user?: string;
+          };
+          message?: string | null;
+          description?: string | null;
+          /** Format: decimal */
+          pay?: string | null;
+          status?: string | null;
+          /** Format: date-time */
+          created_at?: string;
+          /** Format: date-time */
+          updated_at?: string;
+          timesheet?: number | null;
+        })[];
+      author: {
+        id?: number;
+        user?: string;
+      };
+      title?: string | null;
+      description?: string | null;
+      /** Format: decimal */
+      pay?: string | null;
+      status?: string | null;
+      /** Format: date-time */
+      created_at?: string;
+      /** Format: date-time */
+      updated_at?: string;
+    };
     Product: {
       id?: number;
       name?: string;
@@ -481,6 +656,30 @@ export interface components {
       /** @description Designates whether this user should be treated as active. Unselect this instead of deleting accounts. */
       is_active?: boolean;
     };
+    CreateTimesheet: {
+      items: ({
+          id?: number;
+          title?: string | null;
+          description?: string | null;
+          timesheet?: number | null;
+          timesheet_update?: number | null;
+        })[];
+      greenhouse: number;
+      working_hours: ({
+          id?: number;
+          /** Format: date-time */
+          start?: string | null;
+          /** Format: date-time */
+          end?: string | null;
+          timesheet?: number | null;
+          timesheet_update?: number | null;
+        })[];
+      title?: string | null;
+      description?: string | null;
+      /** Format: decimal */
+      pay?: string | null;
+      status?: string | null;
+    };
     ResetToken: {
       token: string;
     };
@@ -551,6 +750,29 @@ export interface components {
       owner: number;
     };
     Empty: Record<string, never>;
+    UpdateTimesheet: {
+      items?: ({
+          id?: number;
+          title?: string | null;
+          description?: string | null;
+          timesheet?: number | null;
+          timesheet_update?: number | null;
+        })[];
+      working_hours?: ({
+          id?: number;
+          /** Format: date-time */
+          start?: string | null;
+          /** Format: date-time */
+          end?: string | null;
+          timesheet?: number | null;
+          timesheet_update?: number | null;
+        })[];
+      message?: string;
+      description?: string | null;
+      /** Format: decimal */
+      pay?: string | null;
+      status?: string | null;
+    };
   };
   responses: never;
   parameters: never;
@@ -678,6 +900,21 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Greenhouse"];
+        };
+      };
+    };
+  };
+  getTimesheetsGreenhouse: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this greenhouse. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Timesheet"];
         };
       };
     };
@@ -991,6 +1228,123 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["UserDetailed"];
+        };
+      };
+    };
+  };
+  listTimesheets: {
+    parameters: {
+      query?: {
+        /** @description A page number within the paginated result set. */
+        page?: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            /** @example 123 */
+            count?: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results?: components["schemas"]["TimesheetWithGreenhouse"][];
+          };
+        };
+      };
+    };
+  };
+  createTimesheet: {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["TimesheetWithGreenhouse"];
+        "application/x-www-form-urlencoded": components["schemas"]["TimesheetWithGreenhouse"];
+        "multipart/form-data": components["schemas"]["TimesheetWithGreenhouse"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["TimesheetWithGreenhouse"];
+        };
+      };
+    };
+  };
+  retrieveTimesheet: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this timesheet. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["TimesheetWithGreenhouse"];
+        };
+      };
+    };
+  };
+  updateTimesheet: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this timesheet. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["TimesheetWithGreenhouse"];
+        "application/x-www-form-urlencoded": components["schemas"]["TimesheetWithGreenhouse"];
+        "multipart/form-data": components["schemas"]["TimesheetWithGreenhouse"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["TimesheetWithGreenhouse"];
+        };
+      };
+    };
+  };
+  destroyTimesheet: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this timesheet. */
+        id: string;
+      };
+    };
+    responses: {
+      204: {
+        content: never;
+      };
+    };
+  };
+  partialUpdateTimesheet: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this timesheet. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["TimesheetWithGreenhouse"];
+        "application/x-www-form-urlencoded": components["schemas"]["TimesheetWithGreenhouse"];
+        "multipart/form-data": components["schemas"]["TimesheetWithGreenhouse"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["TimesheetWithGreenhouse"];
         };
       };
     };
@@ -1375,6 +1729,22 @@ export interface operations {
       };
     };
   };
+  createTimesheetTimesheet: {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["CreateTimesheet"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateTimesheet"];
+        "multipart/form-data": components["schemas"]["CreateTimesheet"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["CreateTimesheet"];
+        };
+      };
+    };
+  };
   /** @description An Api View which provides a method to verify that a token is valid */
   createResetToken: {
     requestBody?: {
@@ -1654,6 +2024,28 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Empty"];
+        };
+      };
+    };
+  };
+  updateTimesheetTimesheet: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this timesheet. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["UpdateTimesheet"];
+        "application/x-www-form-urlencoded": components["schemas"]["UpdateTimesheet"];
+        "multipart/form-data": components["schemas"]["UpdateTimesheet"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateTimesheet"];
         };
       };
     };

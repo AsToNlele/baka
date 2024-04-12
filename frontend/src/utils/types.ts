@@ -162,9 +162,11 @@ export type GetPickupLocationsType = components["schemas"]["GetPickupLocations"]
 export type FlowerbedListType =
     paths["/api/flowerbeds/my_flowerbeds/"]["get"]["responses"][200]["content"]["application/json"][]
 
-export type UserType = components["schemas"]["UserDetailed"] & {
-    owned_greenhouses: GreenhouseType[]
-    caretaker_greenhouses: GreenhouseType[]
+type UserrType = Omit<components["schemas"]["UserDetailed"], "caretaker_greenhouses" | "owned_greenhouses" >
+
+export type UserType = UserrType & {
+    owned_greenhouses: Exclude<GreenhouseType[], string>
+    caretaker_greenhouses: Exclude<GreenhouseType[], string>
     // superuser: boolean
     profile: {
         id: number
@@ -172,6 +174,8 @@ export type UserType = components["schemas"]["UserDetailed"] & {
         user: number
     } & {
         superuser: boolean
+    } & {
+        owned_greenhouses: Exclude<GreenhouseType[], string>
     }
 }
 
@@ -186,3 +190,34 @@ export type SetUserActivityRequest = components["schemas"]["SetUserActivity"]
 export type SetCaretakerRequest = components["schemas"]["SetCaretaker"]
 
 export type SetOwnerRequest = components["schemas"]["SetOwner"]
+
+export type TimesheetListResponse = Exclude<
+    paths["/api/timesheets/"]["get"]["responses"][200]["content"]["application/json"],
+    undefined
+>
+
+export type TimesheetWithGreenhouseType = Exclude<
+    TimesheetListResponse["results"],
+    undefined
+>[0]
+
+export type WorkingHourType = TimesheetWithGreenhouseType["working_hours"][0]
+
+export type TimesheetItemType = TimesheetWithGreenhouseType["items"][0]
+
+export type TimesheetUpdateType = TimesheetWithGreenhouseType["updates"][0]
+
+export type ApproveTimesheetRequest = {
+    message: string
+    status: "approved"
+}
+
+export type RejectTimesheetRequest = {
+    message: string
+    status: "rejected"
+}
+
+export type CreateTimesheetRequest = Exclude<
+    paths["/api/timesheets/create_timesheet/"]["post"]["requestBody"],
+    undefined
+>["content"]["application/json"]

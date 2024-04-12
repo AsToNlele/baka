@@ -56,8 +56,8 @@ export const AppNavbar = () => {
             (profileData && profileData.caretaker_greenhouses.length > 0)
             ? [
                 {
-                    name: "Timesheet",
-                    href: "/app/timesheet",
+                    name: "Timesheets",
+                    href: "/app/timesheets",
                 },
             ]
             : []),
@@ -78,8 +78,6 @@ export const AppNavbar = () => {
             href: "/app/orders",
         },
     ]
-
-    console.log(menuLinks)
 
     return (
         <Navbar
