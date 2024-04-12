@@ -34,13 +34,26 @@ export type CreateGreenhouseProductFromCustomProductValidationType = z.infer<
     typeof CreateGreenhouseProductFromCustomProductSchema
 >
 
-export type ShoppingCartMarketplaceItem = { 
-    marketplaceProduct: number,
-    quantity: number,
+export type ShoppingCartMarketplaceItem = {
+    marketplaceProduct: number
+    quantity: number
 }
 
 export type ShoppingCartProductItem = {
-    product: number,
-    quantity: number,
+    product: number
+    quantity: number
 }
 
+export const EditGreenhouseProductInventoryRequestSchema = z.object({
+    products: z.array(
+        z.object({
+            id: z.number(),
+            quantity: z.number({coerce: true}),
+            price: z.string(),
+        }),
+    ),
+})
+
+export type EditGreenhouseProductInventoryRequestValidationType = z.infer<
+    typeof EditGreenhouseProductInventoryRequestSchema
+>

@@ -24,6 +24,11 @@ urlpatterns = [
         views.CreateGreenhouseProductFromCustomProductView.as_view(),
         name="create-greenhouse-product-from-custom",
     ),
+    path(
+        "greenhouses/<pk>/products/edit/",
+        views.EditGreenhouseProductInventoryView.as_view(),
+        name="edit-greenhouse-product-inventory",
+    ),
     path("order/", views.CreateProductOrderView.as_view(), name="create-product-order"),
     path(
         "product/<pk>/",

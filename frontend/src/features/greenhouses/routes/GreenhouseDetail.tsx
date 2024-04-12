@@ -167,11 +167,6 @@ export const GreenhouseDetail = () => {
                 aria-label="Tabs"
                 className="mt-10"
             >
-                <Tab key="overview" title="Overview">
-                    <Card className="rounded-t">
-                        <CardBody>Hello there</CardBody>
-                    </Card>
-                </Tab>
                 <Tab key="marketplace" title="Marketplace">
                     <Card>
                         <CardBody>
@@ -187,11 +182,6 @@ export const GreenhouseDetail = () => {
                                 greenhouseId={id}
                             />
                         </CardBody>
-                    </Card>
-                </Tab>
-                <Tab key="rules" title="Rules">
-                    <Card>
-                        <CardBody>Hello there</CardBody>
                     </Card>
                 </Tab>
             </Tabs>

@@ -1,10 +1,12 @@
 from greenhouse.models import Greenhouse
+from greenhouse.serializers import GreenhouseSerializer
 from marketplace.models import MarketplaceProduct, Product, SharedProduct
 from marketplace.serializers import (
     CreateGreenhouseProductFromCustomProductSerializer,
     CreateGreenhouseProductFromSharedProductSerializer,
     CreateProductOrderInputSerializer,
     CreateProductOrderOutputSerializer,
+    EditGreenhouseProductInventorySerializer,
     MarketplaceDetailProductSerializer,
     MarketplaceProductSerializer,
     ProductDetailMarketplaceProductSerializer,
@@ -77,7 +79,6 @@ class GreenhouseProductView(generics.ListAPIView):
 
         return items
 
-
 class MarketplaceProductView(generics.RetrieveAPIView):
     queryset = MarketplaceProduct.objects.all()
     serializer_class = MarketplaceDetailProductSerializer
@@ -126,6 +127,25 @@ class CreateProductOrderView(generics.CreateAPIView):
         instance = self.perform_create(serializer)
         instance_serializer = CreateProductOrderOutputSerializer(instance)
         return Response(instance_serializer.data)
+
+class EditGreenhouseProductInventoryView(APIView):
+    def put(self, request, *args, **kwargs):
+        # Get Greenhouse from PK
+        greenhouse = get_object_or_404(Greenhouse, pk=kwargs["pk"])
+        # Get products from data
+        products = request.data.get("products", [])
+        for product in products:
+            listing = MarketplaceProduct.objects.get(pk=product["id"])
+            if listing.greenhouse != greenhouse:
+                return JsonResponse(
+                    {"message": f"Product {listing.id} is not in greenhouse {greenhouse.id}"},
+                    status=400,
+                )
+            listing.quantity = product["quantity"]
+            listing.price = product["price"]
+            listing.save()
+        serializer = GreenhouseSerializer(greenhouse)
+        return Response(serializer.data, status=200)
 
 
 class SetPrimaryGreenhouseView(APIView):

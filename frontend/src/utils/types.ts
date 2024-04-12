@@ -162,7 +162,10 @@ export type GetPickupLocationsType = components["schemas"]["GetPickupLocations"]
 export type FlowerbedListType =
     paths["/api/flowerbeds/my_flowerbeds/"]["get"]["responses"][200]["content"]["application/json"][]
 
-type UserrType = Omit<components["schemas"]["UserDetailed"], "caretaker_greenhouses" | "owned_greenhouses" >
+type UserrType = Omit<
+    components["schemas"]["UserDetailed"],
+    "caretaker_greenhouses" | "owned_greenhouses"
+>
 
 export type UserType = UserrType & {
     owned_greenhouses: Exclude<GreenhouseType[], string>
@@ -221,3 +224,13 @@ export type CreateTimesheetRequest = Exclude<
     paths["/api/timesheets/create_timesheet/"]["post"]["requestBody"],
     undefined
 >["content"]["application/json"]
+
+export type EditProductInventoryType = {
+    id: number
+    quantity: number
+    price: string
+}
+
+export type EditGreenhouseProductInventoryRequest = {
+    products: Array<EditProductInventoryType>
+}

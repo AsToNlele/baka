@@ -1,0 +1,276 @@
+import { useProfile } from "@/features/auth/hooks/useProfile"
+import { useEditGreenhouseProductInventory } from "@/features/marketplace/hooks/useEditGreenhouseProductInventory"
+import { GreenhouseProductListResponse } from "@/utils/types"
+import {
+    Button,
+    Modal,
+    ModalBody,
+    ModalFooter,
+    ModalHeader,
+    Table,
+    TableColumn,
+    TableHeader,
+    TableCell,
+    TableBody,
+    TableRow,
+    ModalContent,
+} from "@nextui-org/react"
+import { useParams } from "react-router-dom"
+import {
+    EditGreenhouseProductInventoryRequestSchema,
+    EditGreenhouseProductInventoryRequestValidationType,
+} from "@/features/marketplace/types"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Controller, SubmitHandler, useForm } from "react-hook-form"
+
+type EditGreenhouseProductInventoryModalProps = {
+    isOpen: boolean
+    onOpenChange: (isOpen: boolean) => void
+    onClose: () => void
+    products: GreenhouseProductListResponse
+}
+
+export const EditGreenhouseProductInventoryModal = ({
+    isOpen,
+    onOpenChange,
+    onClose,
+    products,
+}: EditGreenhouseProductInventoryModalProps) => {
+    const { id } = useParams()
+    const greenhouseId = id ? parseInt(id) : null
+    const { data: profile } = useProfile()
+    const { mutate } = useEditGreenhouseProductInventory()
+
+    const { register, control, handleSubmit, reset, formState, getValues } =
+        useForm<EditGreenhouseProductInventoryRequestValidationType>({
+            resolver: zodResolver(EditGreenhouseProductInventoryRequestSchema),
+            defaultValues: {
+                products: products?.map((product) => ({
+                    id: product.id,
+                    quantity: product.quantity,
+                    price: product.price,
+                })),
+            },
+        })
+
+    console.log(formState.errors)
+    console.log(getValues())
+
+    const onSubmit: SubmitHandler<
+        EditGreenhouseProductInventoryRequestValidationType
+    > = (data) => {
+        console.log("mutating")
+        console.log(data)
+        mutate(
+            { id: greenhouseId!, data },
+            {
+                onSuccess: (res) => {
+                    console.log("SUCCESS", res)
+                    onClose()
+                },
+            },
+        )
+    }
+
+    return (
+        <Modal
+            isOpen={isOpen}
+            onOpenChange={onOpenChange}
+            placement="top-center"
+            scrollBehavior="inside"
+            size="5xl"
+        >
+            <ModalContent>
+                <ModalHeader className="flex flex-col gap-1">
+                    Edit Inventory
+                </ModalHeader>
+                <ModalBody>
+                    <div className="flex flex-col gap-4">
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <Controller
+                                name="products"
+                                defaultValue={products?.map((product) => ({
+                                    id: product.id!,
+                                    quantity: product.quantity,
+                                    price: product.price,
+                                }))}
+                                control={control}
+                                render={() => (
+                                    <div className="flex flex-col gap-4">
+                                        <Table
+                                            shadow="none"
+                                            isStriped
+                                            aria-label="Table of products"
+                                        >
+                                            <TableHeader>
+                                                <TableColumn>Name</TableColumn>
+                                                <TableColumn>
+                                                    Quantity
+                                                </TableColumn>
+                                                <TableColumn>Price</TableColumn>
+                                            </TableHeader>
+                                            <TableBody>
+                                                {products?.map(
+                                                    (product, index) => (
+                                                        <TableRow key={index}>
+                                                            <TableCell>
+                                                                {
+                                                                    product
+                                                                        .product
+                                                                        .name
+                                                                }
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                <input
+                                                                    type="number"
+                                                                    {...register(
+                                                                        `products.${index}.quantity`,
+                                                                    )}
+                                                                />
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                <input
+                                                                    type="number"
+                                                                    {...register(
+                                                                        `products.${index}.price`,
+                                                                    )}
+                                                                />
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    ),
+                                                )}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
+                                )}
+                            />
+                        </form>
+                    </div>
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onPress={handleSubmit(onSubmit)}>
+                        Save
+                    </Button>
+                    <Button color="secondary" onPress={onClose}>
+                        Cancel
+                    </Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    )
+}
+
+// export const EditGreenhouseProductInventoryModal = ({
+//     isOpen,
+//     onOpenChange,
+//     onClose,
+//     products,
+// }: EditGreenhouseProductInventoryModalProps) => {
+// const { id } = useParams()
+// const greenhouseId = id ? parseInt(id) : null
+// const { data: profile } = useProfile()
+// const { mutate } = useEditGreenhouseProductInventory()
+//
+// const { register, control, handleSubmit, reset, formState, getValues } =
+//     useForm<EditGreenhouseProductInventoryRequestValidationType>({
+//         resolver: zodResolver(EditGreenhouseProductInventoryRequestSchema),
+//         defaultValues: {
+//             products: products?.map((product) => ({
+//                 id: product.id,
+//                 quantity: product.quantity,
+//                 price: product.price,
+//             })),
+//         },
+//     })
+//
+// const onSubmit: SubmitHandler<
+//     EditGreenhouseProductInventoryRequestValidationType
+// > = (data) => {
+//     console.log("mutating")
+//     console.log(data)
+//     mutate(
+//         { id: greenhouseId!, data },
+//         {
+//             onSuccess: (res) => {
+//                 console.log("SUCCESS", res)
+//                 onClose()
+//             },
+//         },
+//     )
+// }
+//
+//     return (
+//         <Modal>
+//             <ModalBody>hello</ModalBody>
+//         </Modal>
+//     )
+//
+//     // return (
+//     //     <Modal
+//     //         isOpen={isOpen}
+//     //         onOpenChange={onOpenChange}
+//     //         placement="top-center"
+//     //         scrollBehavior="inside"
+//     //         size="5xl"
+//     //     >
+//     //         <ModalHeader>
+//     //             <h2 className="text-xl font-bold">Edit Inventory</h2>
+//     //         </ModalHeader>
+//     //         <ModalBody>
+// <div className="flex flex-col gap-4">
+//     <form onSubmit={handleSubmit(onSubmit)}>
+//         Hello
+//         {/* <Controller */}
+//         {/*     name="products" */}
+//         {/*     control={control} */}
+//         {/*     render={({ field }) => ( */}
+//         {/*         <div className="flex flex-col gap-4"> */}
+//         {/*             <Table */}
+//         {/*                 isStriped */}
+//         {/*                 aria-label="Table of products" */}
+//         {/*             > */}
+//         {/*                 <TableHeader> */}
+//         {/*                     <TableColumn>Name</TableColumn> */}
+//         {/*                     <TableColumn>Quantity</TableColumn> */}
+//         {/*                     <TableColumn>Price</TableColumn> */}
+//         {/*                 </TableHeader> */}
+//         {/*                 <TableBody> */}
+//         {/*                     {products?.map((product, index) => ( */}
+//         {/*                         <TableRow key={index}> */}
+//         {/*                             <TableCell> */}
+//         {/*                                 {product.product.name} */}
+//         {/*                             </TableCell> */}
+//         {/*                             <TableCell> */}
+//         {/*                                 <input */}
+//         {/*                                     type="number" */}
+//         {/*                                     {...register( */}
+//         {/*                                         `products.${index}.quantity`, */}
+//         {/*                                     )} */}
+//         {/*                                 /> */}
+//         {/*                             </TableCell> */}
+//         {/*                             <TableCell> */}
+//         {/*                                 <input */}
+//         {/*                                     type="number" */}
+//         {/*                                     {...register( */}
+//         {/*                                         `products.${index}.price`, */}
+//         {/*                                     )} */}
+//         {/*                                 /> */}
+//         {/*                             </TableCell> */}
+//         {/*                         </TableRow> */}
+//         {/*                     ))} */}
+//         {/*                 </TableBody> */}
+//         {/*             </Table> */}
+//         {/*         </div> */}
+//         {/*     )} */}
+//         {/* /> */}
+//     </form>
+// </div>
+//     //         </ModalBody>
+//     //         <ModalFooter>
+//     //             <Button color="secondary" onPress={onClose}>
+//     //                 Cancel
+//     //             </Button>
+//     //         </ModalFooter>
+//     //     </Modal>
+//     // )
+// }

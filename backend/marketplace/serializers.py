@@ -41,6 +41,11 @@ class MarketplaceProductSerializer(serializers.ModelSerializer):
         model = MarketplaceProduct
         fields = "__all__"
 
+class EditGreenhouseProductInventorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MarketplaceProduct
+        fields = ["id", "quantity"]
+
 
 class SharedProductSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
