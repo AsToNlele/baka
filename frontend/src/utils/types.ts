@@ -234,3 +234,8 @@ export type EditProductInventoryType = {
 export type EditGreenhouseProductInventoryRequest = {
     products: Array<EditProductInventoryType>
 }
+
+export type EditGreenhouseProductInventoryResponse = Exclude<
+    paths["/api/marketplace/marketplace-products/{id}/"]["put"]["responses"][200]["content"]["application/json"],
+    undefined
+>

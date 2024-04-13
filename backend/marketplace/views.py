@@ -1,5 +1,5 @@
 from greenhouse.models import Greenhouse
-from greenhouse.serializers import GreenhouseSerializer
+from greenhouse.serializers import EmptySerializer, GreenhouseSerializer
 from marketplace.models import MarketplaceProduct, Product, SharedProduct
 from marketplace.serializers import (
     CreateGreenhouseProductFromCustomProductSerializer,
@@ -7,6 +7,7 @@ from marketplace.serializers import (
     CreateProductOrderInputSerializer,
     CreateProductOrderOutputSerializer,
     EditGreenhouseProductInventorySerializer,
+    EditMarketplaceProductSerializer,
     MarketplaceDetailProductSerializer,
     MarketplaceProductSerializer,
     ProductDetailMarketplaceProductSerializer,
@@ -15,12 +16,12 @@ from marketplace.serializers import (
     SharedProductSerializer,
 )
 from orders.models import ProductOrders
-from users.serializers import ProfileSerializer
 from rest_framework import generics, permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import JsonResponse
 from rest_framework.generics import get_object_or_404, mixins
 from rest_framework.views import APIView, Response
+from users.serializers import ProfileSerializer
 
 
 class ProductViewset(viewsets.ModelViewSet):
@@ -79,6 +80,7 @@ class GreenhouseProductView(generics.ListAPIView):
 
         return items
 
+
 class MarketplaceProductView(generics.RetrieveAPIView):
     queryset = MarketplaceProduct.objects.all()
     serializer_class = MarketplaceDetailProductSerializer
@@ -87,6 +89,61 @@ class MarketplaceProductView(generics.RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+
+class EditMarketplaceProductView(generics.UpdateAPIView):
+    queryset = MarketplaceProduct.objects.all()
+    serializer_class = EditMarketplaceProductSerializer
+    lookup_field = "pk"
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if (
+            instance.greenhouse.owner != request.user
+            and request.user.is_staff
+            and instance.greenhouse.caretaker != request.user
+        ):
+            return JsonResponse(
+                {
+                    "message": f"User {request.user} is not the owner of greenhouse {instance.greenhouse}"
+                },
+                status=400,
+            )
+
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+class DeleteMarketplaceProductView(generics.DestroyAPIView):
+    queryset = MarketplaceProduct.objects.all()
+    lookup_field = "pk"
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_destroy(self, instance):
+        instance.delete()
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if (
+            instance.greenhouse.owner != request.user
+            and request.user.is_staff
+            and instance.greenhouse.caretaker != request.user
+        ):
+            return JsonResponse(
+                {
+                    "message": f"User {request.user} is not the owner of greenhouse {instance.greenhouse}"
+                },
+                status=400,
+            )
+
+        serializer = MarketplaceProductSerializer(instance)
+        self.perform_destroy(instance)
         return Response(serializer.data)
 
 
@@ -128,6 +185,7 @@ class CreateProductOrderView(generics.CreateAPIView):
         instance_serializer = CreateProductOrderOutputSerializer(instance)
         return Response(instance_serializer.data)
 
+
 class EditGreenhouseProductInventoryView(APIView):
     def put(self, request, *args, **kwargs):
         # Get Greenhouse from PK
@@ -138,7 +196,9 @@ class EditGreenhouseProductInventoryView(APIView):
             listing = MarketplaceProduct.objects.get(pk=product["id"])
             if listing.greenhouse != greenhouse:
                 return JsonResponse(
-                    {"message": f"Product {listing.id} is not in greenhouse {greenhouse.id}"},
+                    {
+                        "message": f"Product {listing.id} is not in greenhouse {greenhouse.id}"
+                    },
                     status=400,
                 )
             listing.quantity = product["quantity"]
@@ -162,14 +222,14 @@ class GetPickupOptionsFromCartItemsView(APIView):
         items = request.data.get("items", [])
         primaryGreenhouseId = request.data.get("primaryGreenhouseId")
         primaryGreenhouse = None
-        try: 
+        try:
             primaryGreenhouse = Greenhouse.objects.get(pk=primaryGreenhouseId)
             print("Primary Greenhouse:", primaryGreenhouse.title)
             print("Primary Greenhouse ID:", primaryGreenhouseId)
         except Greenhouse.DoesNotExist:
             print("Primary greenhouse not found, continuing...")
             primaryGreenhouse = None
-        
+
         print("Items:", items)
 
         lockedLocationProducts = []
@@ -221,9 +281,9 @@ class GetPickupOptionsFromCartItemsView(APIView):
                     convertedProductsToMarketplaceProducts.append([item, listing])
                     appended = True
                     break
-                
+
             # Check primaryGreenhouse
-            if(appended == False):
+            if appended == False:
                 if primaryGreenhouse:
                     print("Checking primaryGreenhouse")
                     if primaryGreenhouse not in lockedGreenhouses:
@@ -233,7 +293,9 @@ class GetPickupOptionsFromCartItemsView(APIView):
                                 productsInLockedGreenhouses.append(product)
                                 print("Adding Primary greenhouse to locked greenhouses")
                                 lockedGreenhouses.append(primaryGreenhouse)
-                                convertedProductsToMarketplaceProducts.append([item, listing])
+                                convertedProductsToMarketplaceProducts.append(
+                                    [item, listing]
+                                )
                                 appended = True
                                 break
             if not appended:
@@ -299,7 +361,11 @@ class GetPickupOptionsFromCartItemsView(APIView):
             product = MarketplaceProduct.objects.get(pk=item["marketplaceProduct"])
             sum += product.price * item["quantity"]
 
-        currentPickupOption = {"title": "Ideal pickup", "items": idealPickupOptionItems, "sum": sum}
+        currentPickupOption = {
+            "title": "Ideal pickup",
+            "items": idealPickupOptionItems,
+            "sum": sum,
+        }
         pickupOptions.append(currentPickupOption)
 
         return JsonResponse(pickupOptions, status=200, safe=False)

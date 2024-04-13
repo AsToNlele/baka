@@ -1873,6 +1873,110 @@ paths:
           description: ''
       tags:
       - api
+  /api/marketplace/marketplace-products/{id}/:
+    put:
+      operationId: updateMarketplaceProduct
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this marketplace product.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditMarketplaceProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EditMarketplaceProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EditMarketplaceProduct'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EditMarketplaceProduct'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateMarketplaceProduct
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this marketplace product.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditMarketplaceProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EditMarketplaceProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EditMarketplaceProduct'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EditMarketplaceProduct'
+          description: ''
+      tags:
+      - api
+  /api/marketplace/greenhouses/{id}/products/edit/:
+    put:
+      operationId: updateEditGreenhouseProductInventory
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - api
+  /api/marketplace/marketplace-products/{id}/delete/:
+    delete:
+      operationId: destroyMarketplaceProduct
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this marketplace product.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
 components:
   schemas:
     Greenhouse:
@@ -3480,3 +3584,50 @@ components:
         status:
           type: string
           nullable: true
+    EditMarketplaceProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        product:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            name:
+              type: string
+              maxLength: 255
+            description:
+              type: string
+              nullable: true
+            image:
+              type: string
+              nullable: true
+            shared:
+              type: boolean
+        price:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        greenhouse:
+          type: integer
+          nullable: true
+      required:
+      - product
+      - price
+      - quantity

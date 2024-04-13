@@ -191,6 +191,16 @@ export interface paths {
   "/api/timesheets/{id}/update_timesheet/": {
     put: operations["updateTimesheetTimesheet"];
   };
+  "/api/marketplace/marketplace-products/{id}/": {
+    put: operations["updateMarketplaceProduct"];
+    patch: operations["partialUpdateMarketplaceProduct"];
+  };
+  "/api/marketplace/greenhouses/{id}/products/edit/": {
+    put: operations["updateEditGreenhouseProductInventory"];
+  };
+  "/api/marketplace/marketplace-products/{id}/delete/": {
+    delete: operations["destroyMarketplaceProduct"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -772,6 +782,24 @@ export interface components {
       /** Format: decimal */
       pay?: string | null;
       status?: string | null;
+    };
+    EditMarketplaceProduct: {
+      id?: number;
+      product: {
+        id?: number;
+        name?: string;
+        description?: string | null;
+        image?: string | null;
+        shared?: boolean;
+      };
+      /** Format: decimal */
+      price: string;
+      quantity: number;
+      /** Format: date-time */
+      created_at?: string;
+      /** Format: date-time */
+      updated_at?: string;
+      greenhouse?: number | null;
     };
   };
   responses: never;
@@ -2047,6 +2075,84 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["UpdateTimesheet"];
         };
+      };
+    };
+  };
+  updateMarketplaceProduct: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this marketplace product. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["EditMarketplaceProduct"];
+        "application/x-www-form-urlencoded": components["schemas"]["EditMarketplaceProduct"];
+        "multipart/form-data": components["schemas"]["EditMarketplaceProduct"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["EditMarketplaceProduct"];
+        };
+      };
+    };
+  };
+  partialUpdateMarketplaceProduct: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this marketplace product. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["EditMarketplaceProduct"];
+        "application/x-www-form-urlencoded": components["schemas"]["EditMarketplaceProduct"];
+        "multipart/form-data": components["schemas"]["EditMarketplaceProduct"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["EditMarketplaceProduct"];
+        };
+      };
+    };
+  };
+  updateEditGreenhouseProductInventory: {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": unknown;
+        "application/x-www-form-urlencoded": unknown;
+        "multipart/form-data": unknown;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+    };
+  };
+  destroyMarketplaceProduct: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this marketplace product. */
+        id: string;
+      };
+    };
+    responses: {
+      204: {
+        content: never;
       };
     };
   };

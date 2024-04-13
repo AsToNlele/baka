@@ -34,12 +34,28 @@ class MarketplaceDetailProductSerializer(serializers.ModelSerializer):
         model = MarketplaceProduct
         fields = "__all__"
 
+
 class MarketplaceProductSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
 
     class Meta:
         model = MarketplaceProduct
         fields = "__all__"
+
+
+class EditMarketplaceProductSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+
+    class Meta:
+        model = MarketplaceProduct
+        fields = "__all__"
+
+    def update(self, instance, validated_data):
+        instance.__dict__.update(validated_data)
+        instance.product = super().update(instance.product, validated_data["product"])
+        instance.save()
+        return instance
+
 
 class EditGreenhouseProductInventorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -161,6 +177,7 @@ class CreateProductOrderOutputSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductOrders
         fields = "__all__"
+
 
 class ProductMinMaxSerializer(serializers.Serializer):
     id = serializers.IntegerField()

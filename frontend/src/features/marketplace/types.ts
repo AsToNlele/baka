@@ -48,7 +48,7 @@ export const EditGreenhouseProductInventoryRequestSchema = z.object({
     products: z.array(
         z.object({
             id: z.number(),
-            quantity: z.number({coerce: true}),
+            quantity: z.number({ coerce: true }),
             price: z.string(),
         }),
     ),
@@ -56,4 +56,19 @@ export const EditGreenhouseProductInventoryRequestSchema = z.object({
 
 export type EditGreenhouseProductInventoryRequestValidationType = z.infer<
     typeof EditGreenhouseProductInventoryRequestSchema
+>
+
+export const EditGreenhouseMarketplaceProductRequestSchema = z.object({
+    product: z.object({
+        name: z.string().min(3),
+        description: z.string().min(3),
+        image: z.string().optional(),
+        shared: z.boolean(),
+    }),
+    price: z.string(),
+    quantity: z.number({ coerce: true }),
+})
+
+export type EditGreenhouseMarketplaceProductRequestValidationType = z.infer<
+    typeof EditGreenhouseMarketplaceProductRequestSchema
 >
