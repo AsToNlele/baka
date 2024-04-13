@@ -239,3 +239,14 @@ export type EditGreenhouseProductInventoryResponse = Exclude<
     paths["/api/marketplace/marketplace-products/{id}/"]["put"]["responses"][200]["content"]["application/json"],
     undefined
 >
+
+export type CreateFlowerbedRequest = {
+    greenhouse: number
+    name: string
+    disabled: boolean
+    dimension_width: number
+    dimension_height: number
+    idealPlants: string
+    tools: string
+    pricePerDay: number
+}

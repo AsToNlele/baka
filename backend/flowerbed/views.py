@@ -4,14 +4,17 @@ from django.http import JsonResponse
 from django.utils.dateparse import parse_datetime
 from flowerbed.models import Flowerbed
 from flowerbed.serializers import (
+    CreateFlowerbedSerializer,
     CreateRentSerializer,
     FlowerbedSerializer,
     FlowerbedStatusSerializer,
     RentSerializer,
 )
+from greenhouse.models import Greenhouse
 from orders.models import FlowerbedOrders
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
 from rest_framework.mixins import Response
 
 
@@ -33,8 +36,6 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         return JsonResponse(serializer.data)
 
-        
-        
         # return Response(
         #     {
         #         "status": "rented" if serializer.data.get("currentRent") else "free",
@@ -100,8 +101,39 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         serializedRentItem = RentSerializer(rentItem)
         return Response(serializedRentItem.data, status=200)
 
-    @action(detail=False, methods=["get"], name="Get my flowerbeds", serializer_class=FlowerbedSerializer)
+    @action(
+        detail=False,
+        methods=["get"],
+        name="Get my flowerbeds",
+        serializer_class=FlowerbedSerializer,
+    )
     def my_flowerbeds(self, request):
         queryset = Flowerbed.objects.filter(rent__user=request.user.profile)
         serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    # Override create
+    def create(self, request, *args, **kwargs):
+        # Get Greenhouse
+        greenhouseId = request.data.get("greenhouse")
+        greenhouse = get_object_or_404(Greenhouse, pk=greenhouseId)
+
+        # Check if the user is admin, owner or caretaker
+        if (
+            greenhouse.owner != request.user.profile
+            and greenhouse.caretaker != request.user.profile
+            and not request.user.is_superuser
+            and not request.user.is_staff
+        ):
+            return Response(
+                {
+                    "error": "You are not allowed to create a flowerbed in this greenhouse"
+                },
+                status=403,
+            )
+
+        serializer = CreateFlowerbedSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
         return Response(serializer.data)

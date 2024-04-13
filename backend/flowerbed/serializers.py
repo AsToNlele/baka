@@ -2,14 +2,15 @@ from datetime import datetime
 
 from flowerbed.models import Flowerbed, Rent
 from greenhouse.models import Greenhouse, GreenhouseAddress
-from rest_framework import serializers
-
 from orders.serializers import FlowerbedOrderSerializer
+from rest_framework import serializers
 
 # from greenhouse.serializers import GreenhouseAddressSerializer
 
+
 class FlowerbedStatusSerializer(serializers.Serializer):
-    status = serializers.ChoiceField(choices=[('rented', 'Rented'), ('free', 'Free')])
+    status = serializers.ChoiceField(choices=[("rented", "Rented"), ("free", "Free")])
+
 
 class CreateRentSerializer(serializers.ModelSerializer):
     # greenhouse_address = GreenhouseAddressSerializer(required=False)
@@ -27,7 +28,6 @@ class CreateRentSerializer(serializers.ModelSerializer):
             "rented_from": {"required": True},
             "rented_to": {"required": True},
         }
-    
 
     def validate(self, attrs):
         return attrs
@@ -85,7 +85,7 @@ class CreateRentSerializer(serializers.ModelSerializer):
 
 class RentSerializer(serializers.ModelSerializer):
     order = FlowerbedOrderSerializer(source="flowerbedorders")
-    
+
     class Meta:
         model = Rent
         fields = "__all__"
@@ -123,6 +123,14 @@ class FlowerbedSerializer(serializers.ModelSerializer):
             rented_from__lte=datetime.now(), rented_to__gte=datetime.now()
         ).first()
         return RentSerializer(currentRent).data if currentRent else None
+
+    class Meta:
+        model = Flowerbed
+        fields = "__all__"
+
+
+class CreateFlowerbedSerializer(serializers.ModelSerializer):
+    greenhouse = serializers.PrimaryKeyRelatedField(queryset=Greenhouse.objects.all())
 
     class Meta:
         model = Flowerbed

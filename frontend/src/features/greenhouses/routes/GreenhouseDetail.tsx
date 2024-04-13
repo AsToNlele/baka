@@ -11,13 +11,13 @@ import {
     useDisclosure,
 } from "@nextui-org/react"
 import { Key, useEffect } from "react"
-import { FlowerbedList } from "@/features/flowerbeds/components/FlowerbedList"
-import { FaEdit , FaUsersCog} from "react-icons/fa"
+import { FaEdit, FaUsersCog } from "react-icons/fa"
 import { EditGreenhouseModal } from "@/features/greenhouses/components/EditGreenhouseModal"
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { GreenhouseProducts } from "@/features/marketplace/components/GreenhouseProducts"
 import { dayNumberToDay, formatTime } from "@/utils/utils"
 import { SetGreenhouseUsersModal } from "@/features/greenhouses/components/SetGreenhouseUsersModal"
+import { FlowerbedTab } from "@/features/flowerbeds/components/FlowerbedTab"
 
 export const GreenhouseDetail = () => {
     const { id } = useParams()
@@ -42,7 +42,11 @@ export const GreenhouseDetail = () => {
     const greenhouseId = id ? parseInt(id) : null
     const { data, isLoading } = useGreenhouseDetail(greenhouseId)
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
-    const { isOpen: isUsersOpen, onOpen: onOpenUsers, onClose: onCloseUsers } = useDisclosure()
+    const {
+        isOpen: isUsersOpen,
+        onOpen: onOpenUsers,
+        onClose: onCloseUsers,
+    } = useDisclosure()
 
     const { data: user } = useProfile()
 
@@ -55,8 +59,9 @@ export const GreenhouseDetail = () => {
     }
 
     const userIsAdminOrOwnerOrCareTaker = () =>
-        user?.superuser || user?.profile?.id === data.owner || user?.profile?.id === data.caretaker
-
+        user?.superuser ||
+        user?.profile?.id === data.owner ||
+        user?.profile?.id === data.caretaker
 
     return (
         <>
@@ -67,7 +72,12 @@ export const GreenhouseDetail = () => {
                         <Button color="secondary" isIconOnly onPress={onOpen}>
                             <FaEdit />
                         </Button>
-                        <Button color="warning" isIconOnly onPress={onOpenUsers} size="md">
+                        <Button
+                            color="warning"
+                            isIconOnly
+                            onPress={onOpenUsers}
+                            size="md"
+                        >
                             <FaUsersCog size={20} />
                         </Button>
                     </>
@@ -177,9 +187,9 @@ export const GreenhouseDetail = () => {
                 <Tab key="flowerbeds" title="Flowerbeds">
                     <Card>
                         <CardBody>
-                            <FlowerbedList
-                                flowerbeds={data.flowerbeds!}
-                                greenhouseId={id}
+                            <FlowerbedTab
+                                flowerbeds={data.flowerbeds}
+                                greenhouseId={greenhouseId}
                             />
                         </CardBody>
                     </Card>
