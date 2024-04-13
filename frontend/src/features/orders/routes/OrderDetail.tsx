@@ -1,15 +1,18 @@
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { useOrderDetail } from "@/features/orders/hooks/useOrderDetail"
 import { parseIsoAndFormat, upperCaseFirstLetter } from "@/utils/utils"
-import { Divider } from "@nextui-org/react"
+import { Button, Divider, useDisclosure } from "@nextui-org/react"
 import { useParams } from "react-router-dom"
 import { QRPaymentStandalone } from "@/features/orders/components/QRPayment"
 import { AwaitPayment } from "@/features/orders/components/AwaitPayment"
 import { useOrderPickup } from "@/features/orders/hooks/useOrderPickup"
 import { Loading } from "@/components/Loading"
 import { OrderPickupItem } from "@/features/orders/components/OrderPickupItem"
+import { useIsAdmin } from "@/hooks/isAdmin"
+import { FaEdit } from "react-icons/fa"
+import { EditOrderModal } from "@/features/orders/components/EditOrderModal"
 
-const OrderPickupDetail = ({ productOrderId }: {productOrderId: number}) => {
+const OrderPickupDetail = ({ productOrderId }: { productOrderId: number }) => {
     const { data } = useOrderPickup(productOrderId)
 
     if (!data) {
@@ -24,20 +27,33 @@ const OrderPickupDetail = ({ productOrderId }: {productOrderId: number}) => {
         </div>
     )
 }
-    
-    
-    
-
 
 export const OrderDetail = () => {
     const { id } = useParams()
     const orderId = id ? parseInt(id) : null
     const { data } = useOrderDetail(orderId)
+    const isAdmin = useIsAdmin()
 
+    const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
 
     return (
         <div className="flex flex-col gap-4">
-            <PageTitle title={`Order #${orderId}`} />
+            <div className="flex gap-2">
+                <PageTitle title={`Order #${orderId}`} />
+                {isAdmin && data && (
+                    <>
+                        <Button color="secondary" isIconOnly onPress={onOpen}>
+                            <FaEdit />
+                        </Button>
+                        <EditOrderModal
+                            isOpen={isOpen}
+                            onClose={onClose}
+                            onOpenChange={onOpenChange}
+                            order={data}
+                        />
+                    </>
+                )}
+            </div>
             {data ? (
                 <div className="flex flex-col gap-2">
                     <div className="flex items-baseline gap-4">
@@ -55,7 +71,8 @@ export const OrderDetail = () => {
                             <div className="flex gap-4">
                                 <div className="flex-col">
                                     <p>
-                                        Greenhouse:{" "} {data.rent.flowerbed.greenhouse.title}
+                                        Greenhouse:{" "}
+                                        {data.rent.flowerbed.greenhouse.title}
                                     </p>
                                     <p>Flowerbed: {data.rent.flowerbed.name}</p>
                                 </div>
@@ -103,9 +120,11 @@ export const OrderDetail = () => {
                     <AwaitPayment orderId={orderId} />
                 </div>
             )}
-            <h2 className="mt-8 text-2xl">Pickup details</h2>
             {data?.type === "product" && (
-                <OrderPickupDetail productOrderId={orderId!} />
+                <>
+                    <h2 className="mt-8 text-2xl">Pickup details</h2>
+                    <OrderPickupDetail productOrderId={orderId!} />
+                </>
             )}
         </div>
     )

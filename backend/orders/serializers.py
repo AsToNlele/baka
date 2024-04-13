@@ -116,3 +116,8 @@ class GreenhouseWithAddressSerializer(serializers.ModelSerializer):
 class GetPickupLocationsSerializer(serializers.Serializer):
     greenhouse = GreenhouseWithAddressSerializer()
     items = ProductOrderItemSerializer(many=True)
+
+class EditOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ["status", "final_price"]

@@ -188,6 +188,9 @@ export interface paths {
   "/api/greenhouses/{id}/unset_owner/": {
     put: operations["unsetOwnerGreenhouse"];
   };
+  "/api/orders/{id}/edit_order/": {
+    put: operations["editOrderOrder"];
+  };
   "/api/timesheets/{id}/update_timesheet/": {
     put: operations["updateTimesheetTimesheet"];
   };
@@ -760,6 +763,11 @@ export interface components {
       owner: number;
     };
     Empty: Record<string, never>;
+    EditOrder: {
+      status?: string | null;
+      /** Format: decimal */
+      final_price?: string | null;
+    };
     UpdateTimesheet: {
       items?: ({
           id?: number;
@@ -2052,6 +2060,28 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Empty"];
+        };
+      };
+    };
+  };
+  editOrderOrder: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this order. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["EditOrder"];
+        "application/x-www-form-urlencoded": components["schemas"]["EditOrder"];
+        "multipart/form-data": components["schemas"]["EditOrder"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["EditOrder"];
         };
       };
     };

@@ -1842,6 +1842,37 @@ paths:
           description: ''
       tags:
       - api
+  /api/orders/{id}/edit_order/:
+    put:
+      operationId: editOrderOrder
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this order.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditOrder'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EditOrder'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EditOrder'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EditOrder'
+          description: ''
+      tags:
+      - api
   /api/timesheets/{id}/update_timesheet/:
     put:
       operationId: updateTimesheetTimesheet
@@ -3523,6 +3554,19 @@ components:
     Empty:
       type: object
       properties: {}
+    EditOrder:
+      type: object
+      properties:
+        status:
+          type: string
+          nullable: true
+        final_price:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+          nullable: true
     UpdateTimesheet:
       type: object
       properties:

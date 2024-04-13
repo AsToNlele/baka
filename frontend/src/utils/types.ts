@@ -250,3 +250,5 @@ export type CreateFlowerbedRequest = {
     tools: string
     pricePerDay: number
 }
+
+export type EditOrderRequest = Exclude<paths["/api/orders/{id}/edit_order/"]["put"]["requestBody"], undefined>["content"]["application/json"]

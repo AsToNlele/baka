@@ -2,6 +2,7 @@ from django.http.response import JsonResponse
 from greenhouse.models import Greenhouse
 from orders.models import FlowerbedOrders, Order, ProductOrders
 from orders.serializers import (
+    EditOrderSerializer,
     FlowerbedOrderSerializer,
     GetPickupLocationsSerializer,
     OrderSerializer,
@@ -38,7 +39,10 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         # queryset only owned
-        queryset = Order.objects.filter(user=request.user.profile)
+        if request.user.is_staff:
+            queryset = Order.objects.all()
+        else:
+            queryset = Order.objects.filter(user=request.user.profile)
         serializer = OrderSerializer(queryset, many=True)
         print(serializer.data)
         orders = []
@@ -144,3 +148,14 @@ class OrderViewSet(viewsets.ModelViewSet):
         serializer.is_valid()
 
         return Response(serializer.data)
+
+    @action(detail=True, methods=["put"], serializer_class=EditOrderSerializer)
+    def edit_order(self, request, pk=None):
+        if not request.user.is_staff:
+            return JsonResponse({"error": "Unauthorized"}, status=401)
+        order = self.get_object()
+        serializer = EditOrderSerializer(order, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        orderSerializer = OrderSerializer(order)
+        return Response(orderSerializer.data)
