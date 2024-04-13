@@ -89,7 +89,7 @@ export const OrderPickupItem = ({ pickup }: { pickup: GetPickupLocationsType }) 
                         <h2 className="text-xl font-semibold">Items</h2>
                         <div className="flex flex-col gap-4">
                             {pickup.items.map((item) => (
-                                <Card shadow="sm">
+                                <Card shadow="sm" key={item.id}>
                                     <CardBody className="justify-between overflow-visible object-cover p-0">
                                         <div className="flex h-full justify-between gap-2">
                                             <Image

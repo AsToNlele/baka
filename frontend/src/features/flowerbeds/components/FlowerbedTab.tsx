@@ -34,6 +34,13 @@ export const FlowerbedTab = ({
                     <FaPlus />
                 </Button>
             )}
+            {
+                flowerbeds.length === 0 && (
+                    <div className="flex items-center justify-center">
+                        No flowerbeds found
+                    </div>
+                )
+            }
             <FlowerbedList
                 flowerbeds={flowerbeds}
                 greenhouseId={greenhouseId}

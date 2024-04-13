@@ -1,4 +1,3 @@
-import { useCreateTimesheet } from "@/features/timesheets/hooks/useCreateTimesheet"
 import {
     Modal,
     ModalHeader,
@@ -11,19 +10,10 @@ import {
     Input,
     Select,
     SelectItem,
-    Divider,
 } from "@nextui-org/react"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-    CreateTimesheetSchema,
-    CreateTimesheetValidationType,
-} from "@/features/timesheets/utils/types"
-import { useProfile } from "@/features/auth/hooks/useProfile"
 import { useEffect } from "react"
-import { WorkingHoursCustomFields } from "@/features/timesheets/components/WorkingHoursCustomFields"
-import { TimesheetItemsCustomFields } from "@/features/timesheets/components/TimesheetItemsCustomFields"
-import { useNavigate } from "react-router-dom"
 import { useEditOrder } from "@/features/orders/hooks/useEditOrder"
 import { OrderDetailResponse } from "@/utils/types"
 import {

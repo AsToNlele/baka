@@ -187,10 +187,12 @@ export const GreenhouseDetail = () => {
                 <Tab key="flowerbeds" title="Flowerbeds">
                     <Card>
                         <CardBody>
-                            <FlowerbedTab
-                                flowerbeds={data.flowerbeds}
-                                greenhouseId={greenhouseId}
-                            />
+                            {data && (
+                                <FlowerbedTab
+                                    flowerbeds={data.flowerbeds!}
+                                    greenhouseId={greenhouseId!}
+                                />
+                            )}
                         </CardBody>
                     </Card>
                 </Tab>

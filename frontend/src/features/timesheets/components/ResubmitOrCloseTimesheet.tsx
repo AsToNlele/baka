@@ -29,7 +29,7 @@ export const ResubmitOrCloseTimesheet = ({
                     </Button>
                 </div>
             </div>
-            <ResubmitModal isOpen={isResubmitOpen} onOpenChange={onResubmitOpenChange} onClose={onResubmitClose} timesheet={data} />
+            <ResubmitModal isOpen={isResubmitOpen} onOpenChange={onResubmitOpenChange} onClose={onResubmitClose} />
             <CancelModal isOpen={isCloseOpen} onOpenChange={onCloseOpenChange} onClose={onCloseClose} timesheet={data} />
         </>
     )

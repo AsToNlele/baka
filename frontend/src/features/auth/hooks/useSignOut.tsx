@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { api } from "../../../utils/api"
 import { useNavigate } from "react-router-dom"
-import { toast } from "sonner"
 import Cookies from "js-cookie"
 
 const signout = () => {
@@ -17,7 +16,7 @@ export const useSignOut = () => {
             navigate("/")
             queryClient.invalidateQueries({ queryKey: ["profile"] })
             Cookies.remove("csrftoken")
-            toast.success("Signed out successfully")
+            // toast.success("Signed out successfully")
         },
     })
     return mutation
