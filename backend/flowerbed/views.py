@@ -6,6 +6,7 @@ from flowerbed.models import Flowerbed
 from flowerbed.serializers import (
     CreateFlowerbedSerializer,
     CreateRentSerializer,
+    EditFlowerbedSerializer,
     FlowerbedSerializer,
     FlowerbedStatusSerializer,
     RentSerializer,
@@ -133,6 +134,30 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
             )
 
         serializer = CreateFlowerbedSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
+
+    # Override update
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        # Check if the user is admin, owner or caretaker
+        if (
+            instance.greenhouse.owner != request.user.profile
+            and instance.greenhouse.caretaker != request.user.profile
+            and not request.user.is_superuser
+            and not request.user.is_staff
+        ):
+            return Response(
+                {
+                    "error": "You are not allowed to update this flowerbed in this greenhouse"
+                },
+                status=403,
+            )
+
+        serializer = EditFlowerbedSerializer(instance, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 

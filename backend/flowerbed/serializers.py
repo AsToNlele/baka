@@ -135,3 +135,8 @@ class CreateFlowerbedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Flowerbed
         fields = "__all__"
+
+class EditFlowerbedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Flowerbed
+        fields = "__all__"

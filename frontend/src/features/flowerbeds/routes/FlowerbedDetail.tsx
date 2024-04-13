@@ -1,20 +1,58 @@
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { useFlowerbedDetail } from "@/features/flowerbeds/hooks/useFlowerbedDetail"
-import { Button, Card, CardBody, Image, Link } from "@nextui-org/react"
+import {
+    Button,
+    Card,
+    CardBody,
+    Image,
+    Link,
+    useDisclosure,
+} from "@nextui-org/react"
 import { useParams } from "react-router-dom"
 import { parseIsoAndFormat } from "@/utils/utils"
+import { FaEdit } from "react-icons/fa"
+import { useProfile } from "@/features/auth/hooks/useProfile"
+import { EditFlowerbedModal } from "@/features/flowerbeds/components/EditFlowerbedModal"
 
 export const FlowerbedDetail = () => {
     const { id } = useParams()
     const flowerbedId = id ? parseInt(id) : null
     const { data } = useFlowerbedDetail(flowerbedId)
 
+    const { data: profile } = useProfile()
+
+    const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
+
+    const isCaretaker = profile?.caretaker_greenhouses.some(
+        (g) => g.id === data?.greenhouse.id,
+    )
+    const isOwner = profile?.owned_greenhouses.some(
+        (g) => g.id === data?.greenhouse.id,
+    )
+    const isSuperuser = profile?.superuser
+    const hasAccess = isCaretaker || isOwner || isSuperuser
+
     return (
         <>
-            <PageTitle
-                title={`Flowerbed ${data?.name}`}
-                backPath={`/app/greenhouses/${data?.greenhouse.id}?tab=flowerbeds`}
-            />
+            <div className="flex gap-2">
+                <PageTitle
+                    title={`Flowerbed ${data?.name}`}
+                    backPath={`/app/greenhouses/${data?.greenhouse.id}?tab=flowerbeds`}
+                />
+                {data && hasAccess && (
+                    <>
+                        <Button isIconOnly color="primary" onClick={onOpen}>
+                            <FaEdit />
+                        </Button>
+                        <EditFlowerbedModal
+                            isOpen={isOpen}
+                            onClose={onClose}
+                            onOpenChange={onOpenChange}
+                            flowerbed={data}
+                        />
+                    </>
+                )}
+            </div>
 
             <div className="mt-8 flex flex-col flex-wrap gap-2 sm:flex-row">
                 <div className="grid flex-1 auto-rows-max grid-cols-2 gap-8 sm:grid-cols-2">
@@ -29,13 +67,13 @@ export const FlowerbedDetail = () => {
                                 <h3 className="text-lg">From</h3>
                                 <p>
                                     {parseIsoAndFormat(
-                                        data?.currentRent.rented_from
+                                        data?.currentRent.rented_from,
                                     )}
                                 </p>
                                 <h3 className="text-lg">To</h3>
                                 <p>
                                     {parseIsoAndFormat(
-                                        data?.currentRent.rented_to
+                                        data?.currentRent.rented_to,
                                     )}
                                 </p>
                             </>
