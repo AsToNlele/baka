@@ -179,7 +179,7 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         serializer_class=FlowerbedSerializer,
     )
     def my_flowerbeds(self, request):
-        queryset = Flowerbed.objects.filter(rent__user=request.user.profile)
+        queryset = Flowerbed.objects.filter(rent__user=request.user.profile).distinct()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
