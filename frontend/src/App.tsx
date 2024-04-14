@@ -29,6 +29,7 @@ import { ResetPasswordConfirm } from "@/features/auth/routes/ResetPasswordConfir
 import { ResetPasswordReseted } from "@/features/auth/routes/ResetPasswordReseted"
 import { Timesheets } from "@/features/timesheets/routes/Timesheets"
 import { TimesheetDetail } from "@/features/timesheets/routes/TimesheetDetail"
+import { ExtendRentFlowerbed } from "@/features/flowerbeds/routes/ExtendRentFlowerbed"
 
 function App() {
     const navigate = useNavigate()
@@ -88,6 +89,10 @@ function App() {
                                 <Route
                                     path="/app/flowerbeds/:id/rent"
                                     element={<RentFlowerbed />}
+                                />
+                                <Route
+                                    path="/app/flowerbeds/:id/extend-rent"
+                                    element={<ExtendRentFlowerbed />}
                                 />
                                 <Route
                                     path="/app/orders"

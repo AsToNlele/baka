@@ -76,6 +76,27 @@ export const FlowerbedDetail = () => {
                                         data?.currentRent.rented_to,
                                     )}
                                 </p>
+                                {data.extendable && (
+                                    <Button
+                                        color="secondary"
+                                        as={Link}
+                                        href={`/app/flowerbeds/${data.id}/extend-rent`}
+                                    >
+                                        Extend
+                                    </Button>
+                                )}
+                                {!data.extendable && data.rents && (
+                                    <>
+                                        <h3 className="text-lg">Extended To</h3>
+                                        <p>
+                                            {parseIsoAndFormat(
+                                                data.rents[
+                                                    data.rents.length - 1
+                                                ].rented_to!,
+                                            )}
+                                        </p>
+                                    </>
+                                )}
                             </>
                         ) : (
                             <Button

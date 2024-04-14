@@ -1842,6 +1842,37 @@ paths:
           description: ''
       tags:
       - api
+  /api/flowerbeds/{id}/extend_rent/:
+    put:
+      operationId: extendRentFlowerbed
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this flowerbed.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateRent'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateRent'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateRent'
+          description: ''
+      tags:
+      - api
   /api/orders/{id}/edit_order/:
     put:
       operationId: editOrderOrder
@@ -2124,6 +2155,9 @@ components:
                         nullable: true
                 required:
                 - greenhouse_address
+              extendable:
+                type: string
+                readOnly: true
               name:
                 type: string
                 nullable: true
@@ -2346,6 +2380,9 @@ components:
                   nullable: true
           required:
           - greenhouse_address
+        extendable:
+          type: string
+          readOnly: true
         name:
           type: string
           nullable: true
@@ -2768,6 +2805,9 @@ components:
                             nullable: true
                     required:
                     - greenhouse_address
+                  extendable:
+                    type: string
+                    readOnly: true
                   name:
                     type: string
                     nullable: true

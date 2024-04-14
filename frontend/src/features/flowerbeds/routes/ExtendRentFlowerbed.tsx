@@ -2,7 +2,10 @@ import { useFlowerbedDetail } from "@/features/flowerbeds/hooks/useFlowerbedDeta
 import { useMultistepFormStore } from "@/features/flowerbeds/stores/useRentMultistepFormStore"
 import { Button, Divider, Image } from "@nextui-org/react"
 import { useNavigate, useParams } from "react-router-dom"
-import { DaySingleRangePickerWithInput } from "@/features/flowerbeds/components/DayRangePicker"
+import {
+    DaySingleFromFixedRangePickerWithInput,
+    DaySingleRangePickerWithInput,
+} from "@/features/flowerbeds/components/DayRangePicker"
 import { DateRange } from "react-day-picker"
 
 import { differenceInDays, format, startOfDay } from "date-fns"
@@ -16,8 +19,9 @@ import { useRentFlowerbed } from "@/features/flowerbeds/hooks/useRentFlowerbed"
 import { Loading } from "@/components/Loading"
 import { QRPaymentStandalone } from "@/features/orders/components/QRPayment"
 import { AwaitPayment } from "@/features/orders/components/AwaitPayment"
+import { useExtendRentFlowerbed } from "@/features/flowerbeds/hooks/useExtendRentFlowerbed"
 
-const RentFlowerbedHeader = () => {
+const ExtendRentFlowerbedHeader = () => {
     const { id } = useParams()
     const flowerbedId = id ? parseInt(id) : null
     const { data } = useFlowerbedDetail(flowerbedId)
@@ -94,10 +98,10 @@ const schema = z
         "'To' has to be in the future",
     )
 
-export const RentFlowerbed = () => {
+export const ExtendRentFlowerbed = () => {
     return (
         <div className="flex flex-col gap-4">
-            <RentFlowerbedHeader />
+            <ExtendRentFlowerbedHeader />
             <MultistepForm />
         </div>
     )
@@ -108,22 +112,37 @@ const Step1 = () => {
     const flowerbedId = id ? parseInt(id) : null
     const { setCurrentStep, dateRange, setDateRange, setOrderId } =
         useMultistepFormStore()
-    const { refetch } = useFlowerbedStatus(flowerbedId)
     const { data, refetch: refetchDetail } = useFlowerbedDetail(flowerbedId)
 
     const [daysInBetween, setDaysInBetween] = useState<number | undefined>(
         undefined,
     )
 
+    const setSingleDateRange = (range: DateRange) => {
+        if (data) {
+            const from = new Date(data.currentRent.rented_to)
+            const to = range.to
+            if (!to) {
+                setDateRange({ from, to: from })
+            } else if (from < to) {
+                setDateRange({ from, to })
+            } else {
+                setDateRange({ from: from, to: from })
+            }
+        }
+    }
+
+    console.log(dateRange)
+
     useEffect(() => {
-        refetchDetail()
     }, [])
 
     useEffect(() => {
-        if (data) {
-            setDateRange({
-                from: startOfDay(new Date()),
-                to: undefined,
+        if (data && data?.currentRent) {
+            console.log("RESET")
+            setSingleDateRange({
+                from: new Date(data?.currentRent.rented_to),
+                to: new Date(data?.currentRent.rented_to),
             })
         }
     }, [data])
@@ -151,7 +170,6 @@ const Step1 = () => {
             })
             return
         }
-        refetch()
         refetchDetail()
 
         setOrderId(null)
@@ -160,12 +178,18 @@ const Step1 = () => {
 
     const navigate = useNavigate()
 
+    if (!data) {
+        return <Loading />
+    }
+
     return (
         <div className="mx-auto flex flex-col gap-4 lg:mx-24">
-            <DaySingleRangePickerWithInput
-                range={dateRange}
-                onRangeChange={setDateRange}
-            />
+            {dateRange && dateRange.from && dateRange.to && (
+                <DaySingleFromFixedRangePickerWithInput
+                    range={dateRange}
+                    onRangeChange={setSingleDateRange}
+                />
+            )}
             <div className="grid grid-cols-[repeat(2,max-content)] justify-end gap-2">
                 <p>Days:</p>
                 <p>{data && daysInBetween}</p>
@@ -194,7 +218,7 @@ const Step2 = () => {
     const { data } = useFlowerbedDetail(flowerbedId)
     const { dateRange, setCurrentStep } = useMultistepFormStore()
     const dateFormat = "dd.MM.yyyy"
-    const { mutate } = useRentFlowerbed()
+    const { mutate } = useExtendRentFlowerbed()
 
     const goToNext = () => {
         mutate({
@@ -304,24 +328,28 @@ const Step3 = () => {
 const MultistepForm = () => {
     const { id } = useParams()
     const flowerbedId = id ? parseInt(id) : null
-    const { currentStep } = useMultistepFormStore()
+    const { currentStep, setCurrentStep } = useMultistepFormStore()
     const { data } = useFlowerbedDetail(flowerbedId)
     const { data: statusData } = useFlowerbedStatus(flowerbedId)
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (statusData) {
-            if (statusData?.status === "rented" && currentStep != "step3") {
-                toast.error("This flowerbed is already rented")
+        setCurrentStep("step1")
+    }, [setCurrentStep])
 
-                navigate(
-                    data?.greenhouse.id
-                        ? `/app/greenhouses/${data?.greenhouse.id}`
-                        : "/app/greenhouses",
-                )
-            }
-        }
-    }, [statusData])
+    // useEffect(() => {
+    //     if (statusData) {
+    //         if (statusData?.status === "rented" && currentStep != "step3") {
+    //             toast.error("This flowerbed is already rented")
+    //
+    //             navigate(
+    //                 data?.greenhouse.id
+    //                     ? `/app/greenhouses/${data?.greenhouse.id}`
+    //                     : "/app/greenhouses"
+    //             )
+    //         }
+    //     }
+    // }, [statusData])
     return (
         <div>
             <div className="mb-2 flex justify-center gap-4">

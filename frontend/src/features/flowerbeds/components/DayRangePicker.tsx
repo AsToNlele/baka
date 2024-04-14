@@ -15,6 +15,69 @@ type DaySingleRangePickerWithInputProps = {
 
 const dateFormat = "dd.MM.yyyy"
 
+export const DaySingleFromFixedRangePickerWithInput = ({
+    range,
+    onRangeChange,
+}: DaySingleRangePickerWithInputProps) => {
+    console.log("RANGE", range)
+
+    console.log(range && range?.from && isValid(range.from), range?.from)
+    const fromValue = range && range.from ? format(range.from, dateFormat) : ""
+    const [toValue, setToValue] = useState<string>(
+        range && range?.to && isValid(range.to)
+            ? format(range.to, dateFormat)
+            : "",
+    )
+    console.log("INSIDE", range)
+    console.log("INSIDE VALUE", fromValue)
+
+    const handleToValueChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+        setToValue(e.target.value)
+    }
+
+    const handleDayClick = (day: Date | undefined) => {
+        setToValue(day ? format(day, dateFormat) : "")
+    }
+
+    useEffect(() => {
+        const fromDate = parse(fromValue, dateFormat, new Date())
+        const toDate = toValue
+            ? parse(toValue, dateFormat, new Date())
+            : undefined
+        onRangeChange({
+            from: fromDate,
+            to: toDate,
+        })
+    }, [toValue])
+    return (
+        <div className="flex flex-col gap-4">
+            <div className="flex flex-1 justify-center">
+                <DaySingleRangePicker
+                    range={range}
+                    onDayClick={handleDayClick}
+                />
+            </div>
+            <div className="flex items-center justify-center">
+                <Input
+                    label="From Date"
+                    placeholder="25.05.1977"
+                    value={fromValue}
+                    fullWidth={false}
+                    className="w-auto"
+                />
+                <Divider orientation="horizontal" className="max-w-[30px]" />
+                <Input
+                    label="To Date"
+                    placeholder="25.05.1983"
+                    value={toValue}
+                    onChange={handleToValueChange}
+                    className="w-auto"
+                />
+            </div>
+        </div>
+    )
+}
+
 export const DaySingleRangePickerWithInput = ({
     range,
     onRangeChange,
@@ -181,7 +244,7 @@ export const DayRangePicker = ({
     }
 
     const handleRangeSelect: SelectRangeEventHandler = (
-        range: DateRange | undefined
+        range: DateRange | undefined,
     ) => {
         setSelectedRange(range)
         if (range?.from) {

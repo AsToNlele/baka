@@ -32,13 +32,14 @@ export type TimePeriodType =
 
 export type FlowerbedType = components["schemas"]["Flowerbed"]
 export type FlowerbedDetailResponse =
-    paths["/api/flowerbeds/{id}/"]["get"]["responses"][200]["content"]["application/json"] & {
+    Omit<paths["/api/flowerbeds/{id}/"]["get"]["responses"][200]["content"]["application/json"], "extendable"> & {
+        extendable: boolean
+    } & {
         currentRent: {
             rented_from: string
             rented_to: string
         }
     }
-
 export type FlowerbedStatusResponse =
     paths["/api/flowerbeds/{id}/status/"]["get"]["responses"][200]["content"]["application/json"]
 
@@ -251,4 +252,7 @@ export type CreateFlowerbedRequest = {
     pricePerDay: number
 }
 
-export type EditOrderRequest = Exclude<paths["/api/orders/{id}/edit_order/"]["put"]["requestBody"], undefined>["content"]["application/json"]
+export type EditOrderRequest = Exclude<
+    paths["/api/orders/{id}/edit_order/"]["put"]["requestBody"],
+    undefined
+>["content"]["application/json"]

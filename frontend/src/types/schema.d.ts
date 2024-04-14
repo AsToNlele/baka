@@ -188,6 +188,9 @@ export interface paths {
   "/api/greenhouses/{id}/unset_owner/": {
     put: operations["unsetOwnerGreenhouse"];
   };
+  "/api/flowerbeds/{id}/extend_rent/": {
+    put: operations["extendRentFlowerbed"];
+  };
   "/api/orders/{id}/edit_order/": {
     put: operations["editOrderOrder"];
   };
@@ -251,6 +254,7 @@ export interface components {
               longitude?: string | null;
             };
           };
+          extendable?: string;
           name?: string | null;
           disabled?: boolean | null;
           dimension_width?: number;
@@ -329,6 +333,7 @@ export interface components {
           longitude?: string | null;
         };
       };
+      extendable?: string;
       name?: string | null;
       disabled?: boolean | null;
       dimension_width?: number;
@@ -474,6 +479,7 @@ export interface components {
                 longitude?: string | null;
               };
             };
+            extendable?: string;
             name?: string | null;
             disabled?: boolean | null;
             dimension_width?: number;
@@ -2060,6 +2066,28 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Empty"];
+        };
+      };
+    };
+  };
+  extendRentFlowerbed: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this flowerbed. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["CreateRent"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateRent"];
+        "multipart/form-data": components["schemas"]["CreateRent"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateRent"];
         };
       };
     };

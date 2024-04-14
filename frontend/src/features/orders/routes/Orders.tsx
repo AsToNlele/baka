@@ -28,18 +28,18 @@ export const FlowerbedOrder = ({ order }: FlowerbedOrderProps) => {
                         <div className="flex-col">
                             <p>
                                 Greenhouse:{" "}
-                                {order.rent.flowerbed.greenhouse.title}
+                                {order?.rent?.flowerbed?.greenhouse?.title}
                             </p>
-                            <p>Flowerbed: {order.rent.flowerbed.name}</p>
+                            <p>Flowerbed: {order?.rent?.flowerbed?.name}</p>
                         </div>
                         <div className="flex-col">
                             <p>
                                 Rented from{" "}
-                                {parseIsoAndFormat(order.rent.rented_from!)}
+                                {parseIsoAndFormat(order?.rent?.rented_from ?? "")}
                             </p>
                             <p>
                                 Rented to{" "}
-                                {parseIsoAndFormat(order.rent.rented_to!)}
+                                {parseIsoAndFormat(order?.rent?.rented_to ?? "")}
                             </p>
                         </div>
                         <div className="flex-col">

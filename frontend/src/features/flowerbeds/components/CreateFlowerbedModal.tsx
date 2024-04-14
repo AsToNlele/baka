@@ -16,6 +16,7 @@ import {
 } from "@/features/flowerbeds/types"
 import { useCreateFlowerbed } from "@/features/flowerbeds/hooks/useCreateFlowerbed"
 import { toast } from "sonner"
+import { useEffect } from "react"
 
 type CreateFlowerbedModalProps = {
     isOpen: boolean
@@ -30,7 +31,7 @@ export const CreateFlowerbedModal = ({
     onClose,
     greenhouseId,
 }: CreateFlowerbedModalProps) => {
-    const { register, handleSubmit, formState, control } =
+    const { register, handleSubmit, formState, control, reset } =
         useForm<CreateFlowerbedValidationType>({
             resolver: zodResolver(CreateFlowerbedSchema),
         })
@@ -40,6 +41,8 @@ export const CreateFlowerbedModal = ({
     }
 
     const { mutate } = useCreateFlowerbed()
+
+    console.log(formState.errors)
 
     const onSubmit: SubmitHandler<CreateFlowerbedValidationType> = (data) => {
         mutate(
@@ -52,6 +55,10 @@ export const CreateFlowerbedModal = ({
             },
         )
     }
+
+    useEffect(() => {
+        reset()
+    }, [onOpenChange])
 
     return (
         <Modal

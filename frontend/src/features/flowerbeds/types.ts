@@ -3,7 +3,7 @@ import * as z from "zod"
 export const CreateFlowerbedSchema = z.object({
     greenhouse: z.number({coerce: true}),
     name: z.string().min(1),
-    disabled: z.boolean(),
+    disabled: z.boolean().default(false).optional(),
     dimension_width: z.number({coerce: true}).gt(0),
     dimension_height: z.number({coerce: true}).gt(0),
     idealPlants: z.string(),

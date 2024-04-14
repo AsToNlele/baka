@@ -17,6 +17,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.mixins import Response
+from users.models import Profile
 
 
 class FlowerbedViewSet(viewsets.ModelViewSet):
@@ -89,6 +90,75 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
 
         orderedDays = (rentedFrom - rentedTo).days + 1
 
+        finalPrice = flowerbed.pricePerDay * orderedDays
+
+        FlowerbedOrders.objects.create(
+            rent=rentItem,
+            user=request.user.profile,
+            final_price=finalPrice,
+        )
+
+        rentItem.refresh_from_db()
+
+        serializedRentItem = RentSerializer(rentItem)
+        return Response(serializedRentItem.data, status=200)
+
+    # Extend rent
+    @action(
+        methods=["put"],
+        detail=True,
+        serializer_class=CreateRentSerializer,
+        name="Extend rent",
+    )
+    def extend_rent(self, request, pk=None):
+        flowerbed = self.get_object()
+        flowerbedSerializer = FlowerbedSerializer(flowerbed, many=False)
+
+        currentRent = flowerbedSerializer.data.get("currentRent")
+        print(currentRent)
+        print(flowerbedSerializer.data)
+        if not currentRent:
+            return Response({"message": "This flowerbed is not rented"}, status=400)
+        currentRentUser = Profile.objects.get(pk=currentRent.get("user"))
+        if currentRentUser != request.user.profile:
+            return Response(
+                {"message": "You are not allowed to extend this rent"}, status=403
+            )
+
+        currentRentInstance = flowerbed.rent_set.get(pk=currentRent.get("id"))
+
+        print(currentRentInstance)
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        rents = flowerbed.rent_set.all()
+
+        print("RENTS", rents)
+
+        if rents[len(rents) - 1] != currentRentInstance:
+            return Response({"message": "Rent is already extended"}, status=400)
+
+        rentedToOriginal = parse_datetime(currentRent.get("rented_to"))
+
+        newRentedFrom = rentedToOriginal
+        newRentedTo = parse_datetime(serializer.data.get("rented_to"))
+
+        if newRentedTo is None or newRentedFrom is None:
+            return Response({"message": "Invalid date format"}, status=400)
+
+        if newRentedTo <= newRentedFrom:
+            return Response(
+                {"message": "'To' date must be after 'From' date"}, status=400
+            )
+
+        rentItem = flowerbed.rent_set.create(
+            user=request.user.profile,
+            rented_from=currentRent.get("rented_to"),
+            rented_to=serializer.data.get("rented_to"),
+        )
+
+        orderedDays = (newRentedTo - newRentedFrom).days + 1
         finalPrice = flowerbed.pricePerDay * orderedDays
 
         FlowerbedOrders.objects.create(

@@ -115,14 +115,20 @@ class FlowerbedSerializer(serializers.ModelSerializer):
     rents = RentFlowerbedSerializer(source="rent_set", many=True, read_only=True)
     currentRent = serializers.SerializerMethodField()
     greenhouse = GreenhouseFlowerSerializer()
+    extendable = serializers.SerializerMethodField()
 
     def get_currentRent(self, obj):
-        # Get the current lease for this flowerbed
-        # If there is no current lease, return None
         currentRent = obj.rent_set.filter(
             rented_from__lte=datetime.now(), rented_to__gte=datetime.now()
         ).first()
         return RentSerializer(currentRent).data if currentRent else None
+
+    def get_extendable(self, obj):
+        # Check if there' a next rent already rented
+        rents = obj.rent_set.filter(rented_from__gte=datetime.now())
+        if len(rents) > 0:
+            return False
+        return True
 
     class Meta:
         model = Flowerbed
@@ -135,6 +141,7 @@ class CreateFlowerbedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Flowerbed
         fields = "__all__"
+
 
 class EditFlowerbedSerializer(serializers.ModelSerializer):
     class Meta:
