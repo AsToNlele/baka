@@ -106,6 +106,9 @@ export interface paths {
   "/api/marketplace/product/{id}/": {
     get: operations["retrieveMarketplaceProduct"];
   };
+  "/api/greenhouses/create_greenhouse/": {
+    post: operations["createGreenhouseGreenhouse"];
+  };
   "/api/flowerbeds/{id}/rent/": {
     post: operations["rentFlowerbed"];
   };
@@ -659,6 +662,33 @@ export interface components {
       created_at?: string;
       /** Format: date-time */
       updated_at?: string;
+    };
+    CreateGreenhouse: {
+      title: string | null;
+      description: string | null;
+      published: boolean;
+      greenhouse_address?: {
+        id?: number;
+        country?: string | null;
+        state?: string | null;
+        city?: string | null;
+        city_part?: string | null;
+        street?: string | null;
+        zipcode?: string | null;
+        latitude?: string | null;
+        longitude?: string | null;
+      };
+      greenhouse_business_hours?: ({
+          id?: number;
+          greenhouse_business_hour_periods: ({
+              id?: number;
+              open: string;
+              close: string;
+              business_hour?: number | null;
+            })[];
+          day: number;
+          greenhouse?: number | null;
+        })[];
     };
     CreateRent: {
       /** Format: date-time */
@@ -1711,6 +1741,22 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["MarketplaceDetailProduct"];
+        };
+      };
+    };
+  };
+  createGreenhouseGreenhouse: {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["CreateGreenhouse"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateGreenhouse"];
+        "multipart/form-data": components["schemas"]["CreateGreenhouse"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["CreateGreenhouse"];
         };
       };
     };

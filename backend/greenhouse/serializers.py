@@ -65,6 +65,113 @@ class GreenhouseSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class CreateGreenhouseSerializer(serializers.ModelSerializer):
+    greenhouse_address = GreenhouseAddressSerializer(required=False)
+    greenhouse_business_hours = GreenhouseBusinessHourSerializer(
+        source="greenhousebusinesshour_set", many=True, required=False
+    )
+
+    class Meta:
+        model = Greenhouse
+        fields = [
+            "title",
+            "description",
+            "published",
+            "greenhouse_address",
+            "greenhouse_business_hours",
+        ]
+        extra_kwargs = {
+            "title": {"required": True},
+            "description": {"required": True},
+            "published": {"required": True},
+            "greenhouse_address": {"required": True},
+        }
+
+    def validate(self, attrs):
+        return attrs
+
+    def create(self, validated_data):
+        try:
+            with transaction.atomic():
+                greenhouse_address = GreenhouseAddress.objects.create(
+                    **validated_data["greenhouse_address"]
+                )
+                greenhouse = Greenhouse.objects.create(
+                    title=validated_data.get("title"),
+                    description=validated_data.get("description"),
+                    published=validated_data.get("published"),
+                    greenhouse_address=greenhouse_address,
+                )
+
+                businessHours = validated_data.get("greenhousebusinesshour_set")
+                if businessHours is not None:
+                    for businessHour in businessHours:
+                        businessHourInstance = GreenhouseBusinessHour.objects.create(
+                            greenhouse=greenhouse, day=businessHour.get("day")
+                        )
+                        for period in businessHour.get("greenhousebusinesshourperiod_set"):
+                            periodInstance = GreenhouseBusinessHourPeriod.objects.create(
+                                business_hour=businessHourInstance,
+                                open=period.get("open"),
+                                close=period.get("close"),
+                            )
+                            periodInstance.save()
+
+                return greenhouse
+        except Exception as e:
+            print(e)
+            raise serializers.ValidationError("Error creating greenhouse, rollback")
+
+    # def create(self, instance, validated_data):
+    #     instance.title = validated_data.get("title", instance.title)
+    #     instance.description = validated_data.get("description", instance.description)
+    #     instance.published = validated_data.get("published", instance.published)
+    #     instance.greenhouse_address = GreenhouseAddress.objects.get_or_create(
+    #         **validated_data["greenhouse_address"]
+    #     )[0]
+    #
+    #     instance.greenhousebusinesshour_set.all().delete()
+    #     if "greenhousebusinesshour_set" in validated_data:
+    #         print("NEMAM")
+    #         businessHours = validated_data.get("greenhousebusinesshour_set")
+    #         print(businessHours)
+    #
+    #         # TODO: put this above the if later
+    #
+    #         for businessHour in businessHours:
+    #             businessHourInstance = GreenhouseBusinessHour.objects.get_or_create(
+    #                 greenhouse=instance, day=businessHour.get("day")
+    #             )
+    #             businessHourInstance[0].save()
+    #             businessHourInstance[0].greenhousebusinesshourperiod_set.all().delete()
+    #             for period in businessHour.get("greenhousebusinesshourperiod_set"):
+    #                 periodInstance = GreenhouseBusinessHourPeriod.objects.get_or_create(
+    #                     business_hour=businessHourInstance[0],
+    #                     open=period.get("open"),
+    #                     close=period.get("close"),
+    #                 )
+    #                 periodInstance[0].save()
+    #         businessHours = validated_data["greenhousebusinesshour_set"]
+    #
+    #         instance.greenhousebusinesshour_set.all().delete()
+    #
+    #         for businessHour in businessHours:
+    #             businessHourInstance = GreenhouseBusinessHour.objects.get_or_create(
+    #                 greenhouse=instance, day=businessHour.get("day")
+    #             )
+    #             businessHourInstance[0].save()
+    #             businessHourInstance[0].greenhousebusinesshourperiod_set.all().delete()
+    #             for period in businessHour.get("greenhousebusinesshourperiod_set"):
+    #                 periodInstance = GreenhouseBusinessHourPeriod.objects.get_or_create(
+    #                     business_hour=businessHourInstance[0],
+    #                     open=period.get("open"),
+    #                     close=period.get("close"),
+    #                 )
+    #                 periodInstance[0].save()
+    #
+    #     instance.save()
+    #     return instance
+
 class EditGreenhouseSerializer(serializers.ModelSerializer):
     greenhouse_address = GreenhouseAddressSerializer(required=False)
     greenhouse_business_hours = GreenhouseBusinessHourSerializer(

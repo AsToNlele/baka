@@ -4,7 +4,6 @@ import { Button, Divider, Image } from "@nextui-org/react"
 import { useNavigate, useParams } from "react-router-dom"
 import {
     DaySingleFromFixedRangePickerWithInput,
-    DaySingleRangePickerWithInput,
 } from "@/features/flowerbeds/components/DayRangePicker"
 import { DateRange } from "react-day-picker"
 
@@ -13,9 +12,7 @@ import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
 import * as z from "zod"
-import { useFlowerbedStatus } from "@/features/flowerbeds/hooks/useFlowerbedStatus"
 import { useProfile } from "@/features/auth/hooks/useProfile"
-import { useRentFlowerbed } from "@/features/flowerbeds/hooks/useRentFlowerbed"
 import { Loading } from "@/components/Loading"
 import { QRPaymentStandalone } from "@/features/orders/components/QRPayment"
 import { AwaitPayment } from "@/features/orders/components/AwaitPayment"
@@ -118,8 +115,8 @@ const Step1 = () => {
         undefined,
     )
 
-    const setSingleDateRange = (range: DateRange) => {
-        if (data) {
+    const setSingleDateRange = (range: DateRange | undefined) => {
+        if (data && range) {
             const from = new Date(data.currentRent.rented_to)
             const to = range.to
             if (!to) {
@@ -326,30 +323,12 @@ const Step3 = () => {
 }
 
 const MultistepForm = () => {
-    const { id } = useParams()
-    const flowerbedId = id ? parseInt(id) : null
     const { currentStep, setCurrentStep } = useMultistepFormStore()
-    const { data } = useFlowerbedDetail(flowerbedId)
-    const { data: statusData } = useFlowerbedStatus(flowerbedId)
-    const navigate = useNavigate()
 
     useEffect(() => {
         setCurrentStep("step1")
     }, [setCurrentStep])
 
-    // useEffect(() => {
-    //     if (statusData) {
-    //         if (statusData?.status === "rented" && currentStep != "step3") {
-    //             toast.error("This flowerbed is already rented")
-    //
-    //             navigate(
-    //                 data?.greenhouse.id
-    //                     ? `/app/greenhouses/${data?.greenhouse.id}`
-    //                     : "/app/greenhouses"
-    //             )
-    //         }
-    //     }
-    // }, [statusData])
     return (
         <div>
             <div className="mb-2 flex justify-center gap-4">

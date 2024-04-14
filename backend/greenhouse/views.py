@@ -6,6 +6,7 @@ from greenhouse.permissions.isOwnerOrCaretaker import (
     IsOwnerOrCaretaker,
 )
 from greenhouse.serializers import (
+    CreateGreenhouseSerializer,
     CreateTimesheetSerializer,
     EditGreenhouseSerializer,
     EmptySerializer,
@@ -21,7 +22,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action, permission_classes
 from rest_framework.generics import get_object_or_404
 from rest_framework.mixins import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
 
 class GreenhouseAddressViewSet(viewsets.ModelViewSet):
@@ -33,8 +34,48 @@ class GreenhouseViewSet(viewsets.ModelViewSet):
     queryset = Greenhouse.objects.all()
     serializer_class = GreenhouseSerializer
 
-    # Edit few fields of the greenhouse
+    # Override create
+    def create(self, request, *args, **kwargs):
+        return Response({"message": "Not allowed"}, status=405)
 
+    # Override update
+    def update(self, request, *args, **kwargs):
+        return Response({"message": "Not allowed"}, status=405)
+
+    def list(self, request, *args, **kwargs):
+        if request.user.is_superuser or request.user.is_staff:
+            queryset = Greenhouse.objects.all()
+        else:
+            queryset = Greenhouse.objects.filter(Q(owner=request.user.profile) | Q(caretaker=request.user.profile) | Q(published=True))
+        serializer = GreenhouseSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if not instance.published and not request.user.is_superuser and not request.user.is_staff and instance.owner != request.user.profile and instance.caretaker != request.user.profile:
+            return Response({"message": "Not found"}, status=404)
+        serializer = GreenhouseSerializer(instance)
+        return Response(serializer.data)
+
+    # Create Greenhouse
+    @action(
+        methods=["post"],
+        detail=False,
+        serializer_class=CreateGreenhouseSerializer,
+        name="Create Greenhouse",
+        permission_classes=[IsAuthenticated, IsAdminUser],
+    )
+    def create_greenhouse(self, request):
+        serializer = CreateGreenhouseSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=400)
+        gh = serializer.save()
+        ghSerializer = GreenhouseSerializer(gh)
+
+        return Response(ghSerializer.data, status=201)
+        
+
+    # Edit few fields of the greenhouse
     @action(
         methods=["put"],
         detail=True,

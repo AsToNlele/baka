@@ -85,7 +85,7 @@ export const BusinessHours = ({
         <div className="mt-4 flex flex-col gap-4">
             {mappedDays.map((day) => {
                 return (
-                    <div className="flex gap-4">
+                    <div key={day.name} className="flex gap-4">
                         <div className="mt-4 flex gap-4">
                             <Switch
                                 className="items-start"
