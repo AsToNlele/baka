@@ -175,6 +175,21 @@ class GreenhouseViewSet(viewsets.ModelViewSet):
         serializer = TimesheetSerializer(timesheets, many=True)
         return Response(serializer.data, status=200)
 
+    # My Greenhouses (Caretaker or owner)
+    @action(
+        detail=False,
+        methods=["get"],
+        name="My Greenhouses",
+        serializer_class=GreenhouseSerializer,
+        permission_classes=[IsAuthenticated],
+    )
+    def my_greenhouses(self, request):
+        queryset = Greenhouse.objects.filter(
+            Q(owner=request.user.profile) | Q(caretaker=request.user.profile)
+        )
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 
 class TimesheetViewSet(viewsets.ModelViewSet):
     queryset = Timesheet.objects.all()
@@ -249,9 +264,11 @@ class TimesheetViewSet(viewsets.ModelViewSet):
                 return Response(
                     {"message": "You are not allowed to update this timesheet"},
                     status=403,
-                ) 
+                )
 
-        serializer = UpdateTimesheetSerializer(instance, data=request.data, context={"request": request})
+        serializer = UpdateTimesheetSerializer(
+            instance, data=request.data, context={"request": request}
+        )
         if not serializer.is_valid():
             return Response(serializer.errors, status=400)
         # Since timesheet is created, we update with .save(), calls update method in serializer

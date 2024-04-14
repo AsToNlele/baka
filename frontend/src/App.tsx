@@ -30,6 +30,7 @@ import { ResetPasswordReseted } from "@/features/auth/routes/ResetPasswordResete
 import { Timesheets } from "@/features/timesheets/routes/Timesheets"
 import { TimesheetDetail } from "@/features/timesheets/routes/TimesheetDetail"
 import { ExtendRentFlowerbed } from "@/features/flowerbeds/routes/ExtendRentFlowerbed"
+import { MyGreenhouses } from "@/features/greenhouses/routes/MyGreenhouses"
 
 function App() {
     const navigate = useNavigate()
@@ -73,6 +74,10 @@ function App() {
                                 <Route
                                     path="/app/greenhouses"
                                     element={<Greenhouses />}
+                                />
+                                <Route
+                                    path="/app/my-greenhouses"
+                                    element={<MyGreenhouses />}
                                 />
                                 <Route
                                     path="/app/greenhouses/:id"

@@ -9,6 +9,9 @@ export interface paths {
     get: operations["listGreenhouses"];
     post: operations["createGreenhouse"];
   };
+  "/api/greenhouses/my_greenhouses/": {
+    get: operations["myGreenhousesGreenhouse"];
+  };
   "/api/greenhouses/{id}/": {
     get: operations["retrieveGreenhouse"];
     put: operations["updateGreenhouse"];
@@ -868,6 +871,15 @@ export interface operations {
     };
     responses: {
       201: {
+        content: {
+          "application/json": components["schemas"]["Greenhouse"];
+        };
+      };
+    };
+  };
+  myGreenhousesGreenhouse: {
+    responses: {
+      200: {
         content: {
           "application/json": components["schemas"]["Greenhouse"];
         };

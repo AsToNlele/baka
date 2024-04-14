@@ -65,6 +65,20 @@ paths:
           description: ''
       tags:
       - api
+  /api/greenhouses/my_greenhouses/:
+    get:
+      operationId: myGreenhousesGreenhouse
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Greenhouse'
+          description: ''
+      tags:
+      - api
   /api/greenhouses/{id}/:
     get:
       operationId: retrieveGreenhouse
