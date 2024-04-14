@@ -11,6 +11,8 @@ import { OrderPickupItem } from "@/features/orders/components/OrderPickupItem"
 import { useIsAdmin } from "@/hooks/isAdmin"
 import { FaEdit } from "react-icons/fa"
 import { EditOrderModal } from "@/features/orders/components/EditOrderModal"
+import { parseISO, differenceInMinutes } from "date-fns"
+import { CancelOrderModal } from "@/features/orders/components/CancelOrderModal"
 
 const OrderPickupDetail = ({ productOrderId }: { productOrderId: number }) => {
     const { data } = useOrderPickup(productOrderId)
@@ -33,8 +35,12 @@ export const OrderDetail = () => {
     const orderId = id ? parseInt(id) : null
     const { data } = useOrderDetail(orderId)
     const isAdmin = useIsAdmin()
+    const isLessThanAnHour = data && differenceInMinutes(parseISO(data.created_at!), new Date()) < 60
+    console.log({isLessThanAnHour})
 
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
+    const { isOpen: isCancelOpen, onOpen: onCancelOpen, onClose: onCancelClose, onOpenChange: onCancelOpenChange } = useDisclosure()
+
 
     return (
         <div className="flex flex-col gap-4">
@@ -57,8 +63,27 @@ export const OrderDetail = () => {
             {data ? (
                 <div className="flex flex-col gap-2">
                     <div className="flex items-baseline gap-4">
-                        <h2 className="text-lg">
+                        <h2 className="flex items-center gap-4 text-lg">
                             {upperCaseFirstLetter(data.status ?? "")}
+                            {
+                                isAdmin || isLessThanAnHour && (
+                                    <>
+                                        <Button
+                                            color="danger"
+                                            variant="flat"
+                                            onPress={onCancelOpen}
+                                        >
+                                            Cancel
+                                        </Button>
+                                        <CancelOrderModal
+                                            isOpen={isCancelOpen}
+                                            onClose={onCancelClose}
+                                            onOpenChange={onCancelOpenChange}
+                                            orderId={orderId}
+                                        />
+                                    </>
+                                )
+                            }
                         </h2>
                         <p className="text-sm">
                             Ordered on: {parseIsoAndFormat(data.created_at!)}
@@ -69,27 +94,37 @@ export const OrderDetail = () => {
                     <div className="flex gap-4">
                         {data.type === "flowerbed" ? (
                             <div className="flex gap-4">
-                                <div className="flex-col">
-                                    <p>
-                                        Greenhouse:{" "}
-                                        {data.rent.flowerbed.greenhouse.title}
-                                    </p>
-                                    <p>Flowerbed: {data.rent.flowerbed.name}</p>
-                                </div>
-                                <div className="flex-col">
-                                    <p>
-                                        Rented from{" "}
-                                        {parseIsoAndFormat(
-                                            data.rent.rented_from!,
-                                        )}
-                                    </p>
-                                    <p>
-                                        Rented to{" "}
-                                        {parseIsoAndFormat(
-                                            data.rent.rented_to!,
-                                        )}
-                                    </p>
-                                </div>
+                                {data?.rent && data?.rent.flowerbed && (
+                                    <>
+                                        <div className="flex-col">
+                                            <p>
+                                                Greenhouse:{" "}
+                                                {
+                                                    data?.rent?.flowerbed
+                                                        ?.greenhouse?.title
+                                                }
+                                            </p>
+                                            <p>
+                                                Flowerbed:{" "}
+                                                {data?.rent?.flowerbed?.name}
+                                            </p>
+                                        </div>
+                                        <div className="flex-col">
+                                            <p>
+                                                Rented from{" "}
+                                                {parseIsoAndFormat(
+                                                    data.rent.rented_from!,
+                                                )}
+                                            </p>
+                                            <p>
+                                                Rented to{" "}
+                                                {parseIsoAndFormat(
+                                                    data.rent.rented_to!,
+                                                )}
+                                            </p>
+                                        </div>
+                                    </>
+                                )}
                                 <div className="flex-col">
                                     <p>Price: {data.final_price}</p>
                                 </div>
@@ -114,13 +149,13 @@ export const OrderDetail = () => {
                     </div>
                 </div>
             ) : null}
-            {orderId && (
+            {orderId && data?.status === "created" && (
                 <div className="flex flex-col gap-4">
                     <QRPaymentStandalone orderId={orderId} />
                     <AwaitPayment orderId={orderId} />
                 </div>
             )}
-            {data?.type === "product" && (
+            {data?.type === "product" && data.status !== "cancelled" && (
                 <>
                     <h2 className="mt-8 text-2xl">Pickup details</h2>
                     <OrderPickupDetail productOrderId={orderId!} />

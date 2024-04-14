@@ -1912,6 +1912,37 @@ paths:
           description: ''
       tags:
       - api
+  /api/orders/{id}/cancel_order/:
+    put:
+      operationId: cancelOrderOrder
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this order.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Empty'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Empty'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Empty'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Empty'
+          description: ''
+      tags:
+      - api
   /api/orders/{id}/edit_order/:
     put:
       operationId: editOrderOrder
@@ -2641,6 +2672,11 @@ components:
                 type: string
                 nullable: true
                 maxLength: 255
+              productId:
+                type: integer
+                maximum: 2147483647
+                minimum: -2147483648
+                nullable: true
             required:
             - productOrder
       required:

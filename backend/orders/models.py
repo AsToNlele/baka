@@ -36,7 +36,7 @@ class Order(models.Model):
 
 class FlowerbedOrders(Order):
     rent = models.OneToOneField(
-        Rent, on_delete=models.DO_NOTHING, blank=True, null=True
+        Rent, on_delete=models.SET_NULL, blank=True, null=True
     )
 
     class Meta:
@@ -59,6 +59,7 @@ class ProductOrderItems(models.Model):
     greenhouseId = models.IntegerField(blank=True, null=True)
     productName = models.CharField(max_length=255, blank=True, null=True)
     productImage = models.CharField(max_length=255, blank=True, null=True)
+    productId = models.IntegerField(blank=True, null=True)
 
     class Meta:
         db_table = "product_order_items"

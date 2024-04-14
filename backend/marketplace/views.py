@@ -28,6 +28,12 @@ class ProductViewset(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
+    def list(self, request):
+        # Only products with existing listings
+        queryset = Product.objects.filter(marketplaceproduct__isnull=False)
+        serializer = ProductSerializer(queryset, many=True)
+        return Response(serializer.data)
+
     @action(
         detail=True,
         methods=["get"],
@@ -41,9 +47,15 @@ class ProductViewset(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["get"], serializer_class=ProductMinMaxSerializer)
     def minmax(self, request, *args, **kwargs):
+        
         # Add
         product = get_object_or_404(Product, pk=kwargs["pk"])
         listings = MarketplaceProduct.objects.filter(product=product)
+        if not listings:
+            return JsonResponse(
+                {"error": f"Product {product.name} has no listings"},
+                status=400,
+            )
         id = product.id
         min = listings[0].price
         max = listings[0].price
@@ -132,7 +144,8 @@ class DeleteMarketplaceProductView(generics.DestroyAPIView):
         instance = self.get_object()
         if (
             instance.greenhouse.owner != request.user
-            and request.user.is_staff
+            and not request.user.is_staff
+            and not request.is_superuser
             and instance.greenhouse.caretaker != request.user
         ):
             return JsonResponse(

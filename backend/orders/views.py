@@ -1,5 +1,9 @@
+from datetime import datetime
 from django.http.response import JsonResponse
+from django.utils import timezone
 from greenhouse.models import Greenhouse
+from greenhouse.serializers import EmptySerializer
+from marketplace.models import MarketplaceProduct
 from orders.models import FlowerbedOrders, Order, ProductOrders
 from orders.serializers import (
     EditOrderSerializer,
@@ -20,7 +24,7 @@ class IsOrderOwner(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated
     def has_object_permission(self, request, view, obj):
-        return obj.user == request.user.profile
+        return obj.user == request.user.profile or request.user.is_staff or request.user.is_superuser
 
 
 class OrderViewSet(viewsets.ModelViewSet):
@@ -36,6 +40,9 @@ class OrderViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [IsOrderOwner]
         return [permission() for permission in permission_classes]
+
+    def delete(self, request, *args, **kwargs):
+        return JsonResponse({"error": "Method not allowed"}, status=405)
 
     def list(self, request):
         # queryset only owned
@@ -60,14 +67,9 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         return Response(orders)
 
-    def retrieve(self, request, pk=None):
-        # queryset = Order.objects.all()
-        # order = get_object_or_404(queryset, pk=pk)
+    def retrieve(self, request, *args, **kwargs):
+        pk = kwargs.get("pk")
         order = self.get_object()
-        # permission_classes = [IsOrderOwner | IsAdminUser]
-        # # Only if owner
-        # if order.user != request.user.profile:
-        #     return JsonResponse({"error": "Unauthorized"}, status=401)
 
         if hasattr(order, "flowerbedorders"):
             flowerbed_order = FlowerbedOrders.objects.get(id=pk)
@@ -103,7 +105,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         queryset = ProductOrders.objects.all()
         productOrder = get_object_or_404(queryset, pk=pk)
 
-        if productOrder.user != request.user.profile:
+        if productOrder.user != request.user.profile and not request.user.is_staff and not request.user.is_superuser:
             return JsonResponse({"error": "Unauthorized"}, status=401)
 
         if not productOrder:
@@ -157,5 +159,63 @@ class OrderViewSet(viewsets.ModelViewSet):
         serializer = EditOrderSerializer(order, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        orderSerializer = OrderSerializer(order)
+        return Response(orderSerializer.data)
+
+    @action(detail=True, methods=["put"], serializer_class=EmptySerializer)
+    def cancel_order(self, request, pk=None):
+        order = self.get_object()
+
+        if order.user != request.user.profile and not request.user.is_staff and not request.user.is_superuser:
+            return JsonResponse({"error": "Unauthorized"}, status=403)
+
+        if order.status == "cancelled":
+            return Response({"message": "Order is already cancelled"}, status=400)
+
+        # If user is not admin, check if 1 hour has passed since order creation
+        if not request.user.is_staff or not request.user.is_superuser:
+            diff = (datetime.now(timezone.utc) - order.created_at)
+            if (diff.seconds > 3600):
+                return Response({"error": "Order can't be cancelled after 1 hour"}, status=400)
+        
+        
+
+        # Flowerbed order = cancel rent
+        if hasattr(order, "flowerbedorders"):
+            print("FLOWERBEDORDER")
+            flowerbedOrder = FlowerbedOrders.objects.get(id=pk)
+            print(flowerbedOrder)
+            print(flowerbedOrder.rent)
+            if flowerbedOrder.rent:
+                deletedRent = flowerbedOrder.rent.delete()
+                print(deletedRent)
+                print("DELETED RENT")
+            order.refresh_from_db()
+            order.status = "cancelled"
+            order.save()
+
+        # Product order = cancel order and try to restore stock
+        else:
+            print("PRODUCTORDER")
+            productOrder = ProductOrders.objects.get(id=pk)
+            print(productOrder)
+            print(productOrder.__dict__)
+            for item in productOrder.productorderitems_set.all():
+                print(item)
+                print(item.productId)
+                print(item.__dict__)
+                if item.productId:
+                    product = None
+                    try:
+                        product = MarketplaceProduct.objects.get(id=item.productId)
+                        product.quantity += item.quantity
+                        product.save()
+                    except MarketplaceProduct.DoesNotExist:
+                        print("Product not found")
+                        product = None
+            order.refresh_from_db()
+            order.status = "cancelled"
+            order.save()
+                    
         orderSerializer = OrderSerializer(order)
         return Response(orderSerializer.data)

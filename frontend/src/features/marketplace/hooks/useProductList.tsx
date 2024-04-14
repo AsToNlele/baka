@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query"
 const productList = () => {
     return api
         .get("/marketplace/products")
-        .then((res) => res.data.results)
+        .then((res) => res.data)
         .then((data: ProductListResponse) => data)
 }
 

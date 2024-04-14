@@ -33,6 +33,7 @@ class GreenhouseAddressViewSet(viewsets.ModelViewSet):
 class GreenhouseViewSet(viewsets.ModelViewSet):
     queryset = Greenhouse.objects.all()
     serializer_class = GreenhouseSerializer
+    permission_classes = [IsAuthenticated]
 
     # Override create
     def create(self, request, *args, **kwargs):
@@ -46,13 +47,23 @@ class GreenhouseViewSet(viewsets.ModelViewSet):
         if request.user.is_superuser or request.user.is_staff:
             queryset = Greenhouse.objects.all()
         else:
-            queryset = Greenhouse.objects.filter(Q(owner=request.user.profile) | Q(caretaker=request.user.profile) | Q(published=True))
+            queryset = Greenhouse.objects.filter(
+                Q(owner=request.user.profile)
+                | Q(caretaker=request.user.profile)
+                | Q(published=True)
+            )
         serializer = GreenhouseSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        if not instance.published and not request.user.is_superuser and not request.user.is_staff and instance.owner != request.user.profile and instance.caretaker != request.user.profile:
+        if (
+            not instance.published
+            and not request.user.is_superuser
+            and not request.user.is_staff
+            and instance.owner != request.user.profile
+            and instance.caretaker != request.user.profile
+        ):
             return Response({"message": "Not found"}, status=404)
         serializer = GreenhouseSerializer(instance)
         return Response(serializer.data)
@@ -73,7 +84,6 @@ class GreenhouseViewSet(viewsets.ModelViewSet):
         ghSerializer = GreenhouseSerializer(gh)
 
         return Response(ghSerializer.data, status=201)
-        
 
     # Edit few fields of the greenhouse
     @action(

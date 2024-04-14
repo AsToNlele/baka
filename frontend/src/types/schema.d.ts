@@ -197,6 +197,9 @@ export interface paths {
   "/api/flowerbeds/{id}/extend_rent/": {
     put: operations["extendRentFlowerbed"];
   };
+  "/api/orders/{id}/cancel_order/": {
+    put: operations["cancelOrderOrder"];
+  };
   "/api/orders/{id}/edit_order/": {
     put: operations["editOrderOrder"];
   };
@@ -413,6 +416,7 @@ export interface components {
           greenhouseId?: number | null;
           productName?: string | null;
           productImage?: string | null;
+          productId?: number | null;
         })[];
     };
     UserDetailed: {
@@ -2146,6 +2150,28 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["CreateRent"];
+        };
+      };
+    };
+  };
+  cancelOrderOrder: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this order. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["Empty"];
+        "application/x-www-form-urlencoded": components["schemas"]["Empty"];
+        "multipart/form-data": components["schemas"]["Empty"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Empty"];
         };
       };
     };

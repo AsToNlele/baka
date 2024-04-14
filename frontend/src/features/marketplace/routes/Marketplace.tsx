@@ -126,8 +126,8 @@ export const PreferredGreenhouse = () => {
                             setSelectedGreenhouse(e.target.value)
                         }}
                     >
-                        {greenhousesData?.results ? (
-                            greenhousesData.results?.map((greenhouse) => {
+                        {greenhousesData ? (
+                            greenhousesData?.map((greenhouse) => {
                                 return greenhouse ? (
                                     <SelectItem
                                         key={greenhouse.id!.toString()}

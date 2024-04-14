@@ -53,8 +53,8 @@ type RentType = Exclude<
 export type FlowerbedOrderType = components["schemas"]["Order"] & {
     type: "flowerbed"
     rent: RentType & {
-        flowerbed: Omit<FlowerbedType, "currentRent" | "rents">
-    }
+        flowerbed: Omit<FlowerbedType, "currentRent" | "rents"> | undefined | null
+    } | null
 }
 
 export type ProductOrderItemType = {
