@@ -125,6 +125,9 @@ export interface paths {
   "/api/newsletter/history/": {
     get: operations["listNewsletterPosts"];
   };
+  "/api/activate/": {
+    get: operations["listActivateUsers"];
+  };
   "/api/greenhouses/create_greenhouse/": {
     post: operations["createGreenhouseGreenhouse"];
   };
@@ -200,6 +203,9 @@ export interface paths {
   };
   "/api/newsletter/send-newsletter/": {
     post: operations["createSendNewsletter"];
+  };
+  "/api/register/": {
+    post: operations["createUser"];
   };
   "/api/greenhouses/{id}/edit_greenhouse/": {
     put: operations["editGreenhouseGreenhouse"];
@@ -453,6 +459,7 @@ export interface components {
         readonly id?: number;
         readonly primary_greenhouseId?: number | null;
         readonly receive_newsletter?: boolean;
+        readonly activated_once?: boolean;
         readonly user: number;
       };
       owned_greenhouses?: string;
@@ -805,6 +812,15 @@ export interface components {
           marketplaceProduct: number;
           quantity: number;
         }[];
+    };
+    RegisterUserWithEmail: {
+      username: string;
+      /** Format: email */
+      email: string;
+      password: string;
+      first_name: string;
+      last_name: string;
+      subscribe_newsletter: boolean;
     };
     EditGreenhouse: {
       id?: number;
@@ -1767,6 +1783,15 @@ export interface operations {
       };
     };
   };
+  listActivateUsers: {
+    responses: {
+      200: {
+        content: {
+          "application/json": unknown[];
+        };
+      };
+    };
+  };
   createGreenhouseGreenhouse: {
     requestBody?: {
       content: {
@@ -2052,6 +2077,22 @@ export interface operations {
       201: {
         content: {
           "application/json": unknown;
+        };
+      };
+    };
+  };
+  createUser: {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["RegisterUserWithEmail"];
+        "application/x-www-form-urlencoded": components["schemas"]["RegisterUserWithEmail"];
+        "multipart/form-data": components["schemas"]["RegisterUserWithEmail"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["RegisterUserWithEmail"];
         };
       };
     };

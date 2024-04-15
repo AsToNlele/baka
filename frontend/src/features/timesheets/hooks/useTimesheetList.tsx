@@ -6,7 +6,7 @@ import { TimesheetListResponse } from "utils/types"
 const timesheetList = async () => {
     return api
         .get("/timesheets")
-        .then((res) => res.data as TimesheetListResponse["results"])
+        .then((res) => res.data as TimesheetListResponse)
 }
 
 export const useTimesheetList = () => {

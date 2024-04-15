@@ -1226,6 +1226,21 @@ paths:
           description: ''
       tags:
       - api
+  /api/activate/:
+    get:
+      operationId: listActivateUsers
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - api
   /api/greenhouses/create_greenhouse/:
     post:
       operationId: createGreenhouseGreenhouse
@@ -1740,6 +1755,31 @@ paths:
           content:
             application/json:
               schema: {}
+          description: ''
+      tags:
+      - api
+  /api/register/:
+    post:
+      operationId: createUser
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUserWithEmail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RegisterUserWithEmail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RegisterUserWithEmail'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterUserWithEmail'
           description: ''
       tags:
       - api
@@ -2736,6 +2776,8 @@ components:
               nullable: true
             receive_newsletter:
               type: boolean
+            activated_once:
+              type: boolean
             user:
               type: integer
           required:
@@ -3696,6 +3738,29 @@ components:
             - quantity
       required:
       - items
+    RegisterUserWithEmail:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        subscribe_newsletter:
+          type: boolean
+      required:
+      - username
+      - email
+      - password
+      - first_name
+      - last_name
+      - subscribe_newsletter
     EditGreenhouse:
       type: object
       properties:

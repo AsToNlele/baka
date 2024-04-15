@@ -126,3 +126,14 @@ class SetUserActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["is_active"]
+
+class RegisterUserWithEmailSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    email = serializers.EmailField()
+    password = serializers.CharField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    subscribe_newsletter = serializers.BooleanField()
+
+    class Meta:
+        fields = ["username", "email", "password", "first_name", "last_name"]

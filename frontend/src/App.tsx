@@ -32,6 +32,8 @@ import { TimesheetDetail } from "@/features/timesheets/routes/TimesheetDetail"
 import { ExtendRentFlowerbed } from "@/features/flowerbeds/routes/ExtendRentFlowerbed"
 import { MyGreenhouses } from "@/features/greenhouses/routes/MyGreenhouses"
 import { Suspense, lazy } from "react"
+import { ActivateAccount } from "@/features/auth/routes/ActivateAccount"
+import { ActivateAccountConfirm } from "@/features/auth/routes/ActivateAccountConfirm"
 
 // import { Newsletter } from "@/features/newsletter/routes/Newsletter"
 // Import Newsltter lazy
@@ -69,6 +71,14 @@ function App() {
                                 <Route
                                     path="/reset-password-reseted"
                                     element={<ResetPasswordReseted />}
+                                />
+                                <Route
+                                    path="/activate-account"
+                                    element={<ActivateAccount />}
+                                />
+                                <Route
+                                    path="/activate-account-confirm"
+                                    element={<ActivateAccountConfirm />}
                                 />
                             </Route>
                             <Route element={<ProtectedRoute />}>

@@ -6,7 +6,7 @@ const myGreenhouseList = async () => {
     return api
         .get("/greenhouses/my_greenhouses/")
         .then((res) => res.data)
-        .then((data: GreenhouseListResponse["results"]) => data)
+        .then((data: GreenhouseListResponse) => data)
 }
 
 export const useMyGreenhouseList = () => {

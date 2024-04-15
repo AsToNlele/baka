@@ -28,4 +28,6 @@ urlpatterns = [
     ),
     path("marketplace/", include("marketplace.urls"), name="marketplace"),
     path("newsletter/", include("newsletter.urls"), name="newsletter"),
+    path("register/", views.RegisterUserWithEmail.as_view(), name="register"),
+    path("activate/", views.ActivateUserView.as_view(), name="activate"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

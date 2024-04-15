@@ -88,7 +88,7 @@ export type OrderPaymentResponse =
     paths["/api/orders/{id}/get_payment/"]["get"]["responses"][200]["content"]["application/json"]
 
 export type ProductListResponse = Exclude<
-    paths["/api/marketplace/products/"]["get"]["responses"][200]["content"]["application/json"]["results"],
+    paths["/api/marketplace/products/"]["get"]["responses"][200]["content"]["application/json"],
     undefined
 >
 
@@ -274,3 +274,5 @@ export type NewsletterPostType = Omit<
 }
 
 export type NewsletterPostListResponse = Array<NewsletterPostType>
+
+export type RegisterRequest = components["schemas"]["RegisterUserWithEmail"]
