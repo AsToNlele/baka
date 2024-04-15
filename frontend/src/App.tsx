@@ -31,6 +31,12 @@ import { Timesheets } from "@/features/timesheets/routes/Timesheets"
 import { TimesheetDetail } from "@/features/timesheets/routes/TimesheetDetail"
 import { ExtendRentFlowerbed } from "@/features/flowerbeds/routes/ExtendRentFlowerbed"
 import { MyGreenhouses } from "@/features/greenhouses/routes/MyGreenhouses"
+import { Suspense, lazy } from "react"
+
+// import { Newsletter } from "@/features/newsletter/routes/Newsletter"
+// Import Newsltter lazy
+const Newsletter = lazy(() => import("@/features/newsletter/routes/Newsletter"))
+
 
 function App() {
     const navigate = useNavigate()
@@ -131,6 +137,14 @@ function App() {
                                 <Route
                                     path="/app/timesheets/:id"
                                     element={<TimesheetDetail />}
+                                />
+                                <Route
+                                    path="/app/newsletter"
+                                    element={
+                                        <Suspense fallback={<div>Loading...</div>}>
+                                            <Newsletter />
+                                        </Suspense>
+                                    }
                                 />
                                 <Route path="*" element={<h1>404</h1>} />
                             </Route>

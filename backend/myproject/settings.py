@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "marketplace",
     "api",
     "users",
+    "newsletter",
 ]
 
 MIDDLEWARE = [
