@@ -8,7 +8,7 @@ type SendNewsletterType = {
 }
 
 const sendNewsletter = ({ data }: { data: SendNewsletterType }) => {
-    return api.post(`/send-newsletter/`, data)
+    return api.post(`/newsletter/send-newsletter/`, data)
 }
 
 export const useSendNewsletter = () => {

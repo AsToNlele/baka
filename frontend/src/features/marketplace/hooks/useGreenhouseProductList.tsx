@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query"
 const greenhouseProductList = async (id: number) => {
     return api
         .get(`/marketplace/greenhouses/${id}/products`)
-        .then((res) => res.data.results)
+        .then((res) => res.data)
         .then((data: GreenhouseProductListResponse) => data)
 }
 

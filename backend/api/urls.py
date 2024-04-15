@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.urls import include, path
 from flowerbed.views import FlowerbedViewSet
 from greenhouse.views import GreenhouseViewSet, TimesheetViewSet
@@ -5,7 +6,7 @@ from orders.views import OrderViewSet
 from rest_framework import routers
 from users import views
 from django_rest_passwordreset.urls import add_reset_password_urls_to_router
-from newsletter.views import SendNewsletterView, UnsubscribeView, SubscriberCountView
+from django.conf.urls.static import static
 
 router = routers.DefaultRouter()
 # router.register(r"profiles", views.ProfileViewSet)
@@ -26,7 +27,5 @@ urlpatterns = [
         include("django_rest_passwordreset.urls", namespace="password_reset"),
     ),
     path("marketplace/", include("marketplace.urls"), name="marketplace"),
-    path("send-newsletter/", SendNewsletterView.as_view(), name="send-newsletter"),
-    path("unsubscribe/", UnsubscribeView.as_view(), name="unsubscribe"),
-    path("subscriber-count/", SubscriberCountView.as_view(), name="subscriber-count"),
-]
+    path("newsletter/", include("newsletter.urls"), name="newsletter"),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

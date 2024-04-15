@@ -260,3 +260,8 @@ export type EditOrderRequest = Exclude<
 export type SubscriberCountResponse = {
     subscribers: number
 }
+
+export type GalleryListResponse = Exclude< Exclude<
+    paths["/api/newsletter/gallery/"]["get"]["responses"][200]["content"]["application/json"],
+    undefined
+>["results"], undefined>

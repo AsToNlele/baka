@@ -2,6 +2,7 @@ import {
     CodeOutlined,
     DataObjectOutlined,
     EditOutlined,
+    ImageSharp,
     MailOutlined,
     PreviewOutlined,
 } from "@mui/icons-material"
@@ -21,6 +22,7 @@ export default function MainTabsGroup() {
             case "editor":
             case "html":
             case "send":
+            case "gallery":
                 setSelectedMainTab(v)
                 return
             default:
@@ -67,6 +69,14 @@ export default function MainTabsGroup() {
                 label={
                     <Tooltip title="Send Newsletter">
                         <MailOutlined fontSize="small" />
+                    </Tooltip>
+                }
+            />
+            <Tab
+                value="gallery"
+                label={
+                    <Tooltip title="Images">
+                        <ImageSharp fontSize="small" />
                     </Tooltip>
                 }
             />

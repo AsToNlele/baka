@@ -1,10 +1,14 @@
 import os
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from rest_framework.parsers import MultiPartParser, FormParser
 from dotenv import load_dotenv
+from rest_framework import viewsets
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from hashlib import sha256
+from newsletter.models import NewsletterImage
+from newsletter.serializer import NewsletterImageSerializer
 
 from newsletter.tasks import send_newsletter
 from users.models import Profile
@@ -57,10 +61,11 @@ class SubscriberCountView(APIView):
         subscribers = Profile.objects.filter(receive_newsletter=True).count()
         return Response({"subscribers": subscribers}, status=200)
 
-        
-            
+class NewsletterImageViewset(viewsets.ModelViewSet):
+    queryset = NewsletterImage.objects.order_by('-created_at')
+    serializer_class = NewsletterImageSerializer
+    parser_classes = (MultiPartParser, FormParser)
+    permission_classes = [IsAdminUser]
 
-
-        
-        
-        
+    def perform_create(self, serializer):
+        serializer.save()

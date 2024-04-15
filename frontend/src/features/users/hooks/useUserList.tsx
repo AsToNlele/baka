@@ -6,7 +6,7 @@ const userList = async () => {
     return api
         .get("/users")
         .then((res) => res.data)
-        .then((data) => data.results as UserListType)
+        .then((data) => data as UserListType)
 }
 
 export const useUserList = () => {

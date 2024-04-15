@@ -1,11 +1,11 @@
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 
 import {
     VerticalAlignBottomOutlined,
     VerticalAlignCenterOutlined,
     VerticalAlignTopOutlined,
 } from "@mui/icons-material"
-import { Stack, ToggleButton } from "@mui/material"
+import { Button, Stack, ToggleButton } from "@mui/material"
 import { ImageProps, ImagePropsSchema } from "@usewaypoint/block-image"
 
 import BaseSidebarPanel from "./helpers/BaseSidebarPanel"
@@ -13,6 +13,10 @@ import RadioGroupInput from "./helpers/inputs/RadioGroupInput"
 import TextDimensionInput from "./helpers/inputs/TextDimensionInput"
 import TextInput from "./helpers/inputs/TextInput"
 import MultiStylePropertyPanel from "./helpers/style-inputs/MultiStylePropertyPanel"
+import { useUploadNewsletterImage } from "@/features/newsletter/hooks/useUploadNewsletterImage"
+import { imageUrl } from "@/utils/utils"
+import { useDisclosure } from "@nextui-org/react"
+import { GalleryModal } from "@/features/newsletter/components/GalleryModal"
 
 type ImageSidebarPanelProps = {
     data: ImageProps
@@ -24,6 +28,8 @@ export default function ImageSidebarPanel({
 }: ImageSidebarPanelProps) {
     const [, setErrors] = useState<Zod.ZodError | null>(null)
 
+    const uploadNewsletterImage = useUploadNewsletterImage()
+
     const updateData = (d: unknown) => {
         const res = ImagePropsSchema.safeParse(d)
         if (res.success) {
@@ -34,8 +40,66 @@ export default function ImageSidebarPanel({
         }
     }
 
+    const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const newUploadData = e?.target?.files?.[0]
+        if (newUploadData) {
+            uploadNewsletterImage.mutate(
+                { data: { image: newUploadData } },
+                {
+                    onSuccess: (res) => {
+                        const url = imageUrl(res.data.image)
+                        console.log(url)
+                        updateData({
+                            ...data,
+                            props: { ...data.props, url: url },
+                        })
+                    },
+                },
+            )
+        }
+    }
+
+    const handleImageSelect = (image: string) => {
+        updateData({ ...data, props: { ...data.props, url: imageUrl(image) } })
+    }
+
+    const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
+
     return (
         <BaseSidebarPanel title="Image block">
+            <div className="mt-4 flex flex-wrap gap-2">
+                <Button
+                    variant="contained"
+                    component="label"
+                    size="large"
+                    disabled={uploadNewsletterImage.isPending}
+                >
+                    Upload File
+                    <input
+                        type="file"
+                        hidden
+                        name="image"
+                        accept="image/jpeg,image/png,image/gif"
+                        onChange={(e) => {
+                            handleImageChange(e)
+                        }}
+                    />
+                </Button>
+                <Button
+                    variant="contained"
+                    size="large"
+                    color="success"
+                    onClick={onOpen}
+                >
+                    From Gallery
+                </Button>
+                <GalleryModal
+                    onOpenChange={onOpenChange}
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    onImageSelect={handleImageSelect}
+                />
+            </div>
             <TextInput
                 label="Source URL"
                 defaultValue={data.props?.url ?? ""}

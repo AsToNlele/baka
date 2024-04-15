@@ -9,7 +9,7 @@ type TValue = {
 
   selectedBlockId: string | null;
   selectedSidebarTab: 'block-configuration' | 'styles';
-  selectedMainTab: 'editor' | 'preview' | 'json' | 'html' | 'send';
+  selectedMainTab: 'editor' | 'preview' | 'json' | 'html' | 'send' | 'gallery';
   selectedScreenSize: 'desktop' | 'mobile';
 
   inspectorDrawerOpen: boolean;

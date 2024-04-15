@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query"
 const sharedProductList = () => {
     return api
         .get("/marketplace/shared-products")
-        .then((res) => res.data.results)
+        .then((res) => res.data)
         .then((data: SharedProductListResponse) => data)
 }
 

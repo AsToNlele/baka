@@ -106,10 +106,20 @@ export interface paths {
   "/api/marketplace/product/{id}/": {
     get: operations["retrieveMarketplaceProduct"];
   };
-  "/api/unsubscribe/": {
+  "/api/newsletter/gallery/": {
+    get: operations["listNewsletterImages"];
+    post: operations["createNewsletterImage"];
+  };
+  "/api/newsletter/gallery/{id}/": {
+    get: operations["retrieveNewsletterImage"];
+    put: operations["updateNewsletterImage"];
+    delete: operations["destroyNewsletterImage"];
+    patch: operations["partialUpdateNewsletterImage"];
+  };
+  "/api/newsletter/unsubscribe/": {
     get: operations["listUnsubscribes"];
   };
-  "/api/subscriber-count/": {
+  "/api/newsletter/subscriber-count/": {
     get: operations["listSubscriberCounts"];
   };
   "/api/greenhouses/create_greenhouse/": {
@@ -185,7 +195,7 @@ export interface paths {
   "/api/marketplace/set-primary-greenhouse/": {
     post: operations["createSetPrimaryGreenhouse"];
   };
-  "/api/send-newsletter/": {
+  "/api/newsletter/send-newsletter/": {
     post: operations["createSendNewsletter"];
   };
   "/api/greenhouses/{id}/edit_greenhouse/": {
@@ -676,6 +686,10 @@ export interface components {
       created_at?: string;
       /** Format: date-time */
       updated_at?: string;
+    };
+    NewsletterImage: {
+      /** Format: binary */
+      image?: string;
     };
     CreateGreenhouse: {
       title: string | null;
@@ -1755,6 +1769,120 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["MarketplaceDetailProduct"];
+        };
+      };
+    };
+  };
+  listNewsletterImages: {
+    parameters: {
+      query?: {
+        /** @description A page number within the paginated result set. */
+        page?: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": {
+            /** @example 123 */
+            count?: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results?: components["schemas"]["NewsletterImage"][];
+          };
+        };
+      };
+    };
+  };
+  createNewsletterImage: {
+    requestBody?: {
+      content: {
+        "multipart/form-data": components["schemas"]["NewsletterImage"];
+        "application/x-www-form-urlencoded": components["schemas"]["NewsletterImage"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["NewsletterImage"];
+        };
+      };
+    };
+  };
+  retrieveNewsletterImage: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this newsletter image. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["NewsletterImage"];
+        };
+      };
+    };
+  };
+  updateNewsletterImage: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this newsletter image. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "multipart/form-data": components["schemas"]["NewsletterImage"];
+        "application/x-www-form-urlencoded": components["schemas"]["NewsletterImage"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["NewsletterImage"];
+        };
+      };
+    };
+  };
+  destroyNewsletterImage: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this newsletter image. */
+        id: string;
+      };
+    };
+    responses: {
+      204: {
+        content: never;
+      };
+    };
+  };
+  partialUpdateNewsletterImage: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this newsletter image. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "multipart/form-data": components["schemas"]["NewsletterImage"];
+        "application/x-www-form-urlencoded": components["schemas"]["NewsletterImage"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["NewsletterImage"];
         };
       };
     };

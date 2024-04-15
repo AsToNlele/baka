@@ -57,3 +57,11 @@ export const inSameTimePeriod = (date1: string, date2: string) => {
     return convertedDate1 === convertedDate2
 }
 
+export const imageUrl = (image: string | undefined) => {
+    if (!image) {
+        return ""
+    }
+    const origin = window.location.origin
+    return `${origin}/api/media/${image}`
+}
+    

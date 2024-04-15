@@ -27,7 +27,8 @@ export default function SendPanel() {
         [document],
     )
 
-    const {data: subscriberCount, isLoading: subscriberCountLoading } = useSubscriberCount()
+    const { data: subscriberCount, isLoading: subscriberCountLoading } =
+        useSubscriberCount()
 
     const selectedScreenSize = useSelectedScreenSize()
 
@@ -91,13 +92,17 @@ export default function SendPanel() {
                             base: "w-full md:w-[60%]",
                         }}
                     />
-                    {
-                        subscriberCountLoading && !subscriberCount ? (
-                            <SmallLoading />
-                        ) : (
-                        <p>{subscriberCount!.subscribers} {subscriberCount!.subscribers > 1 ? "users are " : "user is "} subscribed to the newsletter</p>
-                        )
-                    }
+                    {subscriberCountLoading || !subscriberCount ? (
+                        <SmallLoading />
+                    ) : (
+                        <p>
+                            {subscriberCount?.subscribers}{" "}
+                            {subscriberCount?.subscribers > 1
+                                ? "users are "
+                                : "user is "}{" "}
+                            subscribed to the newsletter
+                        </p>
+                    )}
                     <Button
                         onPress={submit}
                         isLoading={isPending}

@@ -4,7 +4,7 @@ import { SubscriberCountResponse } from "@/utils/types"
 
 const subscriberCount = async () => {
     return api
-        .get(`/subscriber-count/`)
+        .get(`/newsletter/subscriber-count/`)
         .then((res) => res.data as SubscriberCountResponse)
 }
 

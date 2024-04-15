@@ -24,6 +24,7 @@ import JsonPanel from "./JsonPanel"
 import MainTabsGroup from "./MainTabsGroup"
 import ShareButton from "./ShareButton"
 import SendPanel from "@/features/newsletter/editor/App/TemplatePanel/SendPanel"
+import { GalleryPanel } from "@/features/newsletter/editor/App/TemplatePanel/GalleryPanel"
 
 export default function TemplatePanel() {
     const document = useDocument()
@@ -79,6 +80,8 @@ export default function TemplatePanel() {
                 return <JsonPanel />
             case "send":
                 return <SendPanel />
+            case "gallery":
+                return <GalleryPanel />
         }
     }
 
@@ -99,7 +102,6 @@ export default function TemplatePanel() {
                 justifyContent="space-between"
                 alignItems="center"
             >
-                <ToggleSamplesPanelButton />
                 <Stack
                     px={2}
                     direction="row"

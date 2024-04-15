@@ -1230,7 +1230,155 @@ paths:
           description: ''
       tags:
       - api
-  /api/unsubscribe/:
+  /api/newsletter/gallery/:
+    get:
+      operationId: listNewsletterImages
+      description: ''
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=4
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?page=2
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/NewsletterImage'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createNewsletterImage
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NewsletterImage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewsletterImage'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsletterImage'
+          description: ''
+      tags:
+      - api
+  /api/newsletter/gallery/{id}/:
+    get:
+      operationId: retrieveNewsletterImage
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this newsletter image.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsletterImage'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateNewsletterImage
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this newsletter image.
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NewsletterImage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewsletterImage'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsletterImage'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateNewsletterImage
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this newsletter image.
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NewsletterImage'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewsletterImage'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsletterImage'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyNewsletterImage
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this newsletter image.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/newsletter/unsubscribe/:
     get:
       operationId: listUnsubscribes
       description: ''
@@ -1245,7 +1393,7 @@ paths:
           description: ''
       tags:
       - api
-  /api/subscriber-count/:
+  /api/newsletter/subscriber-count/:
     get:
       operationId: listSubscriberCounts
       description: ''
@@ -1756,7 +1904,7 @@ paths:
           description: ''
       tags:
       - api
-  /api/send-newsletter/:
+  /api/newsletter/send-newsletter/:
     post:
       operationId: createSendNewsletter
       description: ''
@@ -3417,6 +3565,12 @@ components:
       - greenhouse
       - price
       - quantity
+    NewsletterImage:
+      type: object
+      properties:
+        image:
+          type: string
+          format: binary
     CreateGreenhouse:
       type: object
       properties:
