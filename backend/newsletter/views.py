@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from hashlib import sha256
 
 from newsletter.tasks import send_newsletter
+from users.models import Profile
 
 load_dotenv()
 
@@ -49,6 +50,12 @@ class UnsubscribeView(APIView):
             return Response("Invalid token", status=400, content_type="text/html")
 
 
+class SubscriberCountView(APIView):
+    def get(self, request):
+        if not request.user.is_staff and not request.user.is_superuser:
+            return Response({"message": "Unauthorized"}, status=403)
+        subscribers = Profile.objects.filter(receive_newsletter=True).count()
+        return Response({"subscribers": subscribers}, status=200)
 
         
             

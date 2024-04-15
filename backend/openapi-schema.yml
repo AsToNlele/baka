@@ -1230,6 +1230,36 @@ paths:
           description: ''
       tags:
       - api
+  /api/unsubscribe/:
+    get:
+      operationId: listUnsubscribes
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - api
+  /api/subscriber-count/:
+    get:
+      operationId: listSubscriberCounts
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - api
   /api/greenhouses/create_greenhouse/:
     post:
       operationId: createGreenhouseGreenhouse
@@ -1708,6 +1738,27 @@ paths:
   /api/marketplace/set-primary-greenhouse/:
     post:
       operationId: createSetPrimaryGreenhouse
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - api
+  /api/send-newsletter/:
+    post:
+      operationId: createSendNewsletter
       description: ''
       parameters: []
       requestBody:
@@ -2717,6 +2768,8 @@ components:
               maximum: 2147483647
               minimum: -2147483648
               nullable: true
+            receive_newsletter:
+              type: boolean
             user:
               type: integer
           required:

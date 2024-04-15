@@ -106,6 +106,12 @@ export interface paths {
   "/api/marketplace/product/{id}/": {
     get: operations["retrieveMarketplaceProduct"];
   };
+  "/api/unsubscribe/": {
+    get: operations["listUnsubscribes"];
+  };
+  "/api/subscriber-count/": {
+    get: operations["listSubscriberCounts"];
+  };
   "/api/greenhouses/create_greenhouse/": {
     post: operations["createGreenhouseGreenhouse"];
   };
@@ -178,6 +184,9 @@ export interface paths {
   };
   "/api/marketplace/set-primary-greenhouse/": {
     post: operations["createSetPrimaryGreenhouse"];
+  };
+  "/api/send-newsletter/": {
+    post: operations["createSendNewsletter"];
   };
   "/api/greenhouses/{id}/edit_greenhouse/": {
     put: operations["editGreenhouseGreenhouse"];
@@ -430,6 +439,7 @@ export interface components {
       profile?: {
         readonly id?: number;
         readonly primary_greenhouseId?: number | null;
+        readonly receive_newsletter?: boolean;
         readonly user: number;
       };
       owned_greenhouses?: string;
@@ -1749,6 +1759,24 @@ export interface operations {
       };
     };
   };
+  listUnsubscribes: {
+    responses: {
+      200: {
+        content: {
+          "application/json": unknown[];
+        };
+      };
+    };
+  };
+  listSubscriberCounts: {
+    responses: {
+      200: {
+        content: {
+          "application/json": unknown[];
+        };
+      };
+    };
+  };
   createGreenhouseGreenhouse: {
     requestBody?: {
       content: {
@@ -2007,6 +2035,22 @@ export interface operations {
     };
   };
   createSetPrimaryGreenhouse: {
+    requestBody?: {
+      content: {
+        "application/json": unknown;
+        "application/x-www-form-urlencoded": unknown;
+        "multipart/form-data": unknown;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": unknown;
+        };
+      };
+    };
+  };
+  createSendNewsletter: {
     requestBody?: {
       content: {
         "application/json": unknown;

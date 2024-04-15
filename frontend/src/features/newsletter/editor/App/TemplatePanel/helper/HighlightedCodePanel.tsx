@@ -29,7 +29,7 @@ export default function HighlightedCodePanel({
 
     return (
         <pre
-            style={{ margin: 0, padding: 16 }}
+            style={{ margin: 0, padding: 16, whiteSpace: "pre-wrap" }}
             dangerouslySetInnerHTML={{ __html: code }}
             onClick={(ev) => {
                 const s = window.getSelection()

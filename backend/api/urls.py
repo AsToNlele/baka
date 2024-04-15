@@ -5,7 +5,7 @@ from orders.views import OrderViewSet
 from rest_framework import routers
 from users import views
 from django_rest_passwordreset.urls import add_reset_password_urls_to_router
-from newsletter.views import SendNewsletterView, UnsubscribeView
+from newsletter.views import SendNewsletterView, UnsubscribeView, SubscriberCountView
 
 router = routers.DefaultRouter()
 # router.register(r"profiles", views.ProfileViewSet)
@@ -28,4 +28,5 @@ urlpatterns = [
     path("marketplace/", include("marketplace.urls"), name="marketplace"),
     path("send-newsletter/", SendNewsletterView.as_view(), name="send-newsletter"),
     path("unsubscribe/", UnsubscribeView.as_view(), name="unsubscribe"),
+    path("subscriber-count/", SubscriberCountView.as_view(), name="subscriber-count"),
 ]

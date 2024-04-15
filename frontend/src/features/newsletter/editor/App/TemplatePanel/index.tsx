@@ -70,7 +70,11 @@ export default function TemplatePanel() {
                     </Box>
                 )
             case "html":
-                return <HtmlPanel />
+                return (
+                    <Box>
+                        <HtmlPanel />
+                    </Box>
+                )
             case "json":
                 return <JsonPanel />
             case "send":

@@ -256,3 +256,7 @@ export type EditOrderRequest = Exclude<
     paths["/api/orders/{id}/edit_order/"]["put"]["requestBody"],
     undefined
 >["content"]["application/json"]
+
+export type SubscriberCountResponse = {
+    subscribers: number
+}
