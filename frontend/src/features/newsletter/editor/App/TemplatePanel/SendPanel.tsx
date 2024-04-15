@@ -27,6 +27,11 @@ export default function SendPanel() {
         [document],
     )
 
+    const jsonCode = useMemo(
+        () => JSON.stringify(document, null, "  "),
+        [document],
+    )
+
     const { data: subscriberCount, isLoading: subscriberCountLoading } =
         useSubscriberCount()
 
@@ -57,7 +62,7 @@ export default function SendPanel() {
         console.log("mutating")
         console.log(data)
         mutate(
-            { data: { title: data.title, html: code } },
+            { data: { title: data.title, html: code, json:jsonCode } },
             {
                 onSuccess: () => {
                     toast.success("Newsletter sent successfully")
@@ -112,6 +117,7 @@ export default function SendPanel() {
                     </Button>
                 </div>
 
+                <h2 className="mb-2 mt-8 text-xl">Preview</h2>
                 <Box sx={mainBoxSx}>
                     <Reader document={document} rootBlockId="root" />
                 </Box>

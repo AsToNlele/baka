@@ -2,6 +2,7 @@ import {
     CodeOutlined,
     DataObjectOutlined,
     EditOutlined,
+    History,
     ImageSharp,
     MailOutlined,
     PreviewOutlined,
@@ -23,6 +24,7 @@ export default function MainTabsGroup() {
             case "html":
             case "send":
             case "gallery":
+            case "history":
                 setSelectedMainTab(v)
                 return
             default:
@@ -77,6 +79,14 @@ export default function MainTabsGroup() {
                 label={
                     <Tooltip title="Images">
                         <ImageSharp fontSize="small" />
+                    </Tooltip>
+                }
+            />
+            <Tab
+                value="history"
+                label={
+                    <Tooltip title="Newsletter History">
+                        <History fontSize="small" />
                     </Tooltip>
                 }
             />

@@ -17,7 +17,6 @@ import {
     useSelectedScreenSize,
 } from "../../documents/editor/EditorContext"
 import ToggleInspectorPanelButton from "../InspectorDrawer/ToggleInspectorPanelButton"
-import ToggleSamplesPanelButton from "../SamplesDrawer/ToggleSamplesPanelButton"
 
 import HtmlPanel from "./HtmlPanel"
 import JsonPanel from "./JsonPanel"
@@ -25,6 +24,7 @@ import MainTabsGroup from "./MainTabsGroup"
 import ShareButton from "./ShareButton"
 import SendPanel from "@/features/newsletter/editor/App/TemplatePanel/SendPanel"
 import { GalleryPanel } from "@/features/newsletter/editor/App/TemplatePanel/GalleryPanel"
+import { HistoryPanel } from "@/features/newsletter/editor/App/TemplatePanel/HistoryPanel"
 
 export default function TemplatePanel() {
     const document = useDocument()
@@ -82,6 +82,8 @@ export default function TemplatePanel() {
                 return <SendPanel />
             case "gallery":
                 return <GalleryPanel />
+            case "history":
+                return <HistoryPanel />
         }
     }
 

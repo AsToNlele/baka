@@ -7,8 +7,8 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from hashlib import sha256
-from newsletter.models import NewsletterImage
-from newsletter.serializer import NewsletterImageSerializer
+from newsletter.models import NewsletterImage, NewsletterPost
+from newsletter.serializer import NewsletterImageSerializer, NewsletterPostSerializer
 
 from newsletter.tasks import send_newsletter
 from users.models import Profile
@@ -27,10 +27,15 @@ class SendNewsletterView(APIView):
         # Get the email from the request
         title = request.data.get('title')
         html = request.data.get('html')
+        json = request.data.get('json')
 
         # Call celery task
         # send_newsletter.delay(html)
         send_newsletter.apply_async((title,html,), delay=10)
+
+        if json:
+            post = NewsletterPost.objects.create(title=title, content=json)
+            print(post)
         return Response({"message": "Email sent successfully"}, status=200)
 
 class UnsubscribeView(APIView):
@@ -69,3 +74,9 @@ class NewsletterImageViewset(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
+
+class NewsletterPostListView(viewsets.generics.ListAPIView):
+    queryset = NewsletterPost.objects.all()
+    serializer_class = NewsletterPostSerializer
+    permission_classes = [IsAdminUser]
+

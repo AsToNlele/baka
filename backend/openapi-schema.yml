@@ -7,37 +7,15 @@ paths:
     get:
       operationId: listGreenhouses
       description: ''
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
+      parameters: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                    example: 123
-                  next:
-                    type: string
-                    nullable: true
-                    format: uri
-                    example: http://api.example.org/accounts/?page=4
-                  previous:
-                    type: string
-                    nullable: true
-                    format: uri
-                    example: http://api.example.org/accounts/?page=2
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Greenhouse'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Greenhouse'
           description: ''
       tags:
       - api
@@ -198,37 +176,15 @@ paths:
     get:
       operationId: listFlowerbeds
       description: ''
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
+      parameters: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                    example: 123
-                  next:
-                    type: string
-                    nullable: true
-                    format: uri
-                    example: http://api.example.org/accounts/?page=4
-                  previous:
-                    type: string
-                    nullable: true
-                    format: uri
-                    example: http://api.example.org/accounts/?page=2
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Flowerbed'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Flowerbed'
           description: ''
       tags:
       - api
@@ -389,37 +345,15 @@ paths:
     get:
       operationId: listOrders
       description: ''
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
+      parameters: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                    example: 123
-                  next:
-                    type: string
-                    nullable: true
-                    format: uri
-                    example: http://api.example.org/accounts/?page=4
-                  previous:
-                    type: string
-                    nullable: true
-                    format: uri
-                    example: http://api.example.org/accounts/?page=2
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Order'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
           description: ''
       tags:
       - api
@@ -586,37 +520,15 @@ paths:
     get:
       operationId: listUsers
       description: API endpoint that allows users to be viewed or edited.
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
+      parameters: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                    example: 123
-                  next:
-                    type: string
-                    nullable: true
-                    format: uri
-                    example: http://api.example.org/accounts/?page=4
-                  previous:
-                    type: string
-                    nullable: true
-                    format: uri
-                    example: http://api.example.org/accounts/?page=2
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/UserDetailed'
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDetailed'
           description: ''
       tags:
       - api
@@ -644,37 +556,15 @@ paths:
     get:
       operationId: listTimesheets
       description: ''
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
+      parameters: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                    example: 123
-                  next:
-                    type: string
-                    nullable: true
-                    format: uri
-                    example: http://api.example.org/accounts/?page=4
-                  previous:
-                    type: string
-                    nullable: true
-                    format: uri
-                    example: http://api.example.org/accounts/?page=2
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/TimesheetWithGreenhouse'
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimesheetWithGreenhouse'
           description: ''
       tags:
       - api
@@ -816,37 +706,15 @@ paths:
     get:
       operationId: listProducts
       description: ''
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
+      parameters: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                    example: 123
-                  next:
-                    type: string
-                    nullable: true
-                    format: uri
-                    example: http://api.example.org/accounts/?page=4
-                  previous:
-                    type: string
-                    nullable: true
-                    format: uri
-                    example: http://api.example.org/accounts/?page=2
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Product'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
           description: ''
       tags:
       - api
@@ -1013,37 +881,15 @@ paths:
     get:
       operationId: listSharedProducts
       description: ''
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
+      parameters: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                    example: 123
-                  next:
-                    type: string
-                    nullable: true
-                    format: uri
-                    example: http://api.example.org/accounts/?page=4
-                  previous:
-                    type: string
-                    nullable: true
-                    format: uri
-                    example: http://api.example.org/accounts/?page=2
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/SharedProduct'
+                type: array
+                items:
+                  $ref: '#/components/schemas/SharedProduct'
           description: ''
       tags:
       - api
@@ -1177,36 +1023,14 @@ paths:
         description: A unique integer value identifying this marketplace product.
         schema:
           type: string
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                    example: 123
-                  next:
-                    type: string
-                    nullable: true
-                    format: uri
-                    example: http://api.example.org/accounts/?page=4
-                  previous:
-                    type: string
-                    nullable: true
-                    format: uri
-                    example: http://api.example.org/accounts/?page=2
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/MarketplaceProduct'
+                type: array
+                items:
+                  $ref: '#/components/schemas/MarketplaceProduct'
           description: ''
       tags:
       - api
@@ -1234,37 +1058,15 @@ paths:
     get:
       operationId: listNewsletterImages
       description: ''
-      parameters:
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
+      parameters: []
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  count:
-                    type: integer
-                    example: 123
-                  next:
-                    type: string
-                    nullable: true
-                    format: uri
-                    example: http://api.example.org/accounts/?page=4
-                  previous:
-                    type: string
-                    nullable: true
-                    format: uri
-                    example: http://api.example.org/accounts/?page=2
-                  results:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/NewsletterImage'
+                type: array
+                items:
+                  $ref: '#/components/schemas/NewsletterImage'
           description: ''
       tags:
       - api
@@ -1405,6 +1207,22 @@ paths:
               schema:
                 type: array
                 items: {}
+          description: ''
+      tags:
+      - api
+  /api/newsletter/history/:
+    get:
+      operationId: listNewsletterPosts
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NewsletterPost'
           description: ''
       tags:
       - api
@@ -3571,6 +3389,28 @@ components:
         image:
           type: string
           format: binary
+        image_height:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        image_width:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+    NewsletterPost:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 255
+        content:
+          type: object
+        created_at:
+          type: string
+          format: date-time
+      required:
+      - title
+      - content
     CreateGreenhouse:
       type: object
       properties:

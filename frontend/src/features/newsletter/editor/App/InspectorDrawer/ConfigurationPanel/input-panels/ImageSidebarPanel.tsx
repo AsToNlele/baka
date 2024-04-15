@@ -61,6 +61,7 @@ export default function ImageSidebarPanel({
 
     const handleImageSelect = (image: string) => {
         updateData({ ...data, props: { ...data.props, url: imageUrl(image) } })
+        onClose()
     }
 
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()

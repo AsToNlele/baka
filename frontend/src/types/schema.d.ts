@@ -122,6 +122,9 @@ export interface paths {
   "/api/newsletter/subscriber-count/": {
     get: operations["listSubscriberCounts"];
   };
+  "/api/newsletter/history/": {
+    get: operations["listNewsletterPosts"];
+  };
   "/api/greenhouses/create_greenhouse/": {
     post: operations["createGreenhouseGreenhouse"];
   };
@@ -690,6 +693,14 @@ export interface components {
     NewsletterImage: {
       /** Format: binary */
       image?: string;
+      image_height?: number;
+      image_width?: number;
+    };
+    NewsletterPost: {
+      title: string;
+      content: Record<string, never>;
+      /** Format: date-time */
+      created_at?: string;
     };
     CreateGreenhouse: {
       title: string | null;
@@ -891,30 +902,10 @@ export type external = Record<string, never>;
 export interface operations {
 
   listGreenhouses: {
-    parameters: {
-      query?: {
-        /** @description A page number within the paginated result set. */
-        page?: number;
-      };
-    };
     responses: {
       200: {
         content: {
-          "application/json": {
-            /** @example 123 */
-            count?: number;
-            /**
-             * Format: uri
-             * @example http://api.example.org/accounts/?page=4
-             */
-            next?: string | null;
-            /**
-             * Format: uri
-             * @example http://api.example.org/accounts/?page=2
-             */
-            previous?: string | null;
-            results?: components["schemas"]["Greenhouse"][];
-          };
+          "application/json": components["schemas"]["Greenhouse"][];
         };
       };
     };
@@ -1032,30 +1023,10 @@ export interface operations {
     };
   };
   listFlowerbeds: {
-    parameters: {
-      query?: {
-        /** @description A page number within the paginated result set. */
-        page?: number;
-      };
-    };
     responses: {
       200: {
         content: {
-          "application/json": {
-            /** @example 123 */
-            count?: number;
-            /**
-             * Format: uri
-             * @example http://api.example.org/accounts/?page=4
-             */
-            next?: string | null;
-            /**
-             * Format: uri
-             * @example http://api.example.org/accounts/?page=2
-             */
-            previous?: string | null;
-            results?: components["schemas"]["Flowerbed"][];
-          };
+          "application/json": components["schemas"]["Flowerbed"][];
         };
       };
     };
@@ -1173,30 +1144,10 @@ export interface operations {
     };
   };
   listOrders: {
-    parameters: {
-      query?: {
-        /** @description A page number within the paginated result set. */
-        page?: number;
-      };
-    };
     responses: {
       200: {
         content: {
-          "application/json": {
-            /** @example 123 */
-            count?: number;
-            /**
-             * Format: uri
-             * @example http://api.example.org/accounts/?page=4
-             */
-            next?: string | null;
-            /**
-             * Format: uri
-             * @example http://api.example.org/accounts/?page=2
-             */
-            previous?: string | null;
-            results?: components["schemas"]["Order"][];
-          };
+          "application/json": components["schemas"]["Order"][];
         };
       };
     };
@@ -1345,30 +1296,10 @@ export interface operations {
     };
   };
   listTimesheets: {
-    parameters: {
-      query?: {
-        /** @description A page number within the paginated result set. */
-        page?: number;
-      };
-    };
     responses: {
       200: {
         content: {
-          "application/json": {
-            /** @example 123 */
-            count?: number;
-            /**
-             * Format: uri
-             * @example http://api.example.org/accounts/?page=4
-             */
-            next?: string | null;
-            /**
-             * Format: uri
-             * @example http://api.example.org/accounts/?page=2
-             */
-            previous?: string | null;
-            results?: components["schemas"]["TimesheetWithGreenhouse"][];
-          };
+          "application/json": components["schemas"]["TimesheetWithGreenhouse"][];
         };
       };
     };
@@ -1462,30 +1393,10 @@ export interface operations {
     };
   };
   listProducts: {
-    parameters: {
-      query?: {
-        /** @description A page number within the paginated result set. */
-        page?: number;
-      };
-    };
     responses: {
       200: {
         content: {
-          "application/json": {
-            /** @example 123 */
-            count?: number;
-            /**
-             * Format: uri
-             * @example http://api.example.org/accounts/?page=4
-             */
-            next?: string | null;
-            /**
-             * Format: uri
-             * @example http://api.example.org/accounts/?page=2
-             */
-            previous?: string | null;
-            results?: components["schemas"]["Product"][];
-          };
+          "application/json": components["schemas"]["Product"][];
         };
       };
     };
@@ -1609,30 +1520,10 @@ export interface operations {
     };
   };
   listSharedProducts: {
-    parameters: {
-      query?: {
-        /** @description A page number within the paginated result set. */
-        page?: number;
-      };
-    };
     responses: {
       200: {
         content: {
-          "application/json": {
-            /** @example 123 */
-            count?: number;
-            /**
-             * Format: uri
-             * @example http://api.example.org/accounts/?page=4
-             */
-            next?: string | null;
-            /**
-             * Format: uri
-             * @example http://api.example.org/accounts/?page=2
-             */
-            previous?: string | null;
-            results?: components["schemas"]["SharedProduct"][];
-          };
+          "application/json": components["schemas"]["SharedProduct"][];
         };
       };
     };
@@ -1727,10 +1618,6 @@ export interface operations {
   };
   listMarketplaceProducts: {
     parameters: {
-      query?: {
-        /** @description A page number within the paginated result set. */
-        page?: number;
-      };
       path: {
         /** @description A unique integer value identifying this marketplace product. */
         id: string;
@@ -1739,21 +1626,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": {
-            /** @example 123 */
-            count?: number;
-            /**
-             * Format: uri
-             * @example http://api.example.org/accounts/?page=4
-             */
-            next?: string | null;
-            /**
-             * Format: uri
-             * @example http://api.example.org/accounts/?page=2
-             */
-            previous?: string | null;
-            results?: components["schemas"]["MarketplaceProduct"][];
-          };
+          "application/json": components["schemas"]["MarketplaceProduct"][];
         };
       };
     };
@@ -1774,30 +1647,10 @@ export interface operations {
     };
   };
   listNewsletterImages: {
-    parameters: {
-      query?: {
-        /** @description A page number within the paginated result set. */
-        page?: number;
-      };
-    };
     responses: {
       200: {
         content: {
-          "application/json": {
-            /** @example 123 */
-            count?: number;
-            /**
-             * Format: uri
-             * @example http://api.example.org/accounts/?page=4
-             */
-            next?: string | null;
-            /**
-             * Format: uri
-             * @example http://api.example.org/accounts/?page=2
-             */
-            previous?: string | null;
-            results?: components["schemas"]["NewsletterImage"][];
-          };
+          "application/json": components["schemas"]["NewsletterImage"][];
         };
       };
     };
@@ -1901,6 +1754,15 @@ export interface operations {
       200: {
         content: {
           "application/json": unknown[];
+        };
+      };
+    };
+  };
+  listNewsletterPosts: {
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["NewsletterPost"][];
         };
       };
     };

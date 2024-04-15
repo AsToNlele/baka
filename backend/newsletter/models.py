@@ -10,3 +10,8 @@ class NewsletterImage(models.Model):
     image_width = models.PositiveIntegerField(default=0)
     image_height = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
+
+class NewsletterPost(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.JSONField()
+    created_at = models.DateTimeField(default=timezone.now)

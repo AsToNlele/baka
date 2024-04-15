@@ -31,15 +31,17 @@ export type TimePeriodType =
     BusinessHoursType["greenhouse_business_hour_periods"][0]
 
 export type FlowerbedType = components["schemas"]["Flowerbed"]
-export type FlowerbedDetailResponse =
-    Omit<paths["/api/flowerbeds/{id}/"]["get"]["responses"][200]["content"]["application/json"], "extendable"> & {
-        extendable: boolean
-    } & {
-        currentRent: {
-            rented_from: string
-            rented_to: string
-        }
+export type FlowerbedDetailResponse = Omit<
+    paths["/api/flowerbeds/{id}/"]["get"]["responses"][200]["content"]["application/json"],
+    "extendable"
+> & {
+    extendable: boolean
+} & {
+    currentRent: {
+        rented_from: string
+        rented_to: string
     }
+}
 export type FlowerbedStatusResponse =
     paths["/api/flowerbeds/{id}/status/"]["get"]["responses"][200]["content"]["application/json"]
 
@@ -52,9 +54,14 @@ type RentType = Exclude<
 
 export type FlowerbedOrderType = components["schemas"]["Order"] & {
     type: "flowerbed"
-    rent: RentType & {
-        flowerbed: Omit<FlowerbedType, "currentRent" | "rents"> | undefined | null
-    } | null
+    rent:
+    | (RentType & {
+        flowerbed:
+        | Omit<FlowerbedType, "currentRent" | "rents">
+        | undefined
+        | null
+    })
+    | null
 }
 
 export type ProductOrderItemType = {
@@ -97,18 +104,14 @@ export type ProductListingsListResponse = Array<
 export type ProductListingType =
     components["schemas"]["ProductDetailMarketplaceProduct"]
 
-export type SharedProductListResponse = Exclude<
-    paths["/api/marketplace/shared-products/"]["get"]["responses"][200]["content"]["application/json"]["results"],
-    undefined
->
+export type SharedProductListResponse =
+    paths["/api/marketplace/shared-products/"]["get"]["responses"][200]["content"]["application/json"]
 
 export type SharedProductDetailResponse =
     paths["/api/marketplace/shared-products/{id}/"]["get"]["responses"][200]["content"]["application/json"]
 
-export type GreenhouseProductListResponse = Exclude<
-    paths["/api/marketplace/greenhouses/{id}/products/"]["get"]["responses"][200]["content"]["application/json"]["results"],
-    undefined
->
+export type GreenhouseProductListResponse =
+    paths["/api/marketplace/greenhouses/{id}/products/"]["get"]["responses"][200]["content"]["application/json"]
 
 export type GreenhouseProductType = components["schemas"]["MarketplaceProduct"]
 
@@ -200,10 +203,7 @@ export type TimesheetListResponse = Exclude<
     undefined
 >
 
-export type TimesheetWithGreenhouseType = Exclude<
-    TimesheetListResponse["results"],
-    undefined
->[0]
+export type TimesheetWithGreenhouseType = TimesheetListResponse[0]
 
 export type WorkingHourType = TimesheetWithGreenhouseType["working_hours"][0]
 
@@ -261,7 +261,16 @@ export type SubscriberCountResponse = {
     subscribers: number
 }
 
-export type GalleryListResponse = Exclude< Exclude<
+export type GalleryListResponse = Exclude<
     paths["/api/newsletter/gallery/"]["get"]["responses"][200]["content"]["application/json"],
     undefined
->["results"], undefined>
+>
+
+export type NewsletterPostType = Omit<
+    components["schemas"]["NewsletterPost"],
+    "content"
+> & {
+    content: string
+}
+
+export type NewsletterPostListResponse = Array<NewsletterPostType>

@@ -17,4 +17,5 @@ urlpatterns = [
         views.SubscriberCountView.as_view(),
         name="subscriber-count",
     ),
+    path("history/", views.NewsletterPostListView.as_view(), name="history"),
 ]

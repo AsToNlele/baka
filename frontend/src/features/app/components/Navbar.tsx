@@ -68,7 +68,7 @@ export const AppNavbar = () => {
                     href: "/app/users",
                 },
                 {
-                    name: "Send Newsletter",
+                    name: "Newsletter",
                     href: "/app/newsletter",
                 },
             ]
