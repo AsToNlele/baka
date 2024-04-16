@@ -30,4 +30,5 @@ urlpatterns = [
     path("newsletter/", include("newsletter.urls"), name="newsletter"),
     path("register/", views.RegisterUserWithEmail.as_view(), name="register"),
     path("activate/", views.ActivateUserView.as_view(), name="activate"),
+    path("edit-self/", views.EditSelfUserView.as_view(), name="edit-self"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

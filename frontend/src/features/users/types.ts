@@ -25,3 +25,16 @@ export const RegisterUserSchema = z
     })
 
 export type RegisterUserValidationType = z.infer<typeof RegisterUserSchema>
+
+export const EditSelfSchema = z.object({
+    profile: z
+        .object({
+            receive_newsletter: z.boolean().optional(),
+        })
+        .optional(),
+    first_name: z.string().min(2),
+    last_name: z.string().min(2),
+    email: z.string().email(),
+})
+
+export type EditSelfValidationType = z.infer<typeof EditSelfSchema>

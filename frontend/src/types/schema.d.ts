@@ -241,6 +241,10 @@ export interface paths {
   "/api/marketplace/greenhouses/{id}/products/edit/": {
     put: operations["updateEditGreenhouseProductInventory"];
   };
+  "/api/edit-self/": {
+    put: operations["updateEditSelfUser"];
+    patch: operations["partialUpdateEditSelfUser"];
+  };
   "/api/marketplace/marketplace-products/{id}/delete/": {
     delete: operations["destroyMarketplaceProduct"];
   };
@@ -902,6 +906,15 @@ export interface components {
       /** Format: date-time */
       updated_at?: string;
       greenhouse?: number | null;
+    };
+    EditSelfUser: {
+      profile?: {
+        receive_newsletter?: boolean;
+      };
+      first_name?: string;
+      last_name?: string;
+      /** Format: email */
+      email?: string;
     };
   };
   responses: never;
@@ -2356,6 +2369,38 @@ export interface operations {
       200: {
         content: {
           "application/json": unknown;
+        };
+      };
+    };
+  };
+  updateEditSelfUser: {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["EditSelfUser"];
+        "application/x-www-form-urlencoded": components["schemas"]["EditSelfUser"];
+        "multipart/form-data": components["schemas"]["EditSelfUser"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["EditSelfUser"];
+        };
+      };
+    };
+  };
+  partialUpdateEditSelfUser: {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["EditSelfUser"];
+        "application/x-www-form-urlencoded": components["schemas"]["EditSelfUser"];
+        "multipart/form-data": components["schemas"]["EditSelfUser"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["EditSelfUser"];
         };
       };
     };

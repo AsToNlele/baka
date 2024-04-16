@@ -1,10 +1,13 @@
 from django.contrib.auth.models import Group, User
 from greenhouse.models import Greenhouse
 from greenhouse.serializers import GreenhouseSerializer
-from rest_framework import serializers
 from orders.models import FlowerbedOrders, ProductOrders
-
-from orders.serializers import FlowerbedOrderSerializer, OrderSerializer, ProductOrderSerializer
+from orders.serializers import (
+    FlowerbedOrderSerializer,
+    OrderSerializer,
+    ProductOrderSerializer,
+)
+from rest_framework import serializers
 
 from .models import Profile
 
@@ -46,7 +49,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             "profile",
             "owned_greenhouses",
             "caretaker_greenhouses",
-            "superuser"
+            "superuser",
         ]
 
 
@@ -102,9 +105,43 @@ class UserDetailedSerializer(serializers.ModelSerializer):
             "caretaker_greenhouses",
             "orders",
             "superuser",
-            "is_active"
+            "is_active",
         ]
-    
+
+
+class EditProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ["receive_newsletter"]
+
+
+class EditSelfUserSerializer(serializers.ModelSerializer):
+    profile = EditProfileSerializer(required=False)
+
+    def update(self, instance, validated_data):
+        print("UPDATINGG")
+        if "profile" in validated_data:
+            profile_data = validated_data.pop("profile")
+            profile = instance.profile
+            profile.receive_newsletter = profile_data.get(
+                "receive_newsletter", False
+            )
+            profile.save()
+        else:
+            instance.profile.receive_newsletter = False
+            instance.profile.save()
+        return super().update(instance, validated_data)
+
+    class Meta:
+        model = User
+        fields = [
+            "profile",
+            "first_name",
+            "last_name",
+            "email",
+        ]
+
+
 class EditUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -115,6 +152,7 @@ class EditUserSerializer(serializers.ModelSerializer):
             "email",
         ]
 
+
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
@@ -122,10 +160,12 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 
         from rest_framework import serializers
 
+
 class SetUserActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["is_active"]
+
 
 class RegisterUserWithEmailSerializer(serializers.Serializer):
     username = serializers.CharField()

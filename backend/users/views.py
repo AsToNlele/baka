@@ -3,13 +3,14 @@ from hashlib import sha256
 
 from django.contrib.auth.models import Group, User
 from dotenv import load_dotenv
-from rest_framework import permissions, viewsets
+from rest_framework import generics, permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from users.tasks import send_activation_email
 
 from .serializers import (
+    EditSelfUserSerializer,
     EditUserSerializer,
     GroupSerializer,
     RegisterUserWithEmailSerializer,
@@ -21,6 +22,25 @@ from .serializers import (
 load_dotenv()
 
 USER_ACTIVATION_TOKEN = os.getenv("USER_ACTIVATION_TOKEN")
+
+
+class EditSelfUserView(generics.UpdateAPIView):
+    serializer_class = EditSelfUserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance != request.user:
+            return Response({"message": "Cannot edit other users"}, status=400)
+        serializer = self.get_serializer(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        instance.refresh_from_db()
+        responseSerializer = UserDetailedSerializer(instance)
+        return Response(responseSerializer.data)
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):

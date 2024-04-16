@@ -276,3 +276,5 @@ export type NewsletterPostType = Omit<
 export type NewsletterPostListResponse = Array<NewsletterPostType>
 
 export type RegisterRequest = components["schemas"]["RegisterUserWithEmail"]
+
+export type EditSelfRequest = components["schemas"]["EditSelfUser"]
