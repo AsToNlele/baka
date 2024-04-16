@@ -53,29 +53,33 @@ export const AppNavbar = () => {
             href: "/app/my-greenhouses",
         },
         ...((profileData && profileData.owned_greenhouses.length > 0) ||
-            (profileData && profileData.caretaker_greenhouses.length > 0)
+        (profileData && profileData.caretaker_greenhouses.length > 0)
             ? [
-                {
-                    name: "Timesheets",
-                    href: "/app/timesheets",
-                },
-            ]
+                  {
+                      name: "Timesheets",
+                      href: "/app/timesheets",
+                  },
+              ]
             : []),
         ...(profileData && profileData.superuser
             ? [
-                {
-                    name: "Users",
-                    href: "/app/users",
-                },
-                {
-                    name: "Newsletter",
-                    href: "/app/newsletter",
-                },
-            ]
+                  {
+                      name: "Users",
+                      href: "/app/users",
+                  },
+                  {
+                      name: "Newsletter",
+                      href: "/app/newsletter",
+                  },
+              ]
             : []),
         {
             name: "Orders",
             href: "/app/orders",
+        },
+        {
+            name: "Profile",
+            href: "/app/profile",
         },
     ]
 
@@ -109,7 +113,7 @@ export const AppNavbar = () => {
                                 size="lg"
                                 color={
                                     location.pathname === item.href ||
-                                        `${location.pathname}/` === item.href
+                                    `${location.pathname}/` === item.href
                                         ? "secondary"
                                         : "foreground"
                                 }
@@ -120,6 +124,17 @@ export const AppNavbar = () => {
                         </NavbarMenuItem>
                     )
                 })}
+                {
+                    <NavbarMenuItem key={"logout"}>
+                        <Button
+                            color="danger"
+                            variant="flat"
+                            onClick={() => signOut.mutate()}
+                            >
+                            Sign Out
+                        </Button>
+                    </NavbarMenuItem>
+                }
             </NavbarMenu>
 
             {/* Lg */}
@@ -168,10 +183,6 @@ export const AppNavbar = () => {
                                     <User
                                         as="button"
                                         name={`${data?.first_name} ${data?.last_name}`}
-                                        description="Level 4"
-                                        avatarProps={{
-                                            src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-                                        }}
                                     />
                                 </DropdownTrigger>
                                 <DropdownMenu
