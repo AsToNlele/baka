@@ -13,6 +13,7 @@ import { parseIsoAndFormat } from "@/utils/utils"
 import { FaEdit } from "react-icons/fa"
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { EditFlowerbedModal } from "@/features/flowerbeds/components/EditFlowerbedModal"
+import { GreenhouseImage } from "@/features/greenhouses/components/GreenhouseImage"
 
 export const FlowerbedDetail = () => {
     const { id } = useParams()
@@ -164,12 +165,9 @@ export const FlowerbedDetail = () => {
                             </div>
                         </div>
                         <div className="lg:max-w-[60%]">
-                            <Image
-                                classNames={{
-                                    wrapper: "w-full",
-                                    img: "w-full aspect-4/3",
-                                }}
-                                src={`https://placedog.net/800/600?id=${data?.greenhouse.id}`}
+                            <GreenhouseImage
+                                image={data?.greenhouse.image}
+                                title={data?.greenhouse.title}
                             />
                         </div>
                     </CardBody>

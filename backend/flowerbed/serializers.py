@@ -105,10 +105,11 @@ class GreenhouseAddressSerializer(serializers.ModelSerializer):
 
 class GreenhouseFlowerSerializer(serializers.ModelSerializer):
     greenhouse_address = GreenhouseAddressSerializer()
+    image = serializers.ImageField(use_url=False, required=False)
 
     class Meta:
         model = Greenhouse
-        fields = ["id", "title", "description", "greenhouse_address"]
+        fields = ["id", "title", "description", "greenhouse_address", "image"]
 
 
 class FlowerbedSerializer(serializers.ModelSerializer):

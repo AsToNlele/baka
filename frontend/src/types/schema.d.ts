@@ -245,6 +245,9 @@ export interface paths {
     put: operations["updateEditSelfUser"];
     patch: operations["partialUpdateEditSelfUser"];
   };
+  "/api/greenhouse-upload/": {
+    put: operations["updateGreenhouseUploadImage"];
+  };
   "/api/marketplace/marketplace-products/{id}/delete/": {
     delete: operations["destroyMarketplaceProduct"];
   };
@@ -294,6 +297,8 @@ export interface components {
               latitude?: string | null;
               longitude?: string | null;
             };
+            /** Format: binary */
+            image?: string;
           };
           extendable?: string;
           name?: string | null;
@@ -317,11 +322,15 @@ export interface components {
           greenhouse?: number | null;
         })[];
       available_flowerbeds?: string;
+      /** Format: binary */
+      image?: string;
       title?: string | null;
       description?: string | null;
       rules?: string | null;
       published?: boolean;
       bank_account_number?: string | null;
+      image_width?: number;
+      image_height?: number;
       owner?: number | null;
       caretaker?: number | null;
     };
@@ -373,6 +382,8 @@ export interface components {
           latitude?: string | null;
           longitude?: string | null;
         };
+        /** Format: binary */
+        image?: string;
       };
       extendable?: string;
       name?: string | null;
@@ -435,6 +446,10 @@ export interface components {
         rules?: string | null;
         published?: boolean;
         bank_account_number?: string | null;
+        /** Format: binary */
+        image?: string | null;
+        image_width?: number;
+        image_height?: number;
         owner?: number | null;
         caretaker?: number | null;
       };
@@ -522,6 +537,8 @@ export interface components {
                 latitude?: string | null;
                 longitude?: string | null;
               };
+              /** Format: binary */
+              image?: string;
             };
             extendable?: string;
             name?: string | null;
@@ -545,11 +562,15 @@ export interface components {
             greenhouse?: number | null;
           })[];
         available_flowerbeds?: string;
+        /** Format: binary */
+        image?: string;
         title?: string | null;
         description?: string | null;
         rules?: string | null;
         published?: boolean;
         bank_account_number?: string | null;
+        image_width?: number;
+        image_height?: number;
         owner?: number | null;
         caretaker?: number | null;
       };
@@ -625,6 +646,10 @@ export interface components {
         rules?: string | null;
         published?: boolean;
         bank_account_number?: string | null;
+        /** Format: binary */
+        image?: string | null;
+        image_width?: number;
+        image_height?: number;
         owner?: number | null;
         greenhouse_address?: number | null;
         caretaker?: number | null;
@@ -689,6 +714,10 @@ export interface components {
         rules?: string | null;
         published?: boolean;
         bank_account_number?: string | null;
+        /** Format: binary */
+        image?: string | null;
+        image_width?: number;
+        image_height?: number;
         owner?: number | null;
         greenhouse_address?: number | null;
         caretaker?: number | null;
@@ -2401,6 +2430,21 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["EditSelfUser"];
+        };
+      };
+    };
+  };
+  updateGreenhouseUploadImage: {
+    requestBody?: {
+      content: {
+        "multipart/form-data": unknown;
+        "application/x-www-form-urlencoded": unknown;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": unknown;
         };
       };
     };

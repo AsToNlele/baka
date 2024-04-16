@@ -11,13 +11,15 @@ import {
     useDisclosure,
 } from "@nextui-org/react"
 import { Key, useEffect } from "react"
-import { FaEdit, FaUsersCog } from "react-icons/fa"
+import { FaEdit, FaImage, FaUsersCog } from "react-icons/fa"
 import { EditGreenhouseModal } from "@/features/greenhouses/components/EditGreenhouseModal"
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { GreenhouseProducts } from "@/features/marketplace/components/GreenhouseProducts"
-import { dayNumberToDay, formatTime } from "@/utils/utils"
+import { dayNumberToDay, formatTime, imageUrl } from "@/utils/utils"
 import { SetGreenhouseUsersModal } from "@/features/greenhouses/components/SetGreenhouseUsersModal"
 import { FlowerbedTab } from "@/features/flowerbeds/components/FlowerbedTab"
+import { GreenhouseImage } from "@/features/greenhouses/components/GreenhouseImage"
+import { GreenhouseImageUploadModal } from "@/features/greenhouses/components/GreenhouseImageUploadModal"
 
 export const GreenhouseDetail = () => {
     const { id } = useParams()
@@ -47,6 +49,8 @@ export const GreenhouseDetail = () => {
         onOpen: onOpenUsers,
         onClose: onCloseUsers,
     } = useDisclosure()
+    const { isOpen: isImageOpen, onOpen: onOpenImage, onClose: onCloseImage } =
+        useDisclosure()
 
     const { data: user } = useProfile()
 
@@ -80,32 +84,40 @@ export const GreenhouseDetail = () => {
                         >
                             <FaUsersCog size={20} />
                         </Button>
+                        <Button
+                            color="primary"
+                            isIconOnly
+                            onPress={onOpenImage}
+                            size="md"
+                        >
+                            <FaImage size={20} />
+                        </Button>
+
+                        <EditGreenhouseModal
+                            isOpen={isOpen}
+                            onOpenChange={onOpenChange}
+                            onClose={onClose}
+                        />
+
+                        <SetGreenhouseUsersModal
+                            isOpen={isUsersOpen}
+                            onOpenChange={onOpenUsers}
+                            onClose={onCloseUsers}
+                        />
+
+                        <GreenhouseImageUploadModal
+                            isOpen={isImageOpen}
+                            onOpenChange={onOpenImage}
+                            onClose={onCloseImage}
+                            greenhouseId={greenhouseId}
+                        />
                     </>
                 )}
             </div>
 
-            <EditGreenhouseModal
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-                onClose={onClose}
-            />
-
-            <SetGreenhouseUsersModal
-                isOpen={isUsersOpen}
-                onOpenChange={onOpenUsers}
-                onClose={onCloseUsers}
-            />
-
             <div className="flex flex-col gap-8 md:flex-row">
                 <div className="flex flex-1 justify-center">
-                    <Image
-                        classNames={{
-                            wrapper: "w-full",
-                            img: "w-full aspect-4/3",
-                        }}
-                        src={`https://placedog.net/800/600?id=${data.id!}`}
-                        height={160}
-                    />
+                    <GreenhouseImage image={data.image} title={data.title} />
                 </div>
                 <div className="flex flex-1 flex-col gap-8">
                     <div className="flex flex-wrap justify-between gap-8 sm:justify-around lg:justify-evenly">

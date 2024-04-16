@@ -18,6 +18,12 @@ from greenhouse.models import (
 from rest_framework import serializers
 from users.models import Profile
 
+class GreenhouseUploadImageSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=True, use_url=False)
+
+    class Meta:
+        model = Greenhouse
+        fields = ["image", "image_height", "image_width"]
 
 class GreenhouseBusinessHourPeriodSerializer(serializers.ModelSerializer):
     class Meta:
@@ -48,6 +54,7 @@ class GreenhouseSerializer(serializers.ModelSerializer):
         source="greenhousebusinesshour_set", many=True
     )
     available_flowerbeds = serializers.SerializerMethodField()
+    image = serializers.ImageField(required=False, use_url=False)
 
     def get_available_flowerbeds(self, obj):
         flowerbeds = obj.flowerbed_set.all()

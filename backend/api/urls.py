@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.urls import include, path
 from flowerbed.views import FlowerbedViewSet
-from greenhouse.views import GreenhouseViewSet, TimesheetViewSet
+from greenhouse.views import GreenhouseUploadImageView, GreenhouseViewSet, TimesheetViewSet
 from orders.views import OrderViewSet
 from rest_framework import routers
 from users import views
@@ -31,4 +31,5 @@ urlpatterns = [
     path("register/", views.RegisterUserWithEmail.as_view(), name="register"),
     path("activate/", views.ActivateUserView.as_view(), name="activate"),
     path("edit-self/", views.EditSelfUserView.as_view(), name="edit-self"),
+    path("greenhouse-upload/", GreenhouseUploadImageView.as_view(), name="greenhouse-upload"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

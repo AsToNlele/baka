@@ -1,3 +1,5 @@
+import { GreenhouseImage } from "@/features/greenhouses/components/GreenhouseImage"
+import { imageUrl } from "@/utils/utils"
 import { Card, CardBody, CardFooter, Image, Link } from "@nextui-org/react"
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa"
 import { GreenhouseType } from "utils/types"
@@ -54,14 +56,7 @@ export const Greenhouse = ({ item }: { item: GreenhouseType }) => {
             href={`greenhouses/${item.id}?tab=flowerbeds`}
         >
             <CardBody className="overflow-visible p-0">
-                <Image
-                    shadow="sm"
-                    radius="lg"
-                    width="100%"
-                    alt={title!}
-                    className="w-full object-cover"
-                    src={`https://placedog.net/300/200?id=${item.id!}`}
-                />
+                <GreenhouseImage image={item.image} title={title} />
             </CardBody>
             <CardFooter className="flex flex-col justify-between text-small">
                 <div className="flex w-full flex-wrap items-center justify-between">

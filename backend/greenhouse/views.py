@@ -12,6 +12,7 @@ from greenhouse.serializers import (
     EmptySerializer,
     GreenhouseAddressSerializer,
     GreenhouseSerializer,
+    GreenhouseUploadImageSerializer,
     SetCaretakerSerializer,
     SetOwnerSerializer,
     TimesheetSerializer,
@@ -22,7 +23,9 @@ from rest_framework import viewsets
 from rest_framework.decorators import action, permission_classes
 from rest_framework.generics import get_object_or_404
 from rest_framework.mixins import Response
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.views import APIView
 
 
 class GreenhouseAddressViewSet(viewsets.ModelViewSet):
@@ -240,6 +243,30 @@ class GreenhouseViewSet(viewsets.ModelViewSet):
         )
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class GreenhouseUploadImageView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def put(self, request):
+        image = request.data["image"]
+        id = request.data["id"]
+
+        greenhouse = get_object_or_404(Greenhouse.objects.all(), pk=id)
+        if (
+            greenhouse.owner != request.user.profile
+            and greenhouse.caretaker != request.user.profile
+            and request.user.is_superuser
+        ):
+            return Response(
+                {"message": "You are not allowed to update this greenhouse"}, status=403
+            )
+        greenhouse.image = image
+        greenhouse.save()
+
+        serializer = GreenhouseSerializer(greenhouse)
+
+        return Response(serializer.data, status=200)
 
 
 class TimesheetViewSet(viewsets.ModelViewSet):
