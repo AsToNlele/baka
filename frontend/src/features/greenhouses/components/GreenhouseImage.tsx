@@ -14,7 +14,8 @@ export const GreenhouseImage = ({ image, title }: GreenhouseImageProps) => {
             height="200"
             alt={title ?? "Greenhouse"}
             className="w-full object-cover"
-            src={`${imageUrl(image!)}`}
+            src={`${imageUrl(image!) === "" ? imageUrl("fallback-greenhouse.jpg") : imageUrl(image!)}`}
+            fallbackSrc={`${imageUrl("fallback-greenhouse.jpg")}`}
             removeWrapper
         />
     )

@@ -1,6 +1,5 @@
 import { GreenhouseImage } from "@/features/greenhouses/components/GreenhouseImage"
-import { imageUrl } from "@/utils/utils"
-import { Card, CardBody, CardFooter, Image, Link } from "@nextui-org/react"
+import { Card, CardBody, CardFooter, Link } from "@nextui-org/react"
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa"
 import { GreenhouseType } from "utils/types"
 

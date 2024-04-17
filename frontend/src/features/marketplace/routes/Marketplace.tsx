@@ -92,8 +92,8 @@ const Product = ({ product }: { product: ProductType }) => {
 const ProductList = ({ products }: { products: ProductType[] }) => {
     return (
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
-            {products.map((product) => (
-                <Product key={product.id} product={product} />
+            {products.map((product, index) => (
+                <Product key={index} product={product} />
             ))}
         </div>
     )

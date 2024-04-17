@@ -4,7 +4,6 @@ import {
     Button,
     Card,
     CardBody,
-    Image,
     Link,
     useDisclosure,
 } from "@nextui-org/react"

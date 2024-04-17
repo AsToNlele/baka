@@ -16,11 +16,20 @@ import {
 import { useEffect } from "react"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import { useParams } from "react-router-dom"
+import { toast } from "sonner"
 
 type EditGreenhouseModalProps = {
     isOpen: boolean
     onOpenChange: (open: boolean) => void
     onClose: () => void
+}
+
+export type EditGreenhouseInputs = {
+    title: string
+    description: string
+    published: boolean
+    greenhouse_address: GreenhouseAddressType
+    greenhouse_business_hours: Array<BusinessHoursType>
 }
 
 export const EditGreenhouseModal = ({
@@ -33,14 +42,6 @@ export const EditGreenhouseModal = ({
     const greenhouseId = id ? parseInt(id) : null
     const { data } = useGreenhouseDetail(greenhouseId)
     const editGreenhouse = useEditGreenhouse()
-
-    type EditGreenhouseInputs = {
-        title: string
-        description: string
-        published: boolean
-        greenhouse_address: GreenhouseAddressType
-        greenhouse_business_hours: Array<BusinessHoursType>
-    }
 
     const { register, handleSubmit, reset, control } =
         useForm<EditGreenhouseInputs>({
@@ -79,7 +80,13 @@ export const EditGreenhouseModal = ({
     }, [data, reset])
 
     const onSubmit: SubmitHandler<EditGreenhouseInputs> = (data) => {
-        editGreenhouse.mutate({ id: greenhouseId!, data: data })
+        editGreenhouse.mutate({ id: greenhouseId!, data: data }, {
+            onSuccess: () => {
+                toast.success("Greenhouse updated")
+                onClose()
+            }
+        
+        })
     }
 
     const submit = () => {
@@ -138,7 +145,8 @@ export const EditGreenhouseModal = ({
                                     <h2 className="text-base">Address</h2>
                                     <AddressFields
                                         register={register}
-                                        data={data}
+                                        data={data!}
+                                        control={control}
                                     />
                                 </div>
                                 <div className="mt-8 flex flex-col gap-2">

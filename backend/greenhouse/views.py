@@ -256,7 +256,7 @@ class GreenhouseUploadImageView(APIView):
         if (
             greenhouse.owner != request.user.profile
             and greenhouse.caretaker != request.user.profile
-            and request.user.is_superuser
+            and not request.user.is_superuser
         ):
             return Response(
                 {"message": "You are not allowed to update this greenhouse"}, status=403

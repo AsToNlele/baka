@@ -5,21 +5,22 @@ import {
     Button,
     Card,
     CardBody,
-    Image,
     Tab,
     Tabs,
     useDisclosure,
 } from "@nextui-org/react"
+import "leaflet/dist/leaflet.css"
 import { Key, useEffect } from "react"
 import { FaEdit, FaImage, FaUsersCog } from "react-icons/fa"
 import { EditGreenhouseModal } from "@/features/greenhouses/components/EditGreenhouseModal"
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { GreenhouseProducts } from "@/features/marketplace/components/GreenhouseProducts"
-import { dayNumberToDay, formatTime, imageUrl } from "@/utils/utils"
+import { dayNumberToDay, formatTime } from "@/utils/utils"
 import { SetGreenhouseUsersModal } from "@/features/greenhouses/components/SetGreenhouseUsersModal"
 import { FlowerbedTab } from "@/features/flowerbeds/components/FlowerbedTab"
 import { GreenhouseImage } from "@/features/greenhouses/components/GreenhouseImage"
 import { GreenhouseImageUploadModal } from "@/features/greenhouses/components/GreenhouseImageUploadModal"
+import { Map } from "@/features/greenhouses/components/Map"
 
 export const GreenhouseDetail = () => {
     const { id } = useParams()
@@ -49,8 +50,11 @@ export const GreenhouseDetail = () => {
         onOpen: onOpenUsers,
         onClose: onCloseUsers,
     } = useDisclosure()
-    const { isOpen: isImageOpen, onOpen: onOpenImage, onClose: onCloseImage } =
-        useDisclosure()
+    const {
+        isOpen: isImageOpen,
+        onOpen: onOpenImage,
+        onClose: onCloseImage,
+    } = useDisclosure()
 
     const { data: user } = useProfile()
 
@@ -66,6 +70,11 @@ export const GreenhouseDetail = () => {
         user?.superuser ||
         user?.profile?.id === data.owner ||
         user?.profile?.id === data.caretaker
+
+    const mapPosition = [
+        parseFloat(data?.greenhouse_address?.latitude + "") ?? 0,
+        parseFloat(data?.greenhouse_address?.longitude + "") ?? 0,
+    ]
 
     return (
         <>
@@ -169,17 +178,7 @@ export const GreenhouseDetail = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="h-full md:min-h-48">
-                        <Card className="h-full">
-                            <iframe
-                                className="size-full"
-                                src={`https://maps.google.com/maps?q=${data.greenhouse_address.latitude},${data.greenhouse_address.longitude}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
-                                style={{ border: 0 }}
-                                loading="lazy"
-                                referrerPolicy="no-referrer-when-downgrade"
-                            />
-                        </Card>
-                    </div>
+                    <Map position={[mapPosition[0], mapPosition[1]]} />
                 </div>
             </div>
             <Tabs
