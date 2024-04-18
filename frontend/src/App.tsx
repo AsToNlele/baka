@@ -34,11 +34,12 @@ import { MyGreenhouses } from "@/features/greenhouses/routes/MyGreenhouses"
 import { Suspense, lazy } from "react"
 import { ActivateAccount } from "@/features/auth/routes/ActivateAccount"
 import { ActivateAccountConfirm } from "@/features/auth/routes/ActivateAccountConfirm"
+import { SocialPosts } from "@/features/socialposts/routes/SocialPosts"
+import { SocialPostDetail } from "@/features/socialposts/routes/SocialPostDetail"
 
 // import { Newsletter } from "@/features/newsletter/routes/Newsletter"
 // Import Newsltter lazy
 const Newsletter = lazy(() => import("@/features/newsletter/routes/Newsletter"))
-
 
 function App() {
     const navigate = useNavigate()
@@ -151,10 +152,20 @@ function App() {
                                 <Route
                                     path="/app/newsletter"
                                     element={
-                                        <Suspense fallback={<div>Loading...</div>}>
+                                        <Suspense
+                                            fallback={<div>Loading...</div>}
+                                        >
                                             <Newsletter />
                                         </Suspense>
                                     }
+                                />
+                                <Route
+                                    path="/app/socialposts"
+                                    element={<SocialPosts />}
+                                />
+                                <Route
+                                    path="/app/socialposts/:id"
+                                    element={<SocialPostDetail />}
                                 />
                                 <Route path="*" element={<h1>404</h1>} />
                             </Route>

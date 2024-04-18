@@ -687,6 +687,169 @@ paths:
           description: ''
       tags:
       - api
+  /api/socialposts/:
+    get:
+      operationId: listSocialPosts
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SocialPost'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createSocialPost
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSocialPost'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateSocialPost'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateSocialPost'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSocialPost'
+          description: ''
+      tags:
+      - api
+  /api/socialposts/all_posts/:
+    get:
+      operationId: allPostsSocialPost
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SocialPostApp'
+          description: ''
+      tags:
+      - api
+  /api/socialposts/my_posts/:
+    get:
+      operationId: myPostsSocialPost
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SocialPostApp'
+          description: ''
+      tags:
+      - api
+  /api/socialposts/{id}/:
+    get:
+      operationId: retrieveSocialPost
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this social post.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SocialPost'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateSocialPost
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this social post.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SocialPost'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SocialPost'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SocialPost'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SocialPost'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateSocialPost
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this social post.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SocialPost'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SocialPost'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SocialPost'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SocialPost'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroySocialPost
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this social post.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
   /api/auth/profile:
     get:
       operationId: listUsers
@@ -2062,6 +2225,37 @@ paths:
           description: ''
       tags:
       - api
+  /api/socialposts/{id}/edit/:
+    put:
+      operationId: editSocialPost
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this social post.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditSocialPost'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EditSocialPost'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EditSocialPost'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EditSocialPost'
+          description: ''
+      tags:
+      - api
   /api/marketplace/marketplace-products/{id}/:
     put:
       operationId: updateMarketplaceProduct
@@ -3293,6 +3487,77 @@ components:
       - working_hours
       - updates
       - author
+    SocialPost:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          maxLength: 200
+          pattern: "^(?:[a-z0-9.+-]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)(?:\\\
+            .(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)){3}|\\[[0-9a-f:.]+\\\
+            ]|([a-z\xA1-\uFFFF0-9](?:[a-z\xA1-\uFFFF0-9-]{0,61}[a-z\xA1-\uFFFF0-9])?(?:\\\
+            .(?!-)[a-z\xA1-\uFFFF0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z\xA1-\uFFFF-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\\
+            .?|localhost))(?::[0-9]{1,5})?(?:[/?#][^\\s]*)?\\z"
+        post_type:
+          type: string
+        approved:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        author:
+          type: integer
+          nullable: true
+      required:
+      - url
+      - post_type
+    SocialPostApp:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        author:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            user:
+              type: string
+              readOnly: true
+        url:
+          type: string
+          format: uri
+          maxLength: 200
+          pattern: "^(?:[a-z0-9.+-]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)(?:\\\
+            .(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)){3}|\\[[0-9a-f:.]+\\\
+            ]|([a-z\xA1-\uFFFF0-9](?:[a-z\xA1-\uFFFF0-9-]{0,61}[a-z\xA1-\uFFFF0-9])?(?:\\\
+            .(?!-)[a-z\xA1-\uFFFF0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z\xA1-\uFFFF-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\\
+            .?|localhost))(?::[0-9]{1,5})?(?:[/?#][^\\s]*)?\\z"
+        post_type:
+          type: string
+        approved:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - author
+      - url
+      - post_type
     Product:
       type: object
       properties:
@@ -3778,6 +4043,23 @@ components:
       - items
       - greenhouse
       - working_hours
+    CreateSocialPost:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          maxLength: 200
+          pattern: "^(?:[a-z0-9.+-]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)(?:\\\
+            .(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)){3}|\\[[0-9a-f:.]+\\\
+            ]|([a-z\xA1-\uFFFF0-9](?:[a-z\xA1-\uFFFF0-9-]{0,61}[a-z\xA1-\uFFFF0-9])?(?:\\\
+            .(?!-)[a-z\xA1-\uFFFF0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z\xA1-\uFFFF-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\\
+            .?|localhost))(?::[0-9]{1,5})?(?:[/?#][^\\s]*)?\\z"
+        post_type:
+          type: string
+          default: ig
+      required:
+      - url
     ResetToken:
       type: object
       properties:
@@ -4071,6 +4353,19 @@ components:
         status:
           type: string
           nullable: true
+    EditSocialPost:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          pattern: "^(?:[a-z0-9.+-]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)(?:\\\
+            .(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)){3}|\\[[0-9a-f:.]+\\\
+            ]|([a-z\xA1-\uFFFF0-9](?:[a-z\xA1-\uFFFF0-9-]{0,61}[a-z\xA1-\uFFFF0-9])?(?:\\\
+            .(?!-)[a-z\xA1-\uFFFF0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z\xA1-\uFFFF-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\\
+            .?|localhost))(?::[0-9]{1,5})?(?:[/?#][^\\s]*)?\\z"
+        approved:
+          type: boolean
     EditMarketplaceProduct:
       type: object
       properties:

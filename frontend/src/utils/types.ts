@@ -278,3 +278,11 @@ export type NewsletterPostListResponse = Array<NewsletterPostType>
 export type RegisterRequest = components["schemas"]["RegisterUserWithEmail"]
 
 export type EditSelfRequest = components["schemas"]["EditSelfUser"]
+
+export type SocialPostType = components["schemas"]["SocialPost"]
+
+export type SocialPostListResponse = paths["/api/socialposts/"]["get"]["responses"][200]["content"]["application/json"]
+
+export type SocialPostAppType = components["schemas"]["SocialPostApp"]
+
+export type SocialPostAppListResponse = Array<paths["/api/socialposts/all_posts/"]["get"]["responses"][200]["content"]["application/json"]>

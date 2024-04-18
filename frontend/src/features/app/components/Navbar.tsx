@@ -78,6 +78,10 @@ export const AppNavbar = () => {
             href: "/app/orders",
         },
         {
+            name: "Share your moment",
+            href: "/app/socialposts",
+        },
+        {
             name: "Profile",
             href: "/app/profile",
         },
@@ -130,7 +134,7 @@ export const AppNavbar = () => {
                             color="danger"
                             variant="flat"
                             onClick={() => signOut.mutate()}
-                            >
+                        >
                             Sign Out
                         </Button>
                     </NavbarMenuItem>

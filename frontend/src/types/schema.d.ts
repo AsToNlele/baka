@@ -71,6 +71,22 @@ export interface paths {
     delete: operations["destroyTimesheet"];
     patch: operations["partialUpdateTimesheet"];
   };
+  "/api/socialposts/": {
+    get: operations["listSocialPosts"];
+    post: operations["createSocialPost"];
+  };
+  "/api/socialposts/all_posts/": {
+    get: operations["allPostsSocialPost"];
+  };
+  "/api/socialposts/my_posts/": {
+    get: operations["myPostsSocialPost"];
+  };
+  "/api/socialposts/{id}/": {
+    get: operations["retrieveSocialPost"];
+    put: operations["updateSocialPost"];
+    delete: operations["destroySocialPost"];
+    patch: operations["partialUpdateSocialPost"];
+  };
   "/api/auth/profile": {
     get: operations["listUsers"];
   };
@@ -233,6 +249,9 @@ export interface paths {
   };
   "/api/timesheets/{id}/update_timesheet/": {
     put: operations["updateTimesheetTimesheet"];
+  };
+  "/api/socialposts/{id}/edit/": {
+    put: operations["editSocialPost"];
   };
   "/api/marketplace/marketplace-products/{id}/": {
     put: operations["updateMarketplaceProduct"];
@@ -630,6 +649,33 @@ export interface components {
       /** Format: date-time */
       updated_at?: string;
     };
+    SocialPost: {
+      id?: number;
+      /** Format: uri */
+      url: string;
+      post_type: string;
+      approved?: boolean;
+      /** Format: date-time */
+      created_at?: string;
+      /** Format: date-time */
+      updated_at?: string;
+      author?: number | null;
+    };
+    SocialPostApp: {
+      id?: number;
+      author: {
+        id?: number;
+        user?: string;
+      };
+      /** Format: uri */
+      url: string;
+      post_type: string;
+      approved?: boolean;
+      /** Format: date-time */
+      created_at?: string;
+      /** Format: date-time */
+      updated_at?: string;
+    };
     Product: {
       id?: number;
       name?: string;
@@ -811,6 +857,12 @@ export interface components {
       pay?: string | null;
       status?: string | null;
     };
+    CreateSocialPost: {
+      /** Format: uri */
+      url: string;
+      /** @default ig */
+      post_type?: string;
+    };
     ResetToken: {
       token: string;
     };
@@ -917,6 +969,11 @@ export interface components {
       /** Format: decimal */
       pay?: string | null;
       status?: string | null;
+    };
+    EditSocialPost: {
+      /** Format: uri */
+      url?: string;
+      approved?: boolean;
     };
     EditMarketplaceProduct: {
       id?: number;
@@ -1446,6 +1503,121 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["TimesheetWithGreenhouse"];
+        };
+      };
+    };
+  };
+  listSocialPosts: {
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["SocialPost"][];
+        };
+      };
+    };
+  };
+  createSocialPost: {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["CreateSocialPost"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateSocialPost"];
+        "multipart/form-data": components["schemas"]["CreateSocialPost"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["CreateSocialPost"];
+        };
+      };
+    };
+  };
+  allPostsSocialPost: {
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["SocialPostApp"];
+        };
+      };
+    };
+  };
+  myPostsSocialPost: {
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["SocialPostApp"];
+        };
+      };
+    };
+  };
+  retrieveSocialPost: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this social post. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["SocialPost"];
+        };
+      };
+    };
+  };
+  updateSocialPost: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this social post. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["SocialPost"];
+        "application/x-www-form-urlencoded": components["schemas"]["SocialPost"];
+        "multipart/form-data": components["schemas"]["SocialPost"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["SocialPost"];
+        };
+      };
+    };
+  };
+  destroySocialPost: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this social post. */
+        id: string;
+      };
+    };
+    responses: {
+      204: {
+        content: never;
+      };
+    };
+  };
+  partialUpdateSocialPost: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this social post. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["SocialPost"];
+        "application/x-www-form-urlencoded": components["schemas"]["SocialPost"];
+        "multipart/form-data": components["schemas"]["SocialPost"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["SocialPost"];
         };
       };
     };
@@ -2333,6 +2505,28 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["UpdateTimesheet"];
+        };
+      };
+    };
+  };
+  editSocialPost: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this social post. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["EditSocialPost"];
+        "application/x-www-form-urlencoded": components["schemas"]["EditSocialPost"];
+        "multipart/form-data": components["schemas"]["EditSocialPost"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["EditSocialPost"];
         };
       };
     };

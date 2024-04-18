@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "api",
     "users",
     "newsletter",
+    "socialposts",
 ]
 
 MIDDLEWARE = [
@@ -152,12 +153,12 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': None,
-    'PAGE_SIZE': 99999999,
+    "DEFAULT_PAGINATION_CLASS": None,
+    "PAGE_SIZE": 99999999,
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
     ],
-    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"]
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -196,7 +197,7 @@ EMAIL_USE_SSL = True
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
 
-DJANGO_REST_MULTITOKENAUTH_RESET_TOKEN_EXPIRY_TIME=1
+DJANGO_REST_MULTITOKENAUTH_RESET_TOKEN_EXPIRY_TIME = 1
 
 TEMPLATES = [
     {
@@ -213,6 +214,6 @@ TEMPLATES = [
         },
     },
 ]
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'backend/media')
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "backend/media")
 
-MEDIA_URL = '/media/'
+MEDIA_URL = "/media/"

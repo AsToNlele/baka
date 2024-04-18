@@ -25,7 +25,8 @@ export default function LandingNavbar() {
             classNames={{
                 item: ["data-[active=true]:text-secondarytw"],
             }}
-            className="border-none bg-transparent backdrop-blur-none backdrop-filter-none"
+            // className="border-none bg-transparent backdrop-blur-none backdrop-filter-none"
+            className="border-none backdrop-blur-none backdrop-filter-none"
         >
             <NavbarContent className="sm:hidden" justify="start">
                 <NavbarMenuToggle

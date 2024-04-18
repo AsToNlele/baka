@@ -4,6 +4,7 @@ from flowerbed.views import FlowerbedViewSet
 from greenhouse.views import GreenhouseUploadImageView, GreenhouseViewSet, TimesheetViewSet
 from orders.views import OrderViewSet
 from rest_framework import routers
+from socialposts.views import SocialPostViewSet
 from users import views
 from django_rest_passwordreset.urls import add_reset_password_urls_to_router
 from django.conf.urls.static import static
@@ -16,6 +17,7 @@ router.register(r"flowerbeds", FlowerbedViewSet)
 router.register(r"orders", OrderViewSet)
 router.register(r"users", views.UserViewSet)
 router.register(r"timesheets", TimesheetViewSet)
+router.register(r"socialposts", SocialPostViewSet)
 # router.register(r"marketplace", MarketplaceView)
 add_reset_password_urls_to_router(router, base_path='password-reset')
 
