@@ -1,18 +1,20 @@
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { CreateFlowerbedModal } from "@/features/flowerbeds/components/CreateFlowerbedModal"
 import { FlowerbedList } from "@/features/flowerbeds/components/FlowerbedList"
-import { FlowerbedType } from "@/utils/types"
+import { FlowerbedType, GreenhouseType } from "@/utils/types"
 import { Button, useDisclosure } from "@nextui-org/react"
 import { FaPlus } from "react-icons/fa"
 
 type FlowerbedTabProps = {
     flowerbeds: readonly FlowerbedType[]
     greenhouseId?: number | string // If not set, expect to be in My Flowerbeds page
+    greenhouse: GreenhouseType
 }
 
 export const FlowerbedTab = ({
     flowerbeds,
     greenhouseId,
+    greenhouse
 }: FlowerbedTabProps) => {
     const { data: profile } = useProfile()
 
@@ -43,7 +45,7 @@ export const FlowerbedTab = ({
             }
             <FlowerbedList
                 flowerbeds={flowerbeds}
-                greenhouseId={greenhouseId}
+                greenhouse={greenhouse}
             />
             <CreateFlowerbedModal
                 isOpen={isOpen}

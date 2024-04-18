@@ -202,6 +202,7 @@ export const GreenhouseDetail = () => {
                                 <FlowerbedTab
                                     flowerbeds={data.flowerbeds!}
                                     greenhouseId={greenhouseId!}
+                                    greenhouse={data}
                                 />
                             )}
                         </CardBody>

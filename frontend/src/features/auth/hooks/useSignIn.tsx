@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { api } from "../../../utils/api"
 import { useNavigate } from "react-router-dom"
 
@@ -13,9 +13,11 @@ const signin = (data: Inputs) => {
 
 export const useSignIn = () => {
     const navigate = useNavigate()
+    const queryClient = useQueryClient()
     const mutation = useMutation({
         mutationFn: signin,
         onSuccess: () => {
+            queryClient.invalidateQueries()
             navigate("/app")
         },
     })

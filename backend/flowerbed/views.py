@@ -24,6 +24,40 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
     queryset = Flowerbed.objects.all()
     serializer_class = FlowerbedSerializer
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        # Only Admin,Owner,Caretaker if disabled, else 403
+        if (
+            instance.disabled
+            and not request.user.is_superuser
+            and not request.user.is_staff
+            and not request.user.profile == instance.greenhouse.owner
+            and not request.user.profile == instance.greenhouse.caretaker
+        ):
+            return Response({"message": "This flowerbed is disabled"}, status=403)
+
+        # If current renter is not the user, return 403
+        if (
+            not request.user.is_superuser
+            and not request.user.is_staff
+            and not request.user.profile == instance.greenhouse.owner
+            and not request.user.profile == instance.greenhouse.caretaker
+        ):
+            flowerbedSerializer = FlowerbedSerializer(instance, many=False)
+
+            currentRent = flowerbedSerializer.data.get("currentRent")
+            if currentRent:
+                # return Response({"message": "This flowerbed is not rented"}, status=400)
+                currentRentUser = Profile.objects.get(pk=currentRent.get("user"))
+                if currentRentUser != request.user.profile:
+                    return Response(
+                        {"message": "You are not renting this flowerbed"}, status=403
+                    )
+
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
     # status endpoint for the flowerbed
     @action(
         detail=True,
