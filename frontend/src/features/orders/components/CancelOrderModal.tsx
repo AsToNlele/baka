@@ -1,4 +1,12 @@
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button, ModalContent } from "@nextui-org/react"
+import { useCancelOrder } from "@/features/orders/hooks/useCancelOrder"
+import {
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    Button,
+    ModalContent,
+} from "@nextui-org/react"
 
 export const CancelOrderModal = ({
     isOpen,
@@ -11,17 +19,23 @@ export const CancelOrderModal = ({
     onOpenChange: (open: boolean) => void
     orderId: number | null
 }) => {
-    // const { mutate } = useCancelOrder()
+    const { mutate } = useCancelOrder()
 
     const handleCancel = () => {
         if (orderId) {
-            // mutate(orderId)
-            // onClose()
+            mutate(
+                { id: orderId },
+                {
+                    onSuccess: () => onClose(),
+                },
+            )
         }
     }
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose}
+        <Modal
+            isOpen={isOpen}
+            onClose={onClose}
             placement="center"
             scrollBehavior="inside"
             size="xl"
@@ -35,7 +49,11 @@ export const CancelOrderModal = ({
                     </p>
                 </ModalBody>
                 <ModalFooter>
-                    <Button variant="flat" color="danger" onPress={handleCancel}>
+                    <Button
+                        variant="flat"
+                        color="danger"
+                        onPress={handleCancel}
+                    >
                         Cancel Order
                     </Button>
                     <Button variant="flat" onPress={() => onOpenChange(false)}>

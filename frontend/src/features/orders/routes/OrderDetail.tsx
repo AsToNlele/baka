@@ -35,12 +35,21 @@ export const OrderDetail = () => {
     const orderId = id ? parseInt(id) : null
     const { data } = useOrderDetail(orderId)
     const isAdmin = useIsAdmin()
-    const isLessThanAnHour = data && differenceInMinutes(parseISO(data.created_at!), new Date()) < 60
-    console.log({isLessThanAnHour})
+    const isLessThanAnHour =
+        data &&
+        Math.abs(differenceInMinutes(parseISO(data.created_at!), new Date())) <
+        60
 
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
-    const { isOpen: isCancelOpen, onOpen: onCancelOpen, onClose: onCancelClose, onOpenChange: onCancelOpenChange } = useDisclosure()
+    const {
+        isOpen: isCancelOpen,
+        onOpen: onCancelOpen,
+        onClose: onCancelClose,
+        onOpenChange: onCancelOpenChange,
+    } = useDisclosure()
 
+    console.log(isAdmin)
+    console.log(isLessThanAnHour)
 
     return (
         <div className="flex flex-col gap-4">
@@ -65,8 +74,8 @@ export const OrderDetail = () => {
                     <div className="flex items-baseline gap-4">
                         <h2 className="flex items-center gap-4 text-lg">
                             {upperCaseFirstLetter(data.status ?? "")}
-                            {
-                                isAdmin || isLessThanAnHour && (
+                            {isAdmin ||
+                                (isLessThanAnHour && (
                                     <>
                                         <Button
                                             color="danger"
@@ -82,8 +91,7 @@ export const OrderDetail = () => {
                                             orderId={orderId}
                                         />
                                     </>
-                                )
-                            }
+                                ))}
                         </h2>
                         <p className="text-sm">
                             Ordered on: {parseIsoAndFormat(data.created_at!)}
