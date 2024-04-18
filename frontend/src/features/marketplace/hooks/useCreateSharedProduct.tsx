@@ -3,13 +3,24 @@ import { api } from "../../../utils/api"
 import { toast } from "sonner"
 import { CreateSharedProductValidationType } from "@/features/marketplace/types"
 
-
 const createSharedProduct = ({
     data,
 }: {
-    data: CreateSharedProductValidationType
+    data: CreateSharedProductValidationType & { image: File | null }
 }) => {
-    return api.post(`/marketplace/shared-products/`, data)
+    const form_data = new FormData()
+    form_data.append("name", data.name)
+    form_data.append("description", data.description)
+    if (data.image) form_data.append("image", data.image, data.image.name)
+    else {
+        form_data.append("image", "")
+    }
+
+    return api.post(`/marketplace/shared-products/`, form_data, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    })
 }
 
 export const useCreateSharedProduct = () => {

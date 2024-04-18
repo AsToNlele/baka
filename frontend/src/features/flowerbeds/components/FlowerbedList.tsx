@@ -1,6 +1,6 @@
 import { FlowerbedImage } from "@/features/flowerbeds/components/FlowerbedImage"
 import { FlowerbedType } from "@/utils/types"
-import { Card, CardBody, CardFooter, Image, Link } from "@nextui-org/react"
+import { Card, CardBody, CardFooter, Link } from "@nextui-org/react"
 
 type FlowerbedListProps = {
     flowerbeds: readonly FlowerbedType[]

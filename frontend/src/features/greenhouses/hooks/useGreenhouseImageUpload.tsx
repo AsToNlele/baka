@@ -9,6 +9,9 @@ type GreenhouseImageUploadType= {
 const greenhouseImageUpload = ({ data }: { data: GreenhouseImageUploadType }) => {
     const form_data = new FormData()
     if (data.image) form_data.append("image", data.image, data.image.name)
+    else {
+        form_data.append("image", "")
+    }
     form_data.append("id", data.greenhouseId?.toString() ?? "")
 
     return api.put(`/greenhouse-upload/`, form_data, {

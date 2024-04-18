@@ -2,6 +2,7 @@ import {
     Button,
     Card,
     CardBody,
+    Image,
     Modal,
     ModalBody,
     ModalContent,
@@ -40,6 +41,8 @@ export const CreateGreenhouseProductModal = ({
     const greenhouseId = id ? parseInt(id) : null
     const createGreenhouseProductFromSharedProduct =
         useCreateGreenhouseProductFromSharedProduct()
+
+    const [image, setImage] = useState<File | null>(null)
 
     const {
         register: registerShared,
@@ -81,7 +84,10 @@ export const CreateGreenhouseProductModal = ({
     > = (data) => {
         createGreenhouseProductFromCustomProduct.mutate({
             id: greenhouseId!,
-            data: data,
+            data: {
+                ...data,
+                product: { ...data.product, image: image ?? null },
+            },
         })
     }
 
@@ -90,14 +96,22 @@ export const CreateGreenhouseProductModal = ({
     }
 
     useEffect(() => {
-        if (createGreenhouseProductFromSharedProduct.isSuccess || createGreenhouseProductFromCustomProduct.isSuccess) {
+        if (
+            createGreenhouseProductFromSharedProduct.isSuccess ||
+            createGreenhouseProductFromCustomProduct.isSuccess
+        ) {
             onClose()
         }
-    }, [createGreenhouseProductFromSharedProduct.isSuccess, createGreenhouseProductFromCustomProduct.isSuccess ,onClose])
+    }, [
+        createGreenhouseProductFromSharedProduct.isSuccess,
+        createGreenhouseProductFromCustomProduct.isSuccess,
+        onClose,
+    ])
 
     useEffect(() => {
         resetShared()
         resetCustom()
+        setImage(null)
     }, [onOpenChange, resetShared, resetCustom])
 
     const submit = () => {
@@ -158,7 +172,23 @@ export const CreateGreenhouseProductModal = ({
                                             <GreenhouseProductCustomFields
                                                 register={registerCustom}
                                                 errors={errorsCustom}
+                                                setImage={setImage}
                                             />
+                                            {image && (
+                                                <Image
+                                                    src={
+                                                        image
+                                                            ? URL.createObjectURL(
+                                                                image,
+                                                            )
+                                                            : ""
+                                                    }
+                                                    alt="Product"
+                                                    width="300"
+                                                    height="200"
+                                                    className="w-full object-cover"
+                                                />
+                                            )}
                                         </form>
                                     </CardBody>
                                 </Card>

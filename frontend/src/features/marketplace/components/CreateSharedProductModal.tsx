@@ -1,6 +1,7 @@
 import { useCreateSharedProduct } from "@/features/marketplace/hooks/useCreateSharedProduct"
 import {
     Button,
+    Image,
     Input,
     Modal,
     ModalBody,
@@ -10,13 +11,17 @@ import {
 } from "@nextui-org/react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useEffect } from "react"
-import { CreateSharedProductSchema, CreateSharedProductValidationType } from "@/features/marketplace/types"
+import { ChangeEvent, useEffect, useRef, useState } from "react"
+import {
+    CreateSharedProductSchema,
+    CreateSharedProductValidationType,
+} from "@/features/marketplace/types"
 
 type CreateSharedProductModalProps = {
     isOpen: boolean
     onOpenChange: (open: boolean) => void
-    onClose: () => void }
+    onClose: () => void
+}
 
 export const CreateSharedProductModal = ({
     isOpen,
@@ -24,6 +29,8 @@ export const CreateSharedProductModal = ({
     onClose,
 }: CreateSharedProductModalProps) => {
     const createSharedProduct = useCreateSharedProduct()
+    const imageInputRef = useRef<HTMLInputElement>(null)
+    const [image, setImage] = useState<File | null>(null)
 
     const {
         register,
@@ -37,11 +44,18 @@ export const CreateSharedProductModal = ({
     const onSubmit: SubmitHandler<CreateSharedProductValidationType> = (
         data,
     ) => {
-        createSharedProduct.mutate({ data: data })
+        createSharedProduct.mutate({ data: { ...data, image: image ?? null } })
     }
 
     const submit = () => {
         handleSubmit(onSubmit)()
+    }
+
+    const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const newUploadData = e?.target?.files?.[0]
+        if (newUploadData) {
+            setImage(newUploadData)
+        }
     }
 
     useEffect(() => {
@@ -52,6 +66,7 @@ export const CreateSharedProductModal = ({
 
     useEffect(() => {
         reset()
+        setImage(null)
     }, [onOpenChange, reset])
 
     return (
@@ -94,13 +109,35 @@ export const CreateSharedProductModal = ({
                                             errors.description?.message
                                         }
                                     />
-                                    <Input
-                                        label="Image"
-                                        placeholder=""
-                                        {...register("image", {
-                                            required: false,
-                                        })}
-                                    />
+                                    <Button
+                                        onPress={() =>
+                                            imageInputRef?.current?.click()
+                                        }
+                                        color="secondary"
+                                        variant="flat"
+                                    >
+                                        Upload Image
+                                        <input
+                                            hidden
+                                            type="file"
+                                            name="image"
+                                            accept="image/jpeg,image/png,image/gif"
+                                            onChange={(e) => {
+                                                handleImageChange(e)
+                                            }}
+                                            ref={imageInputRef}
+                                        />
+                                    </Button>
+                                    <div className="flex items-center justify-center">
+                                        <Image
+                                            src={
+                                                image
+                                                    ? URL.createObjectURL(image)
+                                                    : ""
+                                            }
+                                            alt="product image"
+                                        />
+                                    </div>
                                     <Input
                                         type="submit"
                                         value="Submit"

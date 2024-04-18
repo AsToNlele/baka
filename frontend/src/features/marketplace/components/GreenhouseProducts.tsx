@@ -6,8 +6,7 @@ import {
     Card,
     CardBody,
     CardFooter,
-    Image,
-    useDisclosure,
+    useDisclosure
 } from "@nextui-org/react"
 import { FaEdit, FaPlus, FaShoppingCart } from "react-icons/fa"
 import { CreateGreenhouseProductModal } from "@/features/marketplace/components/CreateGreenhouseProductModal"
@@ -16,6 +15,7 @@ import { useProfile } from "@/features/auth/hooks/useProfile"
 import { EditGreenhouseProductInventoryModal } from "@/features/marketplace/components/EditGreenhouseProductInventoryModal"
 import { useState } from "react"
 import { EditGreenhouseMarketplaceProductModal } from "@/features/marketplace/components/EditGreenhouseMarketplaceProductModal"
+import { ProductImage } from "@/features/marketplace/components/ProductImage"
 
 export const GreenhouseProducts = () => {
     const { id } = useParams()
@@ -129,12 +129,10 @@ export const GreenhouseProduct = ({
     return (
         <Card shadow="sm" className="h-full">
             <CardBody className="relative overflow-visible p-0">
-                <Image
-                    shadow="sm"
-                    radius="lg"
-                    width="100%"
-                    className="w-full object-cover"
-                    src={`https://placedog.net/300/200?id=${product.id!}`}
+                <ProductImage
+                    image={product?.product?.image}
+                    id={product?.id}
+                    title={product?.product?.name}
                 />
                 {hasAccess && (
                     <Button

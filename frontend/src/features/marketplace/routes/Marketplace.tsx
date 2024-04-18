@@ -3,7 +3,6 @@ import {
     Card,
     CardBody,
     CardFooter,
-    Image,
     Link,
     Select,
     SelectItem,
@@ -19,9 +18,12 @@ import { useSetPrimaryGreenhouse } from "@/features/marketplace/hooks/useSetPrim
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { useGreenhouseList } from "@/features/greenhouses/hooks/useGreenhouseList"
 import { useState } from "react"
+import { useIsAdmin } from "@/hooks/isAdmin"
+import { ProductImage } from "@/features/marketplace/components/ProductImage"
 
 export const Marketplace = () => {
     const { data: products } = useProductList()
+    const isAdmin = useIsAdmin()
 
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
 
@@ -34,19 +36,23 @@ export const Marketplace = () => {
             <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-2">
                     <h2 className="text-2xl font-bold">Products</h2>
-                    <Button
-                        isIconOnly
-                        color="primary"
-                        size="sm"
-                        onPress={onOpen}
-                    >
-                        <FaPlus />
-                    </Button>
-                    <CreateSharedProductModal
-                        isOpen={isOpen}
-                        onOpenChange={onOpenChange}
-                        onClose={onClose}
-                    />
+                    {isAdmin && (
+                        <>
+                            <Button
+                                isIconOnly
+                                color="primary"
+                                size="sm"
+                                onPress={onOpen}
+                            >
+                                <FaPlus />
+                            </Button>
+                            <CreateSharedProductModal
+                                isOpen={isOpen}
+                                onOpenChange={onOpenChange}
+                                onClose={onClose}
+                            />
+                        </>
+                    )}
                 </div>
                 {products && <ProductList products={products} />}
             </div>
@@ -63,14 +69,10 @@ const Product = ({ product }: { product: ProductType }) => {
                 as={Link}
                 href={`/app/marketplace/products/${product.id}`}
             >
-                <Image
-                    shadow="sm"
-                    radius="lg"
-                    width="100%"
-                    alt={product.name!}
-                    src={`https://placedog.net/400/300?id=${product.id!}`}
-                // src={`https://placekitten.com/400/300?image=${product.id! % 17
-                //     }`}
+                <ProductImage
+                    id={product.id}
+                    image={product.image}
+                    title={product.name}
                 />
             </CardBody>
             <CardFooter className="justify-between text-small">

@@ -1,3 +1,4 @@
+from rest_framework.parsers import FormParser, MultiPartParser
 from greenhouse.models import Greenhouse
 from greenhouse.serializers import EmptySerializer, GreenhouseSerializer
 from marketplace.models import MarketplaceProduct, Product, SharedProduct
@@ -96,6 +97,7 @@ class GreenhouseProductView(generics.ListAPIView):
 class MarketplaceProductView(generics.RetrieveAPIView):
     queryset = MarketplaceProduct.objects.all()
     serializer_class = MarketplaceDetailProductSerializer
+    parser_classes = (MultiPartParser, FormParser)
     lookup_field = "pk"
 
     def retrieve(self, request, *args, **kwargs):
@@ -117,8 +119,8 @@ class EditMarketplaceProductView(generics.UpdateAPIView):
         instance = self.get_object()
         if (
             instance.greenhouse.owner != request.user
-            and request.user.is_staff
-            and instance.greenhouse.caretaker != request.user
+            and not request.user.is_staff
+            and not instance.greenhouse.caretaker != request.user
         ):
             return JsonResponse(
                 {
@@ -163,7 +165,9 @@ class DeleteMarketplaceProductView(generics.DestroyAPIView):
 class SharedProductViewset(viewsets.ModelViewSet):
     queryset = SharedProduct.objects.filter(shared=True)
     serializer_class = SharedProductSerializer
-
+    parser_classes = (MultiPartParser, FormParser)
+    permission_classes = [permissions.IsAdminUser]
+    
 
 class CreateGreenhouseProductFromSharedProductView(generics.CreateAPIView):
     queryset = MarketplaceProduct.objects.all()
@@ -177,6 +181,7 @@ class CreateGreenhouseProductFromSharedProductView(generics.CreateAPIView):
 class CreateGreenhouseProductFromCustomProductView(generics.CreateAPIView):
     queryset = MarketplaceProduct.objects.all()
     serializer_class = CreateGreenhouseProductFromCustomProductSerializer
+    parser_classes = (MultiPartParser, FormParser)
     lookup_field = "pk"
 
     def perform_create(self, serializer):

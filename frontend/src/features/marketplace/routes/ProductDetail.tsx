@@ -1,9 +1,11 @@
 import { PageTitle } from "@/features/app/components/PageTitle"
+import { GreenhouseImage } from "@/features/greenhouses/components/GreenhouseImage"
+import { ProductImage } from "@/features/marketplace/components/ProductImage"
 import { useProductDetail } from "@/features/marketplace/hooks/useProductDetail"
 import { useProductListingsList } from "@/features/marketplace/hooks/useProductListingsList"
 import { useShoppingCartStore } from "@/features/marketplace/stores/useShoppingCartStore"
 import { ProductListingType } from "@/utils/types"
-import { Button, Card, CardBody, CardFooter, Image } from "@nextui-org/react"
+import { Button, Card, CardBody, CardFooter } from "@nextui-org/react"
 import { FaShoppingCart } from "react-icons/fa"
 import { useParams } from "react-router-dom"
 
@@ -24,12 +26,10 @@ export const ProductDetail = () => {
                 </div>
                 <div className="flex flex-1 justify-center">
                     <div className="max-w-[400px] md:max-w-[60%] lg:max-w-[60%] xl:max-w-[600px]">
-                        <Image
-                            classNames={{
-                                wrapper: "w-full",
-                                img: "w-full aspect-4/3",
-                            }}
-                            src={`https://placedog.net/800/600?id=${product?.id}`}
+                        <ProductImage
+                            image={product?.image}
+                            id={product?.id}
+                            title={product?.name}
                         />
                     </div>
                 </div>
@@ -56,16 +56,13 @@ type ProductListingProps = {
 }
 
 const ProductListing = ({ listing }: ProductListingProps) => {
-    const {addItem } = useShoppingCartStore()
+    const { addItem } = useShoppingCartStore()
     return (
         <Card shadow="sm" className="h-full">
             <CardBody className="overflow-visible p-0">
-                <Image
-                    shadow="sm"
-                    radius="lg"
-                    width="100%"
-                    className="w-full object-cover"
-                    src={`https://placedog.net/300/200?id=${listing.id!}`}
+                <GreenhouseImage
+                    title={listing.greenhouse.title}
+                    image={listing.greenhouse.image}
                 />
             </CardBody>
             <CardFooter className="flex justify-between text-small">
@@ -84,7 +81,12 @@ const ProductListing = ({ listing }: ProductListingProps) => {
                     <Button
                         isIconOnly
                         color="primary"
-                        onPress={() => addItem({marketplaceProduct: listing.id!, quantity: 1})}
+                        onPress={() =>
+                            addItem({
+                                marketplaceProduct: listing.id!,
+                                quantity: 1,
+                            })
+                        }
                     >
                         <FaShoppingCart />
                     </Button>

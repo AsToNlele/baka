@@ -1,6 +1,6 @@
 import { useFlowerbedDetail } from "@/features/flowerbeds/hooks/useFlowerbedDetail"
 import { useMultistepFormStore } from "@/features/flowerbeds/stores/useRentMultistepFormStore"
-import { Button, Divider, Image } from "@nextui-org/react"
+import { Button, Divider } from "@nextui-org/react"
 import { useNavigate, useParams } from "react-router-dom"
 import {
     DaySingleFromFixedRangePickerWithInput,
@@ -17,6 +17,7 @@ import { Loading } from "@/components/Loading"
 import { QRPaymentStandalone } from "@/features/orders/components/QRPayment"
 import { AwaitPayment } from "@/features/orders/components/AwaitPayment"
 import { useExtendRentFlowerbed } from "@/features/flowerbeds/hooks/useExtendRentFlowerbed"
+import { GreenhouseImage } from "@/features/greenhouses/components/GreenhouseImage"
 
 const ExtendRentFlowerbedHeader = () => {
     const { id } = useParams()
@@ -27,12 +28,9 @@ const ExtendRentFlowerbedHeader = () => {
         <div className="flex flex-col gap-4 sm:flex-row">
             <div className="flex flex-1 justify-center sm:flex-none">
                 <div className="max-w-[400px] lg:max-w-[250px]">
-                    <Image
-                        classNames={{
-                            wrapper: "w-full",
-                            img: "w-full aspect-4/3",
-                        }}
-                        src={`https://placedog.net/800/600`}
+                    <GreenhouseImage
+                        image={data?.greenhouse.image}
+                        title={data?.greenhouse.title}
                     />
                 </div>
             </div>

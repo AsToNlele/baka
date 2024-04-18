@@ -3,7 +3,7 @@ import * as z from "zod"
 export const CreateSharedProductSchema = z.object({
     name: z.string().min(3),
     description: z.string().min(3),
-    image: z.string().optional(),
+    // image: z.string().optional(),
 })
 
 export type CreateSharedProductValidationType = z.infer<
@@ -24,7 +24,7 @@ export const CreateGreenhouseProductFromCustomProductSchema = z.object({
     product: z.object({
         name: z.string().min(3),
         description: z.string().min(3),
-        image: z.string().optional(),
+        // image: z.string().optional(),
     }),
     price: z.coerce.number().gt(0),
     quantity: z.coerce.number().int().gt(0),
@@ -32,7 +32,7 @@ export const CreateGreenhouseProductFromCustomProductSchema = z.object({
 
 export type CreateGreenhouseProductFromCustomProductValidationType = z.infer<
     typeof CreateGreenhouseProductFromCustomProductSchema
->
+> & { product: { image?: File | null } }
 
 export type ShoppingCartMarketplaceItem = {
     marketplaceProduct: number
@@ -62,7 +62,7 @@ export const EditGreenhouseMarketplaceProductRequestSchema = z.object({
     product: z.object({
         name: z.string().min(3),
         description: z.string().min(3),
-        image: z.string().optional(),
+        // image: z.string().optional(),
         shared: z.boolean(),
     }),
     price: z.string(),
@@ -71,4 +71,4 @@ export const EditGreenhouseMarketplaceProductRequestSchema = z.object({
 
 export type EditGreenhouseMarketplaceProductRequestValidationType = z.infer<
     typeof EditGreenhouseMarketplaceProductRequestSchema
->
+> & { product: { image?: File | null } }

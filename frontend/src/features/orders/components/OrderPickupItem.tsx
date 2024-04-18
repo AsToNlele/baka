@@ -1,6 +1,7 @@
+import { ProductImage } from "@/features/marketplace/components/ProductImage"
 import { GetPickupLocationsType } from "@/utils/types"
 import { dayNumberToDay, formatTime } from "@/utils/utils"
-import { Card, CardBody, Image } from "@nextui-org/react"
+import { Card, CardBody } from "@nextui-org/react"
 
 export const OrderPickupItem = ({ pickup }: { pickup: GetPickupLocationsType }) => {
     return (
@@ -92,10 +93,10 @@ export const OrderPickupItem = ({ pickup }: { pickup: GetPickupLocationsType }) 
                                 <Card shadow="sm" key={item.id}>
                                     <CardBody className="justify-between overflow-visible object-cover p-0">
                                         <div className="flex h-full justify-between gap-2">
-                                            <Image
-                                                shadow="sm"
-                                                radius="lg"
-                                                src={`https://placedog.net/300/200?id=${item.id!}`}
+                                            <ProductImage
+                                                id={item.productId}
+                                                image={item?.productImage}
+                                                title={item?.productName}
                                             />
                                             <div className="flex flex-1 flex-col items-center justify-center">
                                                 <div>

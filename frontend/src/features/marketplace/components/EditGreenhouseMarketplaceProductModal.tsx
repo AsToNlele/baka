@@ -7,6 +7,7 @@ import {
     ModalContent,
     Input,
     Checkbox,
+    Image,
 } from "@nextui-org/react"
 import {
     EditGreenhouseMarketplaceProductRequestSchema,
@@ -16,8 +17,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import { useEditGreenhouseMarketplaceProduct } from "@/features/marketplace/hooks/useEditGreenhouseMarketplaceProduct"
 import { GreenhouseProductListResponse } from "@/utils/types"
-import { useEffect } from "react"
+import { ChangeEvent, useEffect, useRef, useState } from "react"
 import { useDeleteGreenhouseMarketplaceProduct } from "@/features/marketplace/hooks/useDeleteGreenhouseMarketplaceProduct"
+import { imageUrl } from "@/utils/utils"
 
 type EditGreenhouseMarketplaceProductModalProps = {
     isOpen: boolean
@@ -36,6 +38,8 @@ export const EditGreenhouseMarketplaceProductModal = ({
 }: EditGreenhouseMarketplaceProductModalProps) => {
     const { mutate } = useEditGreenhouseMarketplaceProduct()
     const { mutate: deleteProduct } = useDeleteGreenhouseMarketplaceProduct()
+    const imageInputRef = useRef<HTMLInputElement>(null)
+    const [image, setImage] = useState<File | string | null>(null)
 
     const foundProduct = products.find(
         (product) => product.id === marketplaceProductId,
@@ -45,7 +49,7 @@ export const EditGreenhouseMarketplaceProductModal = ({
         product: {
             name: foundProduct?.product.name ?? "",
             description: foundProduct?.product.description ?? "",
-            image: foundProduct?.product.image ?? "",
+            // image: foundProduct?.product.image ?? "",
             shared: foundProduct?.product.shared ?? false,
         },
         quantity: foundProduct?.quantity,
@@ -77,8 +81,20 @@ export const EditGreenhouseMarketplaceProductModal = ({
         )
     }
 
+    const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const newUploadData = e?.target?.files?.[0]
+        if (newUploadData) {
+            setImage(newUploadData)
+        }
+    }
+
     useEffect(() => {
         reset(convertedProduct)
+        if (foundProduct?.product?.image) {
+            setImage(foundProduct?.product?.image)
+        } else {
+            setImage(null)
+        }
     }, [onOpenChange, reset])
 
     return (
@@ -120,17 +136,6 @@ export const EditGreenhouseMarketplaceProductModal = ({
                                             convertedProduct.product.description
                                         }
                                     />
-                                    <Input
-                                        label="Image"
-                                        {...register("product.image")}
-                                        errorMessage={
-                                            formState.errors.product?.image
-                                                ?.message
-                                        }
-                                        defaultValue={
-                                            convertedProduct.product.image
-                                        }
-                                    />
                                     <Controller
                                         name="product.shared"
                                         control={control}
@@ -162,6 +167,48 @@ export const EditGreenhouseMarketplaceProductModal = ({
                                         }
                                         defaultValue={convertedProduct.price}
                                     />
+                                    <div className="flex gap-4">
+                                        <Button
+                                            onPress={() =>
+                                                imageInputRef?.current?.click()
+                                            }
+                                            color="secondary"
+                                            variant="flat"
+                                        >
+                                            Upload Image
+                                            <input
+                                                hidden
+                                                type="file"
+                                                name="image"
+                                                accept="image/jpeg,image/png,image/gif"
+                                                onChange={(e) => {
+                                                    handleImageChange(e)
+                                                }}
+                                                ref={imageInputRef}
+                                            />
+                                        </Button>
+                                        <Button
+                                            variant="flat"
+                                            color="warning"
+                                            onPress={() => setImage(null)}
+                                        >
+                                            Remove Image
+                                        </Button>
+                                    </div>
+                                    <div className="flex items-center justify-center">
+                                        <Image
+                                            src={
+                                                typeof image === "string"
+                                                    ? imageUrl(image) ?? ""
+                                                    : image
+                                                      ? URL.createObjectURL(
+                                                            image,
+                                                        )
+                                                      : ""
+                                            }
+                                            alt="product image"
+                                        />
+                                    </div>
                                 </div>
                             )}
                         </form>

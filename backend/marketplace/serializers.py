@@ -7,6 +7,7 @@ from rest_framework import serializers
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(use_url=False, required=False)
     class Meta:
         model = Product
         fields = "__all__"
@@ -53,6 +54,10 @@ class EditMarketplaceProductSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.__dict__.update(validated_data)
         instance.product = super().update(instance.product, validated_data["product"])
+        if(not "image" in validated_data["product"]):
+            instance.product.image = None
+        instance.product.save()
+            
         instance.save()
         return instance
 

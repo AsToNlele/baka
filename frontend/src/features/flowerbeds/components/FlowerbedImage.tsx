@@ -4,11 +4,11 @@ import { Image } from "@nextui-org/react"
 
 type FlowerbedImageProps = {
     id?: number | null
-    title?: string
+    title?: string | undefined | null
 }
 
 const getFlowerbedImageUrl = (flowerbedId: number | null | undefined) => {
-    const imageId = flowerbedId ?? 0 % 10
+    const imageId = flowerbedId ? flowerbedId % 10 : 0 % 10
     const imageName = `flowerbed-images/flowerbed-${imageId}.jpg`
     return imageUrl(imageName)
 }
