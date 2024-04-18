@@ -1,3 +1,4 @@
+import { FlowerbedImage } from "@/features/flowerbeds/components/FlowerbedImage"
 import { FlowerbedType } from "@/utils/types"
 import { Card, CardBody, CardFooter, Image, Link } from "@nextui-org/react"
 
@@ -25,15 +26,9 @@ const Flowerbed = ({ flowerbed }: { flowerbed: FlowerbedType }) => {
             href={`/app/flowerbeds/${flowerbed.id}`}
         >
             <CardBody className="overflow-visible p-0">
-                <Image
-                    shadow="sm"
-                    radius="lg"
-                    width="100%"
-                    alt={flowerbed.name!}
-                    src={`https://placedog.net/800/600?id=${flowerbed.id!}`}
-                    // src={`https://placekitten.com/400/300?image=${
-                    //     flowerbed.id! % 17
-                    // }`}
+                <FlowerbedImage
+                    id={flowerbed.id}
+                    title={flowerbed.name}
                 />
             </CardBody>
             <CardFooter className="justify-between text-small">
