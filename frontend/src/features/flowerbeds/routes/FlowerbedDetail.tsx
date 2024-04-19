@@ -1,18 +1,14 @@
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { useFlowerbedDetail } from "@/features/flowerbeds/hooks/useFlowerbedDetail"
-import {
-    Button,
-    Card,
-    CardBody,
-    Link,
-    useDisclosure,
-} from "@nextui-org/react"
+import { Button, Card, CardBody, Link, useDisclosure } from "@nextui-org/react"
 import { useParams } from "react-router-dom"
 import { parseIsoAndFormat } from "@/utils/utils"
 import { FaEdit } from "react-icons/fa"
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { EditFlowerbedModal } from "@/features/flowerbeds/components/EditFlowerbedModal"
 import { GreenhouseImage } from "@/features/greenhouses/components/GreenhouseImage"
+import { useUserFlowerbed } from "@/features/flowerbeds/hooks/useUserFlowerbed"
+import { UserFlowerbed } from "@/features/flowerbeds/components/UserFlowerbed"
 
 export const FlowerbedDetail = () => {
     const { id } = useParams()
@@ -31,6 +27,15 @@ export const FlowerbedDetail = () => {
     )
     const isSuperuser = profile?.superuser
     const hasAccess = isCaretaker || isOwner || isSuperuser
+
+    const isRenter = data?.currentRent?.user === profile?.profile?.id
+    console.log(isRenter, data?.currentRent?.user)
+    console.log(data)
+    const isRenterOrSuperuser = isRenter || isSuperuser
+
+    const { data: details } = useUserFlowerbed(
+        isRenterOrSuperuser ? flowerbedId : null,
+    )
 
     return (
         <>
@@ -171,6 +176,11 @@ export const FlowerbedDetail = () => {
                         </div>
                     </CardBody>
                 </Card>
+            </div>
+            <div className="mt-8 flex flex-col flex-wrap gap-2 lg:flex-row">
+                {details && data && (
+                    <UserFlowerbed userFlowerbed={details} flowerbed={data} />
+                )}
             </div>
         </>
     )

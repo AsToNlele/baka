@@ -18,6 +18,13 @@ from greenhouse.models import (
 from rest_framework import serializers
 from users.models import Profile
 
+class SmallProfileSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()
+
+    class Meta:
+        model = Profile
+        fields = ["id", "user"]
+
 class GreenhouseUploadImageSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=True, use_url=False)
 
@@ -281,12 +288,6 @@ class TimesheetWorkingHourSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class SmallProfileSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField()
-
-    class Meta:
-        model = Profile
-        fields = ["id", "user"]
 
 
 class TimesheetItemSerializer(serializers.ModelSerializer):

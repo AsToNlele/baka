@@ -40,6 +40,7 @@ export type FlowerbedDetailResponse = Omit<
     currentRent: {
         rented_from: string
         rented_to: string
+        user: number
     }
 }
 export type FlowerbedStatusResponse =
@@ -118,21 +119,21 @@ export type GreenhouseProductType = components["schemas"]["MarketplaceProduct"]
 export type GreenhouseDetailProductType =
     components["schemas"]["MarketplaceDetailProduct"]
 
-export type CreateSharedProductRequest = Omit<
-    Exclude<
-        paths["/api/marketplace/shared-products/"]["post"]["requestBody"],
-        undefined
-    >["content"]["application/json"],
-    "id" | "shared"
->
+// export type CreateSharedProductRequest = Omit<
+//     Exclude<
+//         paths["/api/marketplace/shared-products/"]["post"]["requestBody"],
+//         undefined
+//     >["content"]["application/json"],
+//     "id" | "shared"
+// >
 
-export type CreateGreenhouseProductFromSharedProductRequest = Omit<
-    Exclude<
-        paths["/api/marketplace/greenhouses/{id}/products/from-shared/"]["post"]["requestBody"],
-        undefined
-    >["content"]["application/json"],
-    "id" | "greenhouse"
->
+// export type CreateGreenhouseProductFromSharedProductRequest = Omit<
+//     Exclude<
+//         paths["/api/marketplace/greenhouses/{id}/products/from-shared/"]["post"]["requestBody"],
+//         undefined
+//     >["content"]["application/json"],
+//     "id" | "greenhouse"
+// >
 
 export type CreateProductOrderType =
     components["schemas"]["CreateProductOrderInput"]
@@ -281,8 +282,29 @@ export type EditSelfRequest = components["schemas"]["EditSelfUser"]
 
 export type SocialPostType = components["schemas"]["SocialPost"]
 
-export type SocialPostListResponse = paths["/api/socialposts/"]["get"]["responses"][200]["content"]["application/json"]
+export type SocialPostListResponse =
+    paths["/api/socialposts/"]["get"]["responses"][200]["content"]["application/json"]
 
 export type SocialPostAppType = components["schemas"]["SocialPostApp"]
 
-export type SocialPostAppListResponse = Array<paths["/api/socialposts/all_posts/"]["get"]["responses"][200]["content"]["application/json"]>
+export type SocialPostAppListResponse = Array<
+    paths["/api/socialposts/all_posts/"]["get"]["responses"][200]["content"]["application/json"]
+>
+
+export type FlowerbedNoteType = Exclude<
+    Exclude<components["schemas"]["UserFlowerbed"], undefined>["notes"],
+    undefined
+>[0]
+
+export type FlowerbedHarvestType = Exclude<
+    Exclude<components["schemas"]["UserFlowerbed"], undefined>["harvests"],
+    undefined
+>[0]
+
+export type UserFlowerbedType = Omit<
+    components["schemas"]["UserFlowerbed"],
+    "harvests" | "notes"
+> & {
+    harvests: FlowerbedHarvestType[]
+    notes: FlowerbedNoteType[]
+}

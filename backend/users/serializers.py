@@ -17,6 +17,12 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = "__all__"
 
+class SmallProfileSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()
+
+    class Meta:
+        model = Profile
+        fields = ["id", "user"]
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     profile = ProfileSerializer(read_only=True)

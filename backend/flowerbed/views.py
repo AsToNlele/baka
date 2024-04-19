@@ -2,21 +2,24 @@ from datetime import date
 
 from django.http import JsonResponse
 from django.utils.dateparse import parse_datetime
-from flowerbed.models import Flowerbed
+from flowerbed.models import Flowerbed, UserFlowerbed
 from flowerbed.serializers import (
     CreateFlowerbedSerializer,
     CreateRentSerializer,
+    EditFlowerbedNoteSerializer,
     EditFlowerbedSerializer,
     FlowerbedSerializer,
     FlowerbedStatusSerializer,
     RentSerializer,
+    UserFlowerbedSerializer,
 )
 from greenhouse.models import Greenhouse
 from orders.models import FlowerbedOrders
 from rest_framework import viewsets
-from rest_framework.decorators import action
+from rest_framework.decorators import action, permission_classes
 from rest_framework.generics import get_object_or_404
 from rest_framework.mixins import Response
+from rest_framework.permissions import IsAuthenticated
 from users.models import Profile
 
 
@@ -213,7 +216,7 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         serializer_class=FlowerbedSerializer,
     )
     def my_flowerbeds(self, request):
-        queryset = Flowerbed.objects.filter(rent__user=request.user.profile).distinct()
+        queryset = Flowerbed.objects.filter(rent__user=request.user.profile, rent__rented_to__gte=date.today(), rent__rented_from__lte=date.today()).distinct()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -266,3 +269,68 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         serializer.save()
 
         return Response(serializer.data)
+
+    @action(
+        detail=True,
+        methods=["get"],
+        name="Get current details",
+        serializer_class=UserFlowerbedSerializer,
+        permission_classes=[IsAuthenticated],
+    )
+    def get_current_details(self, request, pk=None):
+        flowerbed = self.get_object()
+        flowerbedSerializer = FlowerbedSerializer(flowerbed)
+        currentRent = flowerbedSerializer.data.get("currentRent")
+        if not currentRent:
+            return Response({"message": "This flowerbed is not rented"}, status=404)
+        currentRentUser = Profile.objects.get(pk=currentRent.get("user"))
+        if currentRentUser != request.user.profile and not request.user.is_superuser:
+            return Response(
+                {"message": "You are not renting this flowerbed"}, status=403
+            )
+        try:
+            userFlowerbed = flowerbed.userflowerbed_set.get(user=request.user.profile)
+        except UserFlowerbed.DoesNotExist:
+            return Response({"message": "You are not renting this flowerbed"}, status=403)
+        serializer = UserFlowerbedSerializer(userFlowerbed)
+
+        return Response(serializer.data)
+
+    @action(
+        detail=True,
+        methods=["put"],
+        name="Set notes",
+        serializer_class=EditFlowerbedNoteSerializer,
+        permission_classes=[IsAuthenticated],
+    )
+    def set_notes(self, request, pk=None):
+        flowerbed = self.get_object()
+        flowerbedSerializer = FlowerbedSerializer(flowerbed)
+        currentRent = flowerbedSerializer.data.get("currentRent")
+        if not currentRent:
+            return Response({"message": "This flowerbed is not rented"}, status=404)
+        currentRentUser = Profile.objects.get(pk=currentRent.get("user"))
+        if currentRentUser != request.user.profile and not request.user.is_superuser:
+            return Response(
+                {"message": "You are not renting this flowerbed"}, status=403
+            )
+        try:
+            userFlowerbed = flowerbed.userflowerbed_set.get(user=request.user.profile)
+            xd = 1
+        except UserFlowerbed.DoesNotExist:
+            return Response({"message": "You are not renting this flowerbed"}, status=403)
+
+
+        serializer = EditFlowerbedNoteSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.update(userFlowerbed, serializer.validated_data)
+
+        print("OK")
+
+        userFlowerbed.refresh_from_db()
+        userFlowerbedSerializer = UserFlowerbedSerializer(userFlowerbed)
+        
+        return Response(userFlowerbedSerializer.data)
+
+    
+

@@ -1,11 +1,24 @@
 from datetime import datetime
 
-from flowerbed.models import Flowerbed, Rent
+from flowerbed.models import (
+    Flowerbed,
+    FlowerbedHarvest,
+    FlowerbedNote,
+    Rent,
+    UserFlowerbed,
+)
 from greenhouse.models import Greenhouse, GreenhouseAddress
 from orders.serializers import FlowerbedOrderSerializer
 from rest_framework import serializers
+from users.models import Profile
 
-# from greenhouse.serializers import GreenhouseAddressSerializer
+
+class SmallProfileSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()
+
+    class Meta:
+        model = Profile
+        fields = ["id", "user"]
 
 
 class FlowerbedStatusSerializer(serializers.Serializer):
@@ -148,3 +161,52 @@ class EditFlowerbedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Flowerbed
         fields = "__all__"
+
+
+class FlowerbedHarvestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FlowerbedHarvest
+        fields = "__all__"
+
+
+class FlowerbedNoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FlowerbedNote
+        fields = "__all__"
+
+
+class UserFlowerbedSerializer(serializers.ModelSerializer):
+    # flowerbed = FlowerbedSerializer(read_only=True)
+    user = SmallProfileSerializer(read_only=True)
+    harvests = FlowerbedHarvestSerializer(
+        source="flowerbedharvest_set", many=True, read_only=True
+    )
+    notes = FlowerbedNoteSerializer(
+        source="flowerbednote_set", many=True, read_only=True
+    )
+
+    class Meta:
+        model = UserFlowerbed
+        fields = "__all__"
+
+
+class EditFlowerbedNoteSerializer(serializers.ModelSerializer):
+    notes = FlowerbedNoteSerializer(source="flowerbednote_set", many=True)
+
+    def update(self, instance, validated_data):
+        instance.flowerbednote_set.all().delete()
+        if "flowerbednote_set" in validated_data:
+            for note in validated_data.get("flowerbednote_set"):
+                note.pop("id", None)
+                noteInstance = FlowerbedNote.objects.create(
+                    **note, user_flowerbed=instance
+                )
+                print(noteInstance)
+                noteInstance.save()
+        instance.refresh_from_db()
+
+        return instance
+
+    class Meta:
+        model = UserFlowerbed
+        fields = ["notes"]

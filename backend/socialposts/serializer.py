@@ -1,6 +1,6 @@
-from greenhouse.serializers import SmallProfileSerializer
 from rest_framework import serializers
 from socialposts.models import SocialPost
+from users.serializers import SmallProfileSerializer
 
 
 class SocialPostSerializer(serializers.ModelSerializer):

@@ -34,6 +34,9 @@ export interface paths {
     delete: operations["destroyFlowerbed"];
     patch: operations["partialUpdateFlowerbed"];
   };
+  "/api/flowerbeds/{id}/get_current_details/": {
+    get: operations["getCurrentDetailsFlowerbed"];
+  };
   "/api/flowerbeds/{id}/status/": {
     get: operations["statusFlowerbed"];
   };
@@ -241,6 +244,9 @@ export interface paths {
   "/api/flowerbeds/{id}/extend_rent/": {
     put: operations["extendRentFlowerbed"];
   };
+  "/api/flowerbeds/{id}/set_notes/": {
+    put: operations["setNotesFlowerbed"];
+  };
   "/api/orders/{id}/cancel_order/": {
     put: operations["cancelOrderOrder"];
   };
@@ -413,6 +419,29 @@ export interface components {
       tools?: string | null;
       /** Format: decimal */
       pricePerDay?: string;
+    };
+    UserFlowerbed: {
+      id?: number;
+      user?: {
+        readonly id?: number;
+        readonly user?: string;
+      };
+      harvests?: readonly ({
+          id?: number;
+          name?: string | null;
+          quantity?: number | null;
+          /** Format: date-time */
+          date?: string | null;
+          user_flowerbed?: number | null;
+        })[];
+      notes?: readonly ({
+          id?: number;
+          note?: string | null;
+          /** Format: date-time */
+          date?: string | null;
+          user_flowerbed?: number | null;
+        })[];
+      flowerbed?: number | null;
     };
     FlowerbedStatus: {
       /** @enum {string} */
@@ -678,9 +707,10 @@ export interface components {
     };
     Product: {
       id?: number;
+      /** Format: binary */
+      image?: string;
       name?: string;
       description?: string | null;
-      image?: string | null;
       shared?: boolean;
     };
     ProductDetailMarketplaceProduct: {
@@ -723,6 +753,7 @@ export interface components {
       id?: number;
       name?: string;
       description?: string | null;
+      /** Format: binary */
       image?: string | null;
       shared?: boolean;
     };
@@ -730,9 +761,10 @@ export interface components {
       id?: number;
       product: {
         id?: number;
+        /** Format: binary */
+        image?: string;
         name?: string;
         description?: string | null;
-        image?: string | null;
         shared?: boolean;
       };
       /** Format: decimal */
@@ -748,9 +780,10 @@ export interface components {
       id?: number;
       product: {
         id?: number;
+        /** Format: binary */
+        image?: string;
         name?: string;
         description?: string | null;
-        image?: string | null;
         shared?: boolean;
       };
       greenhouse: {
@@ -883,9 +916,10 @@ export interface components {
     CreateGreenhouseProductFromCustomProduct: {
       product: {
         id?: number;
+        /** Format: binary */
+        image?: string;
         name?: string;
         description?: string | null;
-        image?: string | null;
         shared?: boolean;
       };
       /** Format: decimal */
@@ -942,6 +976,15 @@ export interface components {
       owner: number;
     };
     Empty: Record<string, never>;
+    EditFlowerbedNote: {
+      notes: ({
+          id?: number;
+          note?: string | null;
+          /** Format: date-time */
+          date?: string | null;
+          user_flowerbed?: number | null;
+        })[];
+    };
     EditOrder: {
       status?: string | null;
       /** Format: decimal */
@@ -979,9 +1022,10 @@ export interface components {
       id?: number;
       product: {
         id?: number;
+        /** Format: binary */
+        image?: string;
         name?: string;
         description?: string | null;
-        image?: string | null;
         shared?: boolean;
       };
       /** Format: decimal */
@@ -1239,6 +1283,21 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["Flowerbed"];
+        };
+      };
+    };
+  };
+  getCurrentDetailsFlowerbed: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this flowerbed. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserFlowerbed"];
         };
       };
     };
@@ -1761,9 +1820,8 @@ export interface operations {
   createSharedProduct: {
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["SharedProduct"];
-        "application/x-www-form-urlencoded": components["schemas"]["SharedProduct"];
         "multipart/form-data": components["schemas"]["SharedProduct"];
+        "application/x-www-form-urlencoded": components["schemas"]["SharedProduct"];
       };
     };
     responses: {
@@ -1798,9 +1856,8 @@ export interface operations {
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["SharedProduct"];
-        "application/x-www-form-urlencoded": components["schemas"]["SharedProduct"];
         "multipart/form-data": components["schemas"]["SharedProduct"];
+        "application/x-www-form-urlencoded": components["schemas"]["SharedProduct"];
       };
     };
     responses: {
@@ -1833,9 +1890,8 @@ export interface operations {
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["SharedProduct"];
-        "application/x-www-form-urlencoded": components["schemas"]["SharedProduct"];
         "multipart/form-data": components["schemas"]["SharedProduct"];
+        "application/x-www-form-urlencoded": components["schemas"]["SharedProduct"];
       };
     };
     responses: {
@@ -2218,9 +2274,8 @@ export interface operations {
     };
     requestBody?: {
       content: {
-        "application/json": components["schemas"]["CreateGreenhouseProductFromCustomProduct"];
-        "application/x-www-form-urlencoded": components["schemas"]["CreateGreenhouseProductFromCustomProduct"];
         "multipart/form-data": components["schemas"]["CreateGreenhouseProductFromCustomProduct"];
+        "application/x-www-form-urlencoded": components["schemas"]["CreateGreenhouseProductFromCustomProduct"];
       };
     };
     responses: {
@@ -2439,6 +2494,28 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["CreateRent"];
+        };
+      };
+    };
+  };
+  setNotesFlowerbed: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this flowerbed. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["EditFlowerbedNote"];
+        "application/x-www-form-urlencoded": components["schemas"]["EditFlowerbedNote"];
+        "multipart/form-data": components["schemas"]["EditFlowerbedNote"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["EditFlowerbedNote"];
         };
       };
     };

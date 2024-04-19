@@ -1,6 +1,5 @@
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { FlowerbedImage } from "@/features/flowerbeds/components/FlowerbedImage"
-import { useIsAdmin } from "@/hooks/isAdmin"
 import { FlowerbedType, GreenhouseType } from "@/utils/types"
 import { Card, CardBody, CardFooter, Link } from "@nextui-org/react"
 
@@ -59,9 +58,6 @@ export const FlowerbedList = ({
     }
 
     let filteredFlowerbeds = flowerbeds
-
-    console.log(user.data)
-    console.log(userIsAdminOrOwnerOrCareTaker())
 
     // filter out disabled flowerbeds
     if ((greenhouse && !user) || !userIsAdminOrOwnerOrCareTaker()) {
