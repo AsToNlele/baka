@@ -13,13 +13,13 @@ export const UserFlowerbed = ({
 }: UserFlowerbedProps) => {
     return (
         <>
-            <div className="flex-1">
+            <div className="col-span-2 xl:col-span-1">
                 <Diary
                     notes={userFlowerbed.notes}
                     flowerbedId={flowerbed.id!}
                 />
             </div>
-            <div className="flex-1">
+            <div className="col-span-2 xl:col-span-1">
                 <Harvest
                     harvests={userFlowerbed.harvests}
                     flowerbedId={flowerbed.id!}

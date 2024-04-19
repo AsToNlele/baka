@@ -58,9 +58,8 @@ export const FlowerbedDetail = () => {
                     </>
                 )}
             </div>
-
-            <div className="mt-8 flex flex-col flex-wrap gap-2 sm:flex-row">
-                <div className="grid flex-1 auto-rows-max grid-cols-2 gap-8 sm:grid-cols-2">
+            <div className="mt-8 grid grid-cols-2 gap-4">
+                <div className="col-span-2 grid flex-1 auto-rows-max grid-cols-2 gap-8 sm:grid-cols-2 md:col-span-1">
                     <div className="">
                         {!data ? (
                             <div></div>
@@ -129,7 +128,7 @@ export const FlowerbedDetail = () => {
                         <p>{data?.tools}</p>
                     </div>
                 </div>
-                <Card className="flex-1">
+                <Card className="col-span-2 flex-1 md:col-span-1">
                     <CardBody className="flex flex-wrap items-center gap-2 lg:flex-row">
                         <div className="flex w-full flex-1 flex-col justify-around gap-2 sm:flex-row lg:flex-col xl:justify-start">
                             <div className="">
@@ -176,8 +175,6 @@ export const FlowerbedDetail = () => {
                         </div>
                     </CardBody>
                 </Card>
-            </div>
-            <div className="mt-8 flex flex-col flex-wrap gap-8 lg:flex-row lg:gap-4">
                 {details && data && (
                     <UserFlowerbed userFlowerbed={details} flowerbed={data} />
                 )}

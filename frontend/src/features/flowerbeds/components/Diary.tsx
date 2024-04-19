@@ -96,7 +96,7 @@ export const Diary = ({ notes, flowerbedId }: DiaryProps) => {
     }
 
     return (
-        <div className="flex size-full h-full max-h-80 min-h-80 flex-col gap-2">
+        <div className="flex size-full h-full max-h-80 min-h-80 flex-col">
             <h1 className="mb-2 text-lg font-semibold">Diary</h1>
             <Card
                 classNames={{
@@ -105,7 +105,7 @@ export const Diary = ({ notes, flowerbedId }: DiaryProps) => {
             >
                 <CardBody className="h-full">
                     {" "}
-                    <div className="flex size-full gap-1">
+                    <div className="flex size-full flex-1 gap-1">
                         <div>
                             <ScrollShadow className="max-h-56">
                                 <Listbox
@@ -141,14 +141,23 @@ export const Diary = ({ notes, flowerbedId }: DiaryProps) => {
                             </div>
                         </div>
                         <div className="mt-2 flex flex-1 flex-col gap-2">
-                            <Textarea
-                                placeholder="Write a note..."
-                                className="h-full"
-                                value={selectedNoteObj?.note ?? ""}
-                                onValueChange={(value) => {
-                                    changeNote(selectedNoteId, value)
-                                }}
-                            />
+                            <div className="h-full flex-1">
+                                <Textarea
+                                    classNames={{
+                                        base:
+                                            "h-full flex-1",
+                                        inputWrapper:
+                                            "h-full flex-1",
+                                    
+                                    }}
+                                    className="size-full"
+                                    placeholder="Write a note..."
+                                    value={selectedNoteObj?.note ?? ""}
+                                    onValueChange={(value) => {
+                                        changeNote(selectedNoteId, value)
+                                    }}
+                                />
+                            </div>
                             <div className="flex justify-around gap-8">
                                 <Button
                                     color="secondary"
