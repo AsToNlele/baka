@@ -96,11 +96,16 @@ export const Diary = ({ notes, flowerbedId }: DiaryProps) => {
     }
 
     return (
-        <div className="max-h-80 min-h-80 w-full">
+        <div className="flex size-full h-full max-h-80 min-h-80 flex-col gap-2">
             <h1 className="mb-2 text-lg font-semibold">Diary</h1>
-            <Card>
-                <CardBody>
-                    <div className="flex w-full gap-1">
+            <Card
+                classNames={{
+                    base: "h-full flex-1",
+                }}
+            >
+                <CardBody className="h-full">
+                    {" "}
+                    <div className="flex size-full gap-1">
                         <div>
                             <ScrollShadow className="max-h-56">
                                 <Listbox

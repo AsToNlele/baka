@@ -210,3 +210,24 @@ class EditFlowerbedNoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserFlowerbed
         fields = ["notes"]
+
+
+class EditFlowerbedHarvestSerializer(serializers.ModelSerializer):
+    harvests = FlowerbedHarvestSerializer(source="flowerbedharvest_set", many=True)
+
+    def update(self, instance, validated_data):
+        instance.flowerbedharvest_set.all().delete()
+        if "flowerbedharvest_set" in validated_data:
+            for harvest in validated_data.get("flowerbedharvest_set"):
+                harvest.pop("id", None)
+                harvestInstance = FlowerbedHarvest.objects.create(
+                    **harvest, user_flowerbed=instance
+                )
+                harvestInstance.save()
+        instance.refresh_from_db()
+
+        return instance
+
+    class Meta:
+        model = UserFlowerbed
+        fields = ["harvests"]

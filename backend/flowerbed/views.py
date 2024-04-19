@@ -6,6 +6,7 @@ from flowerbed.models import Flowerbed, UserFlowerbed
 from flowerbed.serializers import (
     CreateFlowerbedSerializer,
     CreateRentSerializer,
+    EditFlowerbedHarvestSerializer,
     EditFlowerbedNoteSerializer,
     EditFlowerbedSerializer,
     FlowerbedSerializer,
@@ -322,7 +323,6 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
             )
         try:
             userFlowerbed = flowerbed.userflowerbed_set.get(user=request.user.profile)
-            xd = 1
         except UserFlowerbed.DoesNotExist:
             return Response(
                 {"message": "You are not renting this flowerbed"}, status=403
@@ -332,7 +332,40 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.update(userFlowerbed, serializer.validated_data)
 
-        print("OK")
+        userFlowerbed.refresh_from_db()
+        userFlowerbedSerializer = UserFlowerbedSerializer(userFlowerbed)
+
+        return Response(userFlowerbedSerializer.data)
+
+    # Set Harvest
+    @action(
+        detail=True,
+        methods=["put"],
+        name="Set harvests",
+        serializer_class=EditFlowerbedNoteSerializer,
+        permission_classes=[IsAuthenticated],
+    )
+    def set_harvests(self, request, pk=None):
+        flowerbed = self.get_object()
+        flowerbedSerializer = FlowerbedSerializer(flowerbed)
+        currentRent = flowerbedSerializer.data.get("currentRent")
+        if not currentRent:
+            return Response({"message": "This flowerbed is not rented"}, status=404)
+        currentRentUser = Profile.objects.get(pk=currentRent.get("user"))
+        if currentRentUser != request.user.profile and not request.user.is_superuser:
+            return Response(
+                {"message": "You are not renting this flowerbed"}, status=403
+            )
+        try:
+            userFlowerbed = flowerbed.userflowerbed_set.get(user=request.user.profile)
+        except UserFlowerbed.DoesNotExist:
+            return Response(
+                {"message": "You are not renting this flowerbed"}, status=403
+            )
+
+        serializer = EditFlowerbedHarvestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.update(userFlowerbed, serializer.validated_data)
 
         userFlowerbed.refresh_from_db()
         userFlowerbedSerializer = UserFlowerbedSerializer(userFlowerbed)

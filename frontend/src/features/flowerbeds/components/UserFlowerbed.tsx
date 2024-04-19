@@ -1,4 +1,5 @@
 import { Diary } from "@/features/flowerbeds/components/Diary"
+import { Harvest } from "@/features/flowerbeds/components/Harvest"
 import { FlowerbedDetailResponse, UserFlowerbedType } from "@/utils/types"
 
 type UserFlowerbedProps = {
@@ -18,7 +19,12 @@ export const UserFlowerbed = ({
                     flowerbedId={flowerbed.id!}
                 />
             </div>
-            <div className="flex-1"></div>
+            <div className="flex-1">
+                <Harvest
+                    harvests={userFlowerbed.harvests}
+                    flowerbedId={flowerbed.id!}
+                />
+            </div>
         </>
     )
 }

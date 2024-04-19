@@ -12,6 +12,9 @@ export const parseIsoAndFormat = (date: string) => formatDate(parseISO(date))
 export const parseIsoAndFormatDateTime = (date: string) =>
     formatDateTime(parseISO(date))
 
+export const parseIsoAndFormatInputDate = (date: string) =>
+    format(parseISO(date), "yyyy-MM-dd")
+
 export const upperCaseFirstLetter = (string : string) => {
     const altString = string ?? "  "
     return altString.charAt(0).toUpperCase() + altString.slice(1)

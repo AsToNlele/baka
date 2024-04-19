@@ -177,7 +177,7 @@ export const FlowerbedDetail = () => {
                     </CardBody>
                 </Card>
             </div>
-            <div className="mt-8 flex flex-col flex-wrap gap-2 lg:flex-row">
+            <div className="mt-8 flex flex-col flex-wrap gap-8 lg:flex-row lg:gap-4">
                 {details && data && (
                     <UserFlowerbed userFlowerbed={details} flowerbed={data} />
                 )}
