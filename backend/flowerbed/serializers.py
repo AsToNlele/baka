@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 
 from flowerbed.models import (
     Flowerbed,
@@ -133,7 +133,7 @@ class FlowerbedSerializer(serializers.ModelSerializer):
 
     def get_currentRent(self, obj):
         currentRent = obj.rent_set.filter(
-            rented_from__lte=datetime.now(), rented_to__gte=datetime.now()
+            rented_from__lte=date.today(), rented_to__gte=date.today()
         ).first()
         return RentSerializer(currentRent).data if currentRent else None
 

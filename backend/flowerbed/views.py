@@ -216,7 +216,11 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         serializer_class=FlowerbedSerializer,
     )
     def my_flowerbeds(self, request):
-        queryset = Flowerbed.objects.filter(rent__user=request.user.profile, rent__rented_to__gte=date.today(), rent__rented_from__lte=date.today()).distinct()
+        queryset = Flowerbed.objects.filter(
+            rent__user=request.user.profile,
+            rent__rented_to__gte=date.today(),
+            rent__rented_from__lte=date.today(),
+        ).distinct()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -291,7 +295,9 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         try:
             userFlowerbed = flowerbed.userflowerbed_set.get(user=request.user.profile)
         except UserFlowerbed.DoesNotExist:
-            return Response({"message": "You are not renting this flowerbed"}, status=403)
+            userFlowerbed = UserFlowerbed.objects.create(
+                user=request.user.profile, flowerbed=flowerbed
+            )
         serializer = UserFlowerbedSerializer(userFlowerbed)
 
         return Response(serializer.data)
@@ -318,8 +324,9 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
             userFlowerbed = flowerbed.userflowerbed_set.get(user=request.user.profile)
             xd = 1
         except UserFlowerbed.DoesNotExist:
-            return Response({"message": "You are not renting this flowerbed"}, status=403)
-
+            return Response(
+                {"message": "You are not renting this flowerbed"}, status=403
+            )
 
         serializer = EditFlowerbedNoteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -329,8 +336,5 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
 
         userFlowerbed.refresh_from_db()
         userFlowerbedSerializer = UserFlowerbedSerializer(userFlowerbed)
-        
+
         return Response(userFlowerbedSerializer.data)
-
-    
-

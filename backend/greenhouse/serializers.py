@@ -68,7 +68,7 @@ class GreenhouseSerializer(serializers.ModelSerializer):
         availableCount = 0
         for flowerbed in flowerbeds:
             currentRent = flowerbed.rent_set.filter(
-                rented_from__lte=datetime.now(), rented_to__gte=datetime.now()
+                rented_from__lte=date.today(), rented_to__gte=date.today()
             ).first()
             if currentRent is None:
                 availableCount += 1
