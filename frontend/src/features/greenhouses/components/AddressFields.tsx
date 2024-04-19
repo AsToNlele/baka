@@ -134,17 +134,21 @@ export const MapWithGeolocation = ({
                 longitude: "0",
             }}
             render={({ field }) => {
-                console.log(
-                    parseFloat(data?.greenhouse_address?.latitude ?? "0") ?? 0,
-                )
-                const initialPosition = new LatLng(
-                    parseFloat(
-                        data?.greenhouse_address?.latitude?.toString() ?? "0",
-                    ) ?? 0,
-                    parseFloat(
-                        data?.greenhouse_address?.longitude?.toString() ?? "0",
-                    ) ?? 0,
-                )
+                const latitude =
+                    data.greenhouse_address.latitude === ""
+                        ? 49.1951
+                        : parseFloat(
+                              data?.greenhouse_address?.latitude?.toString() ??
+                                  "49.1951",
+                          )
+                const longitude =
+                    data.greenhouse_address.longitude === ""
+                        ? 16.6068
+                        : parseFloat(
+                              data?.greenhouse_address?.longitude?.toString() ??
+                                  "16.6068",
+                          )
+                const initialPosition = new LatLng(latitude, longitude)
                 return (
                     <>
                         <Input
@@ -192,9 +196,7 @@ const ControllableMap = ({
 
     const onMove = useCallback(() => {
         if (map && markerRef.current) {
-            console.log("PRE")
             const position = map.getCenter()
-            console.log("POS",position)
             field.onChange({
                 ...field.value,
                 latitude: position.lat,
@@ -215,7 +217,6 @@ const ControllableMap = ({
             parseFloat(field.value.longitude?.toString() ?? "0") ?? 0,
         ])
     }, [field.value.latitude, field.value.longitude])
-
 
     const displayMap = useMemo(
         () => (
