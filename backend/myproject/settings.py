@@ -44,7 +44,7 @@ print("DB_HOST", DB_HOST)
 print("DEBUG", DEBUG)
 print("PROD", PROD)
 
-ALLOWED_HOSTS = ["baka.docker", "localhost"]
+ALLOWED_HOSTS = ["baka.docker", "localhost", "baka.aston.dev"]
 
 
 # Application definition
@@ -183,6 +183,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8080",
     "http://baka.docker",
     "http://localhost",
+    "https://baka.aston.dev"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -194,6 +195,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:8080",
     "http://baka.docker",
     "http://localhost",
+    "https://baka.aston.dev"
 ]
 
 if PROD:
