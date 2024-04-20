@@ -27,11 +27,15 @@ import {
     useDisclosure,
     Chip,
     Link,
+    Image,
 } from "@nextui-org/react"
 import { Key, useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { FaEdit, FaTrash } from "react-icons/fa"
 import { toast } from "sonner"
+import tutorial0 from "../images/tutorial-0.jpg"
+import tutorial1 from "../images/tutorial-1.jpg"
+import tutorial2 from "../images/tutorial-2.jpg"
 
 export const SocialPosts = () => {
     const [selected, setSelected] = useState("send")
@@ -280,6 +284,25 @@ const CreateSocialPost = ({ setTab }: { setTab: (key: string) => void }) => {
 
     return (
         <div>
+            <div className="mb-4 flex flex-col gap-8">
+                <h1 className="text-xl font-semibold">How it works</h1>
+                <div>
+                    <p className="text-lg">1. Make sure your account is public</p>
+                    <p>This can be found in Settings &gt; Privacy</p>
+                    <Image src={tutorial0} />
+                </div>
+                <div className="flex flex-col gap-2">
+                    <p className="text-lg">2. Open your Instagram post and click share</p>
+                    <Image src={tutorial1} />
+                </div>
+                <div className="flex flex-col gap-2">
+                    <p className="text-lg">3. Click copy link</p>
+                    <Image src={tutorial2} />
+                </div>
+                <div>
+                    <p className="text-lg">4. Paste link below, submit and wait for approval</p>
+                </div>
+            </div>
             <form
                 onSubmit={(e) => {
                     e.preventDefault()
@@ -289,8 +312,9 @@ const CreateSocialPost = ({ setTab }: { setTab: (key: string) => void }) => {
             >
                 <Input
                     type="text"
-                    label="Url"
+                    label="Instagram Image Link"
                     {...register("url")}
+                    placeholder="https://www.instagram.com/p/...."
                     errorMessage={formState?.errors?.url?.message}
                 />
                 <Input
