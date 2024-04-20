@@ -231,3 +231,16 @@ class EditFlowerbedHarvestSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserFlowerbed
         fields = ["harvests"]
+
+class FlowerbedLocalHarvestSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FlowerbedHarvest
+        fields = ["name", "quantity"]
+
+class FlowerbedSavingsSerializer(serializers.Serializer):
+    harvests = FlowerbedLocalHarvestSerializer(source="flowerbedharvest_set", many=True)
+    
+    class Meta:
+        model = UserFlowerbed
+        fields = ["harvests"]

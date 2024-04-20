@@ -1,5 +1,6 @@
 import { Diary } from "@/features/flowerbeds/components/Diary"
 import { Harvest } from "@/features/flowerbeds/components/Harvest"
+import { Stats } from "@/features/flowerbeds/components/Stats"
 import { FlowerbedDetailResponse, UserFlowerbedType } from "@/utils/types"
 
 type UserFlowerbedProps = {
@@ -24,6 +25,9 @@ export const UserFlowerbed = ({
                     harvests={userFlowerbed.harvests}
                     flowerbedId={flowerbed.id!}
                 />
+            </div>
+            <div className="col-span-2 xl:col-span-1">
+                <Stats />
             </div>
         </>
     )

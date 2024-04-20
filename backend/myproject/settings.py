@@ -20,7 +20,6 @@ load_dotenv()
 import django_filters.rest_framework
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -33,6 +32,17 @@ SECRET_KEY = "django-insecure-aam1o7u%1@+=jlz3-l=2ns_elblq!n!^6$8e7ix^jby(2#!4i9
 PROD = os.environ.get("PROD", False)
 DEBUG = not PROD
 DB_HOST = os.environ.get("DB_HOST", "localhost")
+
+if PROD:
+    BASE_DIR = Path(__file__).resolve().parent
+else:
+    BASE_DIR = Path(__file__).resolve().parent.parent
+
+print("BASE_DIR", BASE_DIR)
+
+print("DB_HOST", DB_HOST)
+print("DEBUG", DEBUG)
+print("PROD", PROD)
 
 ALLOWED_HOSTS = ["baka.docker", "localhost"]
 
@@ -146,6 +156,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
+# STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "backend/static")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -185,8 +196,14 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost",
 ]
 
-CELERY_BROKER_URL = "redis://localhost:6379"
-CELERY_RESULT_BACKEND = "redis://localhost:6379"
+if PROD:
+    CELERY_BROKER_URL = "redis://redis:6379"
+    CELERY_RESULT_BACKEND = "redis://redis:6379"
+else:
+    CELERY_BROKER_URL = "redis://localhost:6379"
+    CELERY_RESULT_BACKEND = "redis://localhost:6379"
+    
+    
 CELERY_TIMEZONE = TIME_ZONE
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -214,6 +231,12 @@ TEMPLATES = [
         },
     },
 ]
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "backend/media")
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+STATIC_URL = "/static/"
 
 MEDIA_URL = "/media/"
+
+print("BASE_DIR", BASE_DIR)
+print("STATIC_ROOT", STATIC_ROOT)
+print("MEDIA_ROOT", MEDIA_ROOT)

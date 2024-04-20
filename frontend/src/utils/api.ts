@@ -2,7 +2,7 @@ import axios from "axios"
 import Cookies from "js-cookie"
 
 export const api = axios.create({
-    baseURL: "http://baka.docker/api",
+    baseURL: "/api",
     headers: {
         "Content-Type": "application/json",
         Accept: "application/json",

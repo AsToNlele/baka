@@ -12,7 +12,8 @@ load_dotenv()
 
 BANK_TOKEN = os.getenv("BANK_TOKEN")
 
-app = Celery("tasks", broker="redis://localhost")
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
+app = Celery("tasks", broker=CELERY_BROKER_URL)
 
 
 @app.task

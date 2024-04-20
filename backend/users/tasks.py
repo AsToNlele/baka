@@ -15,7 +15,9 @@ USER_ACTIVATION_TOKEN = os.getenv("USER_ACTIVATION_TOKEN")
 
 DEPLOYED_URL = os.getenv("DEPLOYED_URL")
 
-app = Celery("tasks", broker="redis://localhost")
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
+app = Celery("tasks", broker=CELERY_BROKER_URL)
+
 
 
 @app.task

@@ -65,6 +65,6 @@ export const imageUrl = (image: string | undefined) => {
         return ""
     }
     const origin = window.location.origin
-    return `${origin}/api/media/${image}`
+    return `${origin}/media/${image}`
 }
     

@@ -9,12 +9,14 @@ from flowerbed.serializers import (
     EditFlowerbedHarvestSerializer,
     EditFlowerbedNoteSerializer,
     EditFlowerbedSerializer,
+    FlowerbedSavingsSerializer,
     FlowerbedSerializer,
     FlowerbedStatusSerializer,
     RentSerializer,
     UserFlowerbedSerializer,
 )
 from greenhouse.models import Greenhouse
+from greenhouse.serializers import EmptySerializer
 from orders.models import FlowerbedOrders
 from rest_framework import viewsets
 from rest_framework.decorators import action, permission_classes
@@ -342,7 +344,7 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         detail=True,
         methods=["put"],
         name="Set harvests",
-        serializer_class=EditFlowerbedNoteSerializer,
+        serializer_class=EditFlowerbedHarvestSerializer,
         permission_classes=[IsAuthenticated],
     )
     def set_harvests(self, request, pk=None):
@@ -371,3 +373,38 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         userFlowerbedSerializer = UserFlowerbedSerializer(userFlowerbed)
 
         return Response(userFlowerbedSerializer.data)
+
+    # Get Savings
+    @action(
+        detail=True,
+        methods=["post"],
+        name="Get savings",
+        serializer_class=FlowerbedSavingsSerializer,
+        permission_classes=[IsAuthenticated],
+    )
+    def get_savings(self, request, pk=None):
+        flowerbed = self.get_object()
+        flowerbedSerializer = FlowerbedSerializer(flowerbed)
+        currentRent = flowerbedSerializer.data.get("currentRent")
+        if not currentRent:
+            return Response({"message": "This flowerbed is not rented"}, status=404)
+        currentRentUser = Profile.objects.get(pk=currentRent.get("user"))
+        if currentRentUser != request.user.profile and not request.user.is_superuser:
+            return Response(
+                {"message": "You are not renting this flowerbed"}, status=403
+            )
+        try:
+            userFlowerbed = flowerbed.userflowerbed_set.get(user=request.user.profile)
+        except UserFlowerbed.DoesNotExist:
+            return Response(
+                {"message": "You are not renting this flowerbed"}, status=403
+            )
+
+        serializer = FlowerbedSavingsSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        localHarvests = serializer.data.get("harvests")
+
+        # for harvest in localHarvests:
+
+        return Response(serializer.data)

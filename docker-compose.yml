@@ -1,19 +1,42 @@
 # docker-compose.yml
 
-version: '3.8'
-
 services:
   backend:
     build: ./backend
     volumes:
-      - ./backend:/usr/src/app
+      - backendshare:/usr/src/app
     expose:
       - 8000
     depends_on:
       - db
     environment:
-    PROD: 'True'
-    DB_HOST: 'db'
+      - PROD='True'
+      - DB_HOST=db
+    # command: tail -F /dev/null
+
+  # celerybeat:
+  #   build: ./backend
+  #   command: celery -A myproject beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+  #   volumes:
+  #       - backendshare:/usr/src/app
+  #   depends_on:
+  #       - backend
+  #       - redis
+  #   environment:
+  #     - PROD='True'
+  #     - DB_HOST=db
+
+  # celeryworker:
+  #   build: ./backend
+  #   command: celery -A myproject worker --loglevel=INFO
+  #   volumes:
+  #       - backendshare:/usr/src/app
+  #   depends_on:
+  #       - backend
+  #       - redis
+  #       - celerybeat
+  #   environment:
+  #     - PROD='True'
 
   frontend:
     # stdin_open: true
@@ -32,12 +55,13 @@ services:
         - ENV=prod
     volumes:
       - frontendshare:/app/static
+      - backendshare:/backend
       # - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - 80:8080
     depends_on:
       - backend
-      - frontend
+      # - frontend
 
   db:
     image: postgres:16.0-alpine
@@ -45,11 +69,17 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-    ports:
-      - '5432:5432'
+    # ports:
+    #   - '5432:5432'
     volumes:
       - db:/var/lib/postgresql/data
+
+  redis:
+    image: redis:alpine
+    # ports:
+      # - '6379:6379'
 
 volumes:
   frontendshare:
   db:
+  backendshare:

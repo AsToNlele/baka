@@ -18,5 +18,8 @@ RUN pip install -r requirements.txt
 # add app
 COPY . .
 
+RUN chmod +x ./docker-start.sh
+
 # start app
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["sh","/usr/src/app/docker-start.sh"]
+# CMD ["bash"]

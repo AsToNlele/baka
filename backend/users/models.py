@@ -8,12 +8,6 @@ from django.utils.crypto import get_random_string
 
 # from greenhouse.models import Greenhouse
 
-def generate32():
-    while True:
-        randomString = get_random_string(length=32)
-        if not Profile.objects.filter(unsubscribe_token=randomString).exists():
-            return randomString
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     primary_greenhouseId = models.IntegerField(null=True, blank=True)

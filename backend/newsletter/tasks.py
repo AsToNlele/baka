@@ -12,7 +12,10 @@ load_dotenv()
 EMAIL_UNSUBSCRIBE_TOKEN = os.getenv("EMAIL_UNSUBSCRIBE_TOKEN")
 DEPLOYED_URL = os.getenv("DEPLOYED_URL")
 
-app = Celery("tasks", broker="redis://localhost")
+
+# PROD = os.environ.get("PROD", False)
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
+app = Celery("tasks", broker=CELERY_BROKER_URL)
 
 
 @app.task
