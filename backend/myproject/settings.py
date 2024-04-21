@@ -40,7 +40,7 @@ DB_HOST = os.environ.get("DB_HOST", "localhost")
 if PROD:
     BASE_DIR = Path(__file__).resolve().parent
 else:
-    BASE_DIR = Path(__file__).resolve().parent.parent
+    BASE_DIR = Path(__file__).resolve().parent
 
 print("BASE_DIR", BASE_DIR)
 

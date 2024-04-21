@@ -17,8 +17,9 @@ services:
       context: ./nginx
       args:
         - ENV=dev
-    # volumes:
-    #   - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    volumes:
+      - ./backend/media:/backend/media
+      - ./backend/static:/backend/static
     ports:
       - 80:8080
       # depends_on:
