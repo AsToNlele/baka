@@ -33,9 +33,9 @@ PROD = os.environ.get("PROD", False)
 DEBUG = not PROD
 DB_HOST = os.environ.get("DB_HOST", "localhost")
 
-if PROD:
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SECURE_SSL_REDIRECT = True
+# if PROD:
+#     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#     SECURE_SSL_REDIRECT = True
 
 if PROD:
     BASE_DIR = Path(__file__).resolve().parent

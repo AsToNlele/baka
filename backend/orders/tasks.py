@@ -7,12 +7,13 @@ from celery import Celery
 from dotenv import load_dotenv
 from orders.models import Order
 from rest_framework.compat import requests
+from django.conf import settings
 
 load_dotenv()
 
 BANK_TOKEN = os.getenv("BANK_TOKEN")
 
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
+CELERY_BROKER_URL = settings.CELERY_BROKER_URL
 app = Celery("tasks", broker=CELERY_BROKER_URL)
 
 

@@ -19,6 +19,7 @@ RUN pip install -r requirements.txt
 COPY . .
 
 RUN chmod +x ./docker-start.sh
+RUN chmod +x ./celerybeat-start.sh
 
 # start app
 CMD ["sh","/usr/src/app/docker-start.sh"]

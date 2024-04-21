@@ -6,6 +6,8 @@ from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from dotenv import load_dotenv
 from users.models import Profile
+from django.conf import settings
+CELERY_BROKER_URL = settings.CELERY_BROKER_URL
 
 load_dotenv()
 
@@ -14,7 +16,6 @@ DEPLOYED_URL = os.getenv("DEPLOYED_URL")
 
 
 # PROD = os.environ.get("PROD", False)
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379")
 app = Celery("tasks", broker=CELERY_BROKER_URL)
 
 
