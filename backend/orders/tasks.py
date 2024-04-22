@@ -24,13 +24,13 @@ def get_bank_statement():
     yesterday = now - timedelta(days=1)
     yesterdayFormatted = yesterday.strftime("%Y-%m-%d")
 
-    # response = requests.get(
-    #     f"https://www.fio.cz/ib_api/rest/periods/{BANK_TOKEN}/{yesterdayFormatted}/{nowFormatted}/transactions.json"
-    # ).json()
+    response = requests.get(
+        f"https://www.fio.cz/ib_api/rest/periods/{BANK_TOKEN}/{yesterdayFormatted}/{nowFormatted}/transactions.json"
+    ).json()
 
     # For testing purposes
-    f = open("orders/responseExample.json", "r")
-    response= json.load(f)
+    # f = open("orders/responseExample.json", "r")
+    # response= json.load(f)
 
     print(response.get("accountStatement").get("info"))
     print("Successfully got bank statement")
