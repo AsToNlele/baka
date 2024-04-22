@@ -1,5 +1,11 @@
 import { NextUIProvider } from "@nextui-org/react"
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom"
+import {
+    Navigate,
+    Route,
+    Routes,
+    useLocation,
+    useNavigate,
+} from "react-router-dom"
 import { Landing } from "./features/landing/routes/Landing"
 import { SignIn } from "./features/auth/routes/SignIn"
 import { Profile } from "./features/auth/routes/Profile"
@@ -7,7 +13,6 @@ import { Toaster } from "sonner"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { SignUp } from "./features/auth/routes/SignUp"
-import { Menu } from "./features/app/routes/Menu"
 import { queryConfig } from "./utils/queryConfig"
 import { ProtectedRoute, RedirectRoute } from "./utils/CustomRoutes"
 import { Greenhouses } from "./features/greenhouses/routes/Greenhouses"
@@ -83,7 +88,11 @@ function App() {
                                 />
                             </Route>
                             <Route element={<ProtectedRoute />}>
-                                <Route path="/app" element={<Menu />} />
+                                {/* <Route path="/app" element={<Menu />} /> */}
+                                <Route
+                                    path="/app"
+                                    element={<Navigate to="/app/greenhouses" />}
+                                />
                                 <Route
                                     path="/app/profile"
                                     element={<Profile />}

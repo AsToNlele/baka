@@ -32,10 +32,10 @@ export const AppNavbar = () => {
     const signOut = useSignOut()
 
     const menuLinks = [
-        {
-            name: "Home",
-            href: "/app/",
-        },
+        // {
+        //     name: "Home",
+        //     href: "/app/",
+        // },
         {
             name: "Greenhouses",
             href: "/app/greenhouses",
