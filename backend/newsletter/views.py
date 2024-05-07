@@ -53,7 +53,6 @@ class UnsubscribeView(APIView):
                 user.profile.save()
             except User.DoesNotExist:
                 return Response({"message": "User not found"}, status=404)
-            # return Response({"message": "Unsubscribed successfully"}, status=200)
             return Response("Unsubscribed successfully", status=200, content_type="text/html")
         else:
             return Response("Invalid token", status=400, content_type="text/html")

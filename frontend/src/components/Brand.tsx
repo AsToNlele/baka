@@ -36,6 +36,9 @@ export const BrandLogo = () => (
 export const Brand = () => (
     <div className="flex items-center justify-center">
         <BrandLogo />
-        <h1 className="font-bold text-foreground">Growy</h1>
+        <h1 className="font-bold text-foreground">
+            <span className="text-primary">Grow</span>
+            <span className="text-secondary">Hub</span>
+        </h1>
     </div>
 )

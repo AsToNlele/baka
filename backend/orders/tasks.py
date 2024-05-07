@@ -24,6 +24,7 @@ def get_bank_statement():
     yesterday = now - timedelta(days=1)
     yesterdayFormatted = yesterday.strftime("%Y-%m-%d")
 
+    # Get bank statement
     response = requests.get(
         f"https://www.fio.cz/ib_api/rest/periods/{BANK_TOKEN}/{yesterdayFormatted}/{nowFormatted}/transactions.json"
     ).json()
@@ -38,6 +39,8 @@ def get_bank_statement():
     transactions = (
         response.get("accountStatement").get("transactionList").get("transaction")
     )
+
+    # Process every transaction
     for transaction in transactions:
         print(f"VS: {transaction.get('column5')}")
         print(f"Amount: {transaction.get('column1')}")

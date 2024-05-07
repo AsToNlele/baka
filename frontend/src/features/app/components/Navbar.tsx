@@ -78,6 +78,10 @@ export const AppNavbar = () => {
             href: "/app/orders",
         },
         {
+            name: "Badges",
+            href: "/app/badges",
+        },
+        {
             name: "Share your moment",
             href: "/app/socialposts",
         },

@@ -41,6 +41,7 @@ import { ActivateAccount } from "@/features/auth/routes/ActivateAccount"
 import { ActivateAccountConfirm } from "@/features/auth/routes/ActivateAccountConfirm"
 import { SocialPosts } from "@/features/socialposts/routes/SocialPosts"
 import { SocialPostDetail } from "@/features/socialposts/routes/SocialPostDetail"
+import { Badges } from "@/features/badges/routes/Badges"
 
 // import { Newsletter } from "@/features/newsletter/routes/Newsletter"
 // Import Newsltter lazy
@@ -175,6 +176,10 @@ function App() {
                                 <Route
                                     path="/app/socialposts/:id"
                                     element={<SocialPostDetail />}
+                                />
+                                <Route
+                                    path="app/badges"
+                                    element={<Badges />}
                                 />
                                 <Route path="*" element={<h1>404</h1>} />
                             </Route>
