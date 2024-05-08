@@ -176,6 +176,10 @@ class FlowerbedNoteSerializer(serializers.ModelSerializer):
         model = FlowerbedNote
         fields = "__all__"
 
+class UserFlowerbedStatsSerializer(serializers.Serializer):
+    emission_sum = serializers.FloatField()
+    emission_sentence = serializers.CharField()
+    savings_sum = serializers.FloatField()
 
 class UserFlowerbedSerializer(serializers.ModelSerializer):
     # flowerbed = FlowerbedSerializer(read_only=True)

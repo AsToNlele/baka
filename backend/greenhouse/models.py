@@ -136,3 +136,12 @@ class TimesheetWorkingHour(models.Model):
 
     class Meta:
         db_table = "timesheet_working_hours"
+
+class GreenhousePlantEmission(models.Model):
+    greenhouse = models.ForeignKey("Greenhouse", models.CASCADE, blank=True, null=True)
+    co2grams_per_piece = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    plant_names = models.CharField(blank=True, null=True)
+    is_default = models.BooleanField(default=False, blank=False, null=False)
+
+    class Meta:
+        db_table = "greenhouse_plant_emissions"

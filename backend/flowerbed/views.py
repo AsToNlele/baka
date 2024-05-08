@@ -14,7 +14,9 @@ from flowerbed.serializers import (
     FlowerbedStatusSerializer,
     RentSerializer,
     UserFlowerbedSerializer,
+    UserFlowerbedStatsSerializer,
 )
+from flowerbed.service import get_emission_stats, get_savings_stats
 from greenhouse.models import Greenhouse
 from greenhouse.serializers import EmptySerializer
 from orders.models import Discount, FlowerbedOrders
@@ -118,14 +120,17 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
 
         # Check discount code
         discount_code = serializer.validated_data.get("discount_code")
-        discount_found = Discount.objects.filter(code=discount_code, valid_to__gte=date.today()).first()
+        discount_found = Discount.objects.filter(
+            code=discount_code, valid_to__gte=date.today()
+        ).first()
         discount_value = 0
         if discount_found:
             # Check if the discount has been used
             if discount_found.order_set.all().count() > 0:
-                return Response({"error": "Discount code has already been used"}, status=400)
+                return Response(
+                    {"error": "Discount code has already been used"}, status=400
+                )
             discount_value = discount_found.discount_value
-
 
         orderedDays = (rentedFrom - rentedTo).days + 1
 
@@ -139,8 +144,8 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
             rent=rentItem,
             user=request.user.profile,
             final_price=finalPrice,
-            status = finalStatus,
-            discount = discount_found
+            status=finalStatus,
+            discount=discount_found,
         )
 
         rentItem.refresh_from_db()
@@ -192,17 +197,20 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
             return Response(
                 {"message": "'To' date must be after 'From' date"}, status=400
             )
-        
+
         # Check discount code
         discount_code = serializer.validated_data.get("discount_code")
-        discount_found = Discount.objects.filter(code=discount_code, valid_to__gte=date.today()).first()
+        discount_found = Discount.objects.filter(
+            code=discount_code, valid_to__gte=date.today()
+        ).first()
         discount_value = 0
         if discount_found:
             # Check if the discount has been used
             if discount_found.order_set.all().count() > 0:
-                return Response({"error": "Discount code has already been used"}, status=400)
+                return Response(
+                    {"error": "Discount code has already been used"}, status=400
+                )
             discount_value = discount_found.discount_value
-
 
         rentItem = flowerbed.rent_set.create(
             user=request.user.profile,
@@ -220,7 +228,7 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
             rent=rentItem,
             user=request.user.profile,
             final_price=finalPrice,
-            status = finalStatus,
+            status=finalStatus,
         )
 
         rentItem.refresh_from_db()
@@ -311,6 +319,8 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
             return Response(
                 {"message": "You are not renting this flowerbed"}, status=403
             )
+
+        # Create userFlowerbed if not exists
         try:
             userFlowerbed = flowerbed.userflowerbed_set.get(user=request.user.profile)
         except UserFlowerbed.DoesNotExist:
@@ -318,7 +328,45 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
                 user=request.user.profile, flowerbed=flowerbed
             )
         serializer = UserFlowerbedSerializer(userFlowerbed)
+        return Response(serializer.data)
 
+    @action(
+        detail=True,
+        methods=["get"],
+        name="Get stats",
+        serializer_class=UserFlowerbedStatsSerializer,
+        permission_classes=[IsAuthenticated],
+    )
+    def get_stats(self, request, pk=None):
+        flowerbed = self.get_object()
+        profile = request.user.profile
+
+        # Get userFlowerbed
+        try:
+            userFlowerbed = flowerbed.userflowerbed_set.get(user=profile)
+        except UserFlowerbed.DoesNotExist:
+            return Response(
+                {"message": "You are not renting this flowerbed"}, status=403
+            )
+
+        # Calculate emissions
+
+        (emissionSum, comparisonSentence) = get_emission_stats(userFlowerbed)
+        print("Emission sum: ", emissionSum)
+        print("Comparison sentence: ", comparisonSentence)
+
+        savingsSum = get_savings_stats(userFlowerbed)
+        print("Savings sum: ", savingsSum)
+
+
+        serializer = UserFlowerbedStatsSerializer(
+            data={
+                "emission_sum": emissionSum,
+                "emission_sentence": comparisonSentence,
+                "savings_sum": savingsSum,
+            }
+        )
+        serializer.is_valid(raise_exception=True)
         return Response(serializer.data)
 
     @action(

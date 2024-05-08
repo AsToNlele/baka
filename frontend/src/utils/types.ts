@@ -355,3 +355,9 @@ export type LocalDiscount = {
     code: string
     discount_value: number
 }
+
+export type UserFlowerbedStatsType = {
+    emission_sum: number
+    emission_sentence: string
+    savings_sum: number
+}

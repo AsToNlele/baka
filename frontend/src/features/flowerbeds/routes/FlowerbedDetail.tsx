@@ -29,12 +29,9 @@ export const FlowerbedDetail = () => {
     const hasAccess = isCaretaker || isOwner || isSuperuser
 
     const isRenter = data?.currentRent?.user === profile?.profile?.id
-    console.log(isRenter, data?.currentRent?.user)
-    console.log(data)
-    const isRenterOrSuperuser = isRenter || isSuperuser
 
     const { data: details } = useUserFlowerbed(
-        isRenterOrSuperuser ? flowerbedId : null,
+        isRenter ? flowerbedId : null,
     )
 
     return (
