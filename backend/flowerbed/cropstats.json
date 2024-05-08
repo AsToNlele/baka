@@ -21,7 +21,7 @@
       "names":"carrot,carrots",
       "type":"priceKg",
       "priceKg":22.6,
-      "singleWeight":0.05
+      "singleWeight":0.1
    },
    {
       "names":"cucumber,cucumbers",

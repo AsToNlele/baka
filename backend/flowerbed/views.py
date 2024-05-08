@@ -436,6 +436,9 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         userFlowerbed.refresh_from_db()
         userFlowerbedSerializer = UserFlowerbedSerializer(userFlowerbed)
 
+        
+        (emissionSum, _) = get_emission_stats(userFlowerbed)
+
         return Response(userFlowerbedSerializer.data)
 
     # Get Savings
