@@ -13,7 +13,10 @@ const getFallbackProductImageUrl = (productId: number | null | undefined) => {
     return imageUrl(imageName)
 }
 
-const getProductImageUrl = (image: string | undefined | null, id: number | null | undefined) => {
+const getProductImageUrl = (
+    image: string | undefined | null,
+    id: number | null | undefined,
+) => {
     if (!image) {
         return getFallbackProductImageUrl(id)
     }
@@ -23,16 +26,16 @@ const getProductImageUrl = (image: string | undefined | null, id: number | null 
 export const ProductImage = ({ image, id, title }: ProductImageProps) => {
     console.log({ image, id, title })
     return (
-        <Image
-            shadow="sm"
-            radius="lg"
-            width="300"
-            height="200"
-            alt={title ?? "Product"}
-            className="w-full object-cover"
-            src={getProductImageUrl(image, id)}
-            fallbackSrc={getFallbackProductImageUrl(id)}
-            removeWrapper
-        />
+        <div className="max-h-[300px] max-w-[400px]">
+            <Image
+                shadow="sm"
+                radius="lg"
+                alt={title ?? "Product"}
+                className="size-full object-contain"
+                src={getProductImageUrl(image, id)}
+                fallbackSrc={getFallbackProductImageUrl(id)}
+                removeWrapper
+            />
+        </div>
     )
 }

@@ -71,4 +71,4 @@ export const EditGreenhouseMarketplaceProductRequestSchema = z.object({
 
 export type EditGreenhouseMarketplaceProductRequestValidationType = z.infer<
     typeof EditGreenhouseMarketplaceProductRequestSchema
-> & { product: { image?: File | null } }
+> & { product: { image?: File | null | string } }

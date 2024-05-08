@@ -49,7 +49,7 @@ export const EditGreenhouseMarketplaceProductModal = ({
         product: {
             name: foundProduct?.product.name ?? "",
             description: foundProduct?.product.description ?? "",
-            // image: foundProduct?.product.image ?? "",
+            // image: foundProduct?.product.image ?? undefined,
             shared: foundProduct?.product.shared ?? false,
         },
         quantity: foundProduct?.quantity,
@@ -72,7 +72,16 @@ export const EditGreenhouseMarketplaceProductModal = ({
         EditGreenhouseMarketplaceProductRequestValidationType
     > = (data) => {
         mutate(
-            { id: marketplaceProductId ?? 0, data },
+            {
+                id: marketplaceProductId ?? 0,
+                data: {
+                    ...data,
+                    product: {
+                        ...data.product,
+                        image: image ?? null,
+                    },
+                },
+            },
             {
                 onSuccess: () => {
                     onClose()
@@ -83,6 +92,7 @@ export const EditGreenhouseMarketplaceProductModal = ({
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newUploadData = e?.target?.files?.[0]
+        console.log(newUploadData)
         if (newUploadData) {
             setImage(newUploadData)
         }
@@ -201,10 +211,10 @@ export const EditGreenhouseMarketplaceProductModal = ({
                                                 typeof image === "string"
                                                     ? imageUrl(image) ?? ""
                                                     : image
-                                                      ? URL.createObjectURL(
+                                                        ? URL.createObjectURL(
                                                             image,
                                                         )
-                                                      : ""
+                                                        : ""
                                             }
                                             alt="product image"
                                         />

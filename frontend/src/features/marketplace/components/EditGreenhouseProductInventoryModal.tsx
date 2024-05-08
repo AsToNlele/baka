@@ -55,7 +55,7 @@ export const EditGreenhouseProductInventoryModal = ({
     console.log(getValues())
 
     const submit = () => {
-        handleSubmit(onSubmit)
+        handleSubmit(onSubmit)()
     }
 
     const onSubmit: SubmitHandler<
