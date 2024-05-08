@@ -3,9 +3,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.fields import timezone
 from badges.service import add_badge
-from flowerbed.models import Rent
-from users.models import Profile
-
 
 class Discount(models.Model):
     code = models.CharField(blank=True, null=True, unique=True)
@@ -20,7 +17,7 @@ class Discount(models.Model):
 
 
 class Order(models.Model):
-    user = models.ForeignKey(Profile, models.DO_NOTHING, blank=True, null=True)
+    user = models.ForeignKey("users.Profile", models.DO_NOTHING, blank=True, null=True)
     status = models.CharField(default="created", blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
     final_price = models.DecimalField(
@@ -37,7 +34,7 @@ class Order(models.Model):
 
 class FlowerbedOrders(Order):
     rent = models.OneToOneField(
-        Rent, on_delete=models.SET_NULL, blank=True, null=True
+        "flowerbed.Rent", on_delete=models.SET_NULL, blank=True, null=True
     )
 
     class Meta:
@@ -67,8 +64,13 @@ class ProductOrderItems(models.Model):
         db_table_comment = 'There"s flowerbed orders and product_orders'
 
 
+
+# post_save.connect(add_newsletter_badge, sender = Order)
+
 @receiver(post_save, sender=Order)
-def check_badges(sender, instance, **kwargs):
+def add_badges(sender, instance, **kwargs):
+
+    print("Handling order changes...")
     if instance.status == "paid":
         # Check flowerbed orders
         if hasattr(instance, "flowerbedorders"):
@@ -76,15 +78,15 @@ def check_badges(sender, instance, **kwargs):
             order_count = FlowerbedOrders.objects.filter(user=instance.user, status="paid").count()
 
             # Gradually add every badge
-            if order_count == 1:
+            if order_count >= 1:
                 add_badge(instance.user, "flowerbed", 1)
-            if order_count == 2:
+            if order_count >= 2:
                 add_badge(instance.user, "flowerbed", 2)
-            if order_count == 3:
+            if order_count >= 3:
                 add_badge(instance.user, "flowerbed", 3)
-            if order_count == 4:
+            if order_count >= 4:
                 add_badge(instance.user, "flowerbed", 4)
-            if order_count == 5:
+            if order_count >= 5:
                 add_badge(instance.user, "flowerbed", 5)
             
         # Check product orders

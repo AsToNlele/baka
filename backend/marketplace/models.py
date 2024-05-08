@@ -1,8 +1,6 @@
 from django.db import models
 from rest_framework.fields import timezone
 
-from greenhouse.models import Greenhouse
-        
 def upload_to(instance, filename):
     return f"product-images/{filename}"
 
@@ -24,7 +22,7 @@ class SharedProduct(Product):
 
 class CustomProduct(Product):
     greenhouse = models.ForeignKey(
-        Greenhouse, models.DO_NOTHING, blank=True, null=True
+        "greenhouse.Greenhouse", models.DO_NOTHING, blank=True, null=True
     )
     class Meta:
         db_table = "custom_products"
@@ -36,7 +34,7 @@ class MarketplaceProduct(models.Model):
         "Product", models.DO_NOTHING, blank=True, null=True
     )
     greenhouse = models.ForeignKey(
-        Greenhouse, models.DO_NOTHING, blank=True, null=True
+        "greenhouse.Greenhouse", models.DO_NOTHING, blank=True, null=True
     )
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()

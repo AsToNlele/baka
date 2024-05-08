@@ -1,6 +1,5 @@
 from django.db import models
 from rest_framework.fields import timezone
-from users.models import Profile
 
 
 class GreenhouseBusinessHourPeriod(models.Model):
@@ -54,7 +53,7 @@ class Greenhouse(models.Model):
     title = models.CharField(blank=True, null=True)
     description = models.TextField(blank=True, null=True, db_comment="Description")
     owner = models.ForeignKey(
-        Profile, models.DO_NOTHING, blank=True, null=True, related_name="owner"
+        "users.Profile", models.DO_NOTHING, blank=True, null=True, related_name="owner"
     )
     rules = models.CharField(blank=True, null=True)
     greenhouse_address = models.OneToOneField(
@@ -62,7 +61,7 @@ class Greenhouse(models.Model):
     )
     published = models.BooleanField(default=True, blank=False, null=False)
     caretaker = models.ForeignKey(
-        Profile, models.DO_NOTHING, blank=True, null=True, related_name="caretaker"
+        "users.Profile", models.DO_NOTHING, blank=True, null=True, related_name="caretaker"
     )
     bank_account_number = models.CharField(blank=True, null=True)
 
@@ -89,7 +88,7 @@ class Timesheet(models.Model):
     pay = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     status = models.CharField(default="submitted", blank=True, null=True)
     author = models.ForeignKey(
-        Profile, models.DO_NOTHING, blank=True, null=True, related_name="author"
+        "users.Profile", models.DO_NOTHING, blank=True, null=True, related_name="author"
     )
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
@@ -118,7 +117,7 @@ class TimesheetUpdate(models.Model):
     pay = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     status = models.CharField(default="submitted", blank=True, null=True)
     author = models.ForeignKey(
-        Profile, models.DO_NOTHING, blank=True, null=True, related_name="update_author"
+        "users.Profile", models.DO_NOTHING, blank=True, null=True, related_name="update_author"
     )
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)

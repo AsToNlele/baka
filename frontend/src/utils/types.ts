@@ -333,6 +333,7 @@ export type LevelType = {
     name: string
     xp_required: number
     reward: number
+    level: number
 }
 
 export type UserStatsResponse = {

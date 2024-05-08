@@ -17,6 +17,7 @@ class LevelSerializer(serializers.Serializer):
     name = serializers.CharField()
     xp_required = serializers.IntegerField()
     reward = serializers.IntegerField()
+    level = serializers.IntegerField()
     
 class UserStatsSerializer(serializers.Serializer):
     badges = BadgeSerializer(many=True)

@@ -1,3 +1,6 @@
+from datetime import timedelta
+from django.utils.crypto import get_random_string
+from rest_framework.fields import timezone
 from badges.models import Badge
 from django.db.models import Sum
 
@@ -6,31 +9,37 @@ user_levels = [
         "name": "Beginner",
         "xp_required": 0,
         "reward": 0,
+        "level": 1
     },
     {
         "name": "Intermediate",
         "xp_required": 10,
         "reward": 10,
+        "level": 2,
     },
     {
         "name": "Advanced",
         "xp_required": 30,
         "reward": 20,
+        "level": 3,
     },
     {
         "name": "Expert",
         "xp_required": 50,
         "reward": 30,
+        "level": 4,
     },
     {
         "name": "Master",
         "xp_required": 70,
         "reward": 40,
+        "level": 5,
     },
     {
         "name": "Legend",
         "xp_required": 100,
         "reward": 50,
+        "level": 6,
     },
 ]
 
@@ -263,6 +272,8 @@ def get_user_stats(profile):
 
 
 def add_badge(profile, badge_type, badge_level):
+    print("ADDING BADGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     # Check if badge already exists
     found_badge_type = badges.get(badge_type, None)
     if found_badge_type is None:
@@ -285,11 +296,41 @@ def add_badge(profile, badge_type, badge_level):
     # Check if adding a badge will level up
     user_stats = get_user_stats(profile)
     result = check_if_level_up(user_stats["xp_sum"], badge["xp"])
-    print("RESULT ", result)
     if result is not False:
         # Give reward
-        # TODO: Give discount
         print("Level up!, new level is " + result["name"])
+
+        exists = True
+        newDiscountCode = get_random_string(length=6).upper()
+        
+        from orders.models import Discount
+        while exists:
+            print("NEW DISCOUNT CODE", newDiscountCode)
+            exists = Discount.objects.filter(code=newDiscountCode).exists()
+            newDiscountCode = get_random_string(length=6).upper()
+        discountObj = Discount.objects.create(
+            code=newDiscountCode,
+            discount_value=result["reward"],
+            valid_from=timezone.now(),
+            valid_to=timezone.now() + timedelta(days=30)
+        )
+        # TODO: Send email with discount code
+        from newsletter.tasks import send_single_email
+
+        send_single_email.delay(
+            "You have leveled up!",
+            f"""
+            <h1>Congratulations!</h1>
+            <p>You have leveled up to {result["name"]}!</p>
+            <p>Your reward is a discount code for {result["reward"]}!</p>
+            <p><strong>{newDiscountCode}</strong></p>
+            <p>Valid for 30 days.</p>
+            """,
+            profile.user.email
+        )
+        
+        
+        
 
     # Add badge to user
     newBadge = Badge.objects.create(

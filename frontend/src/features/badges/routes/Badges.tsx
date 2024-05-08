@@ -72,7 +72,7 @@ const LevelStats = ({
             <h1 className="text-xl">
                 Current level:{" "}
                 <span className="text-2xl font-bold">
-                    {userStatsData.current_level.name}
+                    {userStatsData.current_level.name}({userStatsData.current_level.level})
                 </span>
             </h1>
             <Progress value={percentage} />
