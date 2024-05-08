@@ -870,6 +870,141 @@ paths:
           description: ''
       tags:
       - api
+  /api/badges/:
+    get:
+      operationId: listBadges
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Badge'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createBadge
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Badge'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Badge'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Badge'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Badge'
+          description: ''
+      tags:
+      - api
+  /api/badges/{id}/:
+    get:
+      operationId: retrieveBadge
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this badge.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Badge'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateBadge
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this badge.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Badge'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Badge'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Badge'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Badge'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateBadge
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this badge.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Badge'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Badge'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Badge'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Badge'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyBadge
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this badge.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
   /api/auth/profile:
     get:
       operationId: listUsers
@@ -1415,6 +1550,36 @@ paths:
           description: ''
       tags:
       - api
+  /api/user-stats/:
+    get:
+      operationId: listUserStats
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - api
+  /api/badge-rarity/:
+    get:
+      operationId: listBadgeStats
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - api
   /api/greenhouses/create_greenhouse/:
     post:
       operationId: createGreenhouseGreenhouse
@@ -1437,6 +1602,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateGreenhouse'
+          description: ''
+      tags:
+      - api
+  /api/flowerbeds/{id}/get_savings/:
+    post:
+      operationId: getSavingsFlowerbed
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this flowerbed.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FlowerbedSavings'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FlowerbedSavings'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FlowerbedSavings'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowerbedSavings'
           description: ''
       tags:
       - api
@@ -2137,6 +2333,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateRent'
+          description: ''
+      tags:
+      - api
+  /api/flowerbeds/{id}/set_harvests/:
+    put:
+      operationId: setHarvestsFlowerbed
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this flowerbed.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditFlowerbedHarvest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EditFlowerbedHarvest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EditFlowerbedHarvest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EditFlowerbedHarvest'
           description: ''
       tags:
       - api
@@ -3659,6 +3886,39 @@ components:
       - author
       - url
       - post_type
+    Badge:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        badge_type:
+          type: string
+          maxLength: 255
+        badge_level:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        xp:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        user:
+          type: integer
+      required:
+      - name
+      - description
+      - badge_type
+      - user
     Product:
       type: object
       properties:
@@ -4036,6 +4296,24 @@ components:
       - title
       - description
       - published
+    FlowerbedSavings:
+      type: object
+      properties:
+        harvests:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                nullable: true
+              quantity:
+                type: integer
+                maximum: 2147483647
+                minimum: -2147483648
+                nullable: true
+      required:
+      - harvests
     CreateRent:
       type: object
       properties:
@@ -4381,6 +4659,34 @@ components:
     Empty:
       type: object
       properties: {}
+    EditFlowerbedHarvest:
+      type: object
+      properties:
+        harvests:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                readOnly: true
+              name:
+                type: string
+                nullable: true
+              quantity:
+                type: integer
+                maximum: 2147483647
+                minimum: -2147483648
+                nullable: true
+              date:
+                type: string
+                format: date-time
+                nullable: true
+              user_flowerbed:
+                type: integer
+                nullable: true
+      required:
+      - harvests
     EditFlowerbedNote:
       type: object
       properties:

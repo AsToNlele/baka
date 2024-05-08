@@ -90,6 +90,16 @@ export interface paths {
     delete: operations["destroySocialPost"];
     patch: operations["partialUpdateSocialPost"];
   };
+  "/api/badges/": {
+    get: operations["listBadges"];
+    post: operations["createBadge"];
+  };
+  "/api/badges/{id}/": {
+    get: operations["retrieveBadge"];
+    put: operations["updateBadge"];
+    delete: operations["destroyBadge"];
+    patch: operations["partialUpdateBadge"];
+  };
   "/api/auth/profile": {
     get: operations["listUsers"];
   };
@@ -147,8 +157,17 @@ export interface paths {
   "/api/activate/": {
     get: operations["listActivateUsers"];
   };
+  "/api/user-stats/": {
+    get: operations["listUserStats"];
+  };
+  "/api/badge-rarity/": {
+    get: operations["listBadgeStats"];
+  };
   "/api/greenhouses/create_greenhouse/": {
     post: operations["createGreenhouseGreenhouse"];
+  };
+  "/api/flowerbeds/{id}/get_savings/": {
+    post: operations["getSavingsFlowerbed"];
   };
   "/api/flowerbeds/{id}/rent/": {
     post: operations["rentFlowerbed"];
@@ -243,6 +262,9 @@ export interface paths {
   };
   "/api/flowerbeds/{id}/extend_rent/": {
     put: operations["extendRentFlowerbed"];
+  };
+  "/api/flowerbeds/{id}/set_harvests/": {
+    put: operations["setHarvestsFlowerbed"];
   };
   "/api/flowerbeds/{id}/set_notes/": {
     put: operations["setNotesFlowerbed"];
@@ -705,6 +727,17 @@ export interface components {
       /** Format: date-time */
       updated_at?: string;
     };
+    Badge: {
+      id?: number;
+      name: string;
+      description: string;
+      badge_type: string;
+      badge_level?: number;
+      xp?: number;
+      /** Format: date-time */
+      created_at?: string;
+      user: number;
+    };
     Product: {
       id?: number;
       /** Format: binary */
@@ -848,6 +881,12 @@ export interface components {
           greenhouse?: number | null;
         })[];
     };
+    FlowerbedSavings: {
+      harvests: ({
+          name?: string | null;
+          quantity?: number | null;
+        })[];
+    };
     CreateRent: {
       /** Format: date-time */
       rented_from: string | null;
@@ -976,6 +1015,16 @@ export interface components {
       owner: number;
     };
     Empty: Record<string, never>;
+    EditFlowerbedHarvest: {
+      harvests: ({
+          id?: number;
+          name?: string | null;
+          quantity?: number | null;
+          /** Format: date-time */
+          date?: string | null;
+          user_flowerbed?: number | null;
+        })[];
+    };
     EditFlowerbedNote: {
       notes: ({
           id?: number;
@@ -1681,6 +1730,103 @@ export interface operations {
       };
     };
   };
+  listBadges: {
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Badge"][];
+        };
+      };
+    };
+  };
+  createBadge: {
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["Badge"];
+        "application/x-www-form-urlencoded": components["schemas"]["Badge"];
+        "multipart/form-data": components["schemas"]["Badge"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["Badge"];
+        };
+      };
+    };
+  };
+  retrieveBadge: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this badge. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Badge"];
+        };
+      };
+    };
+  };
+  updateBadge: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this badge. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["Badge"];
+        "application/x-www-form-urlencoded": components["schemas"]["Badge"];
+        "multipart/form-data": components["schemas"]["Badge"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Badge"];
+        };
+      };
+    };
+  };
+  destroyBadge: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this badge. */
+        id: string;
+      };
+    };
+    responses: {
+      204: {
+        content: never;
+      };
+    };
+  };
+  partialUpdateBadge: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this badge. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["Badge"];
+        "application/x-www-form-urlencoded": components["schemas"]["Badge"];
+        "multipart/form-data": components["schemas"]["Badge"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Badge"];
+        };
+      };
+    };
+  };
   listProducts: {
     responses: {
       200: {
@@ -2062,6 +2208,24 @@ export interface operations {
       };
     };
   };
+  listUserStats: {
+    responses: {
+      200: {
+        content: {
+          "application/json": unknown[];
+        };
+      };
+    };
+  };
+  listBadgeStats: {
+    responses: {
+      200: {
+        content: {
+          "application/json": unknown[];
+        };
+      };
+    };
+  };
   createGreenhouseGreenhouse: {
     requestBody?: {
       content: {
@@ -2074,6 +2238,28 @@ export interface operations {
       201: {
         content: {
           "application/json": components["schemas"]["CreateGreenhouse"];
+        };
+      };
+    };
+  };
+  getSavingsFlowerbed: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this flowerbed. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["FlowerbedSavings"];
+        "application/x-www-form-urlencoded": components["schemas"]["FlowerbedSavings"];
+        "multipart/form-data": components["schemas"]["FlowerbedSavings"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["FlowerbedSavings"];
         };
       };
     };
@@ -2494,6 +2680,28 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["CreateRent"];
+        };
+      };
+    };
+  };
+  setHarvestsFlowerbed: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this flowerbed. */
+        id: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": components["schemas"]["EditFlowerbedHarvest"];
+        "application/x-www-form-urlencoded": components["schemas"]["EditFlowerbedHarvest"];
+        "multipart/form-data": components["schemas"]["EditFlowerbedHarvest"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["EditFlowerbedHarvest"];
         };
       };
     };

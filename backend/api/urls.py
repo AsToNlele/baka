@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.urls import include, path
+from badges.views import BadgeStatsView, BadgeViewSet, UserStatsView
 from flowerbed.views import FlowerbedViewSet
 from greenhouse.views import GreenhouseUploadImageView, GreenhouseViewSet, TimesheetViewSet
 from orders.views import OrderViewSet
@@ -18,6 +19,7 @@ router.register(r"orders", OrderViewSet)
 router.register(r"users", views.UserViewSet)
 router.register(r"timesheets", TimesheetViewSet)
 router.register(r"socialposts", SocialPostViewSet)
+router.register(r"badges", BadgeViewSet)
 # router.register(r"marketplace", MarketplaceView)
 add_reset_password_urls_to_router(router, base_path='password-reset')
 
@@ -34,4 +36,6 @@ urlpatterns = [
     path("activate/", views.ActivateUserView.as_view(), name="activate"),
     path("edit-self/", views.EditSelfUserView.as_view(), name="edit-self"),
     path("greenhouse-upload/", GreenhouseUploadImageView.as_view(), name="greenhouse-upload"),
+    path("user-stats/", UserStatsView.as_view(), name="user-stats"),
+    path("badge-rarity/", BadgeStatsView.as_view(), name="badge-rarity")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     "users",
     "newsletter",
     "socialposts",
+    "badges"
 ]
 
 MIDDLEWARE = [

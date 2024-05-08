@@ -308,3 +308,44 @@ export type UserFlowerbedType = Omit<
     harvests: FlowerbedHarvestType[]
     notes: FlowerbedNoteType[]
 }
+
+export type BadgeType = {
+    id: number
+    name: string
+    description: string
+    badge_type: string
+    badge_level: number
+    xp: number
+    created_at: string
+    user: number
+}
+
+export type BadgeTypeImage = {
+    name: string
+    description: string
+    badge_type: string
+    badge_level: number
+    xp: number
+    image: string
+}
+
+export type LevelType = {
+    name: string
+    xp_required: number
+    reward: number
+}
+
+export type UserStatsResponse = {
+    badges: Array<BadgeType>
+    xp_sum: number
+    current_level: LevelType
+    next_level: LevelType
+}
+
+export type BadgeRarityType = {
+    badge_type: string
+    badge_level: number
+    rarity: number
+}
+
+export type BadgeRarityListResponse = Array<BadgeRarityType>
