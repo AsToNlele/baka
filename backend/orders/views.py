@@ -65,9 +65,9 @@ class OrderViewSet(viewsets.ModelViewSet):
     def list(self, request):
         # queryset only owned
         if request.user.is_staff:
-            queryset = Order.objects.all()
+            queryset = Order.objects.all().order_by("-created_at")
         else:
-            queryset = Order.objects.filter(user=request.user.profile)
+            queryset = Order.objects.filter(user=request.user.profile).order_by("-created_at")
         serializer = OrderSerializer(queryset, many=True)
         print(serializer.data)
         orders = []
@@ -222,10 +222,10 @@ class OrderViewSet(viewsets.ModelViewSet):
                 print(item)
                 print(item.productId)
                 print(item.__dict__)
-                if item.productId:
+                if item.marketplaceProductId:
                     product = None
                     try:
-                        product = MarketplaceProduct.objects.get(id=item.productId)
+                        product = MarketplaceProduct.objects.get(id=item.marketplaceProductId)
                         product.quantity += item.quantity
                         product.save()
                     except MarketplaceProduct.DoesNotExist:

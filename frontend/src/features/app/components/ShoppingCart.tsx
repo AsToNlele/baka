@@ -90,7 +90,7 @@ export const ShoppingCart = () => {
                                 </div>
                             )
                         })}
-                        <div>Celkem: {sum} Kč</div>
+                        <div>Total: ~{sum}</div>
                         <Button onPress={onCartClick}>Go to cart</Button>
                     </div>
                 </PopoverContent>

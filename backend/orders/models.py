@@ -58,14 +58,11 @@ class ProductOrderItems(models.Model):
     productName = models.CharField(max_length=255, blank=True, null=True)
     productImage = models.CharField(max_length=255, blank=True, null=True)
     productId = models.IntegerField(blank=True, null=True)
+    marketplaceProductId = models.IntegerField(blank=True, null=True)
 
     class Meta:
         db_table = "product_order_items"
         db_table_comment = 'There"s flowerbed orders and product_orders'
-
-
-
-# post_save.connect(add_newsletter_badge, sender = Order)
 
 @receiver(post_save, sender=Order)
 def add_badges(sender, instance, **kwargs):

@@ -131,6 +131,7 @@ class ProductOrderItemInputSerializer(serializers.Serializer):
     quantity = serializers.IntegerField()
 
     def validate(self, attrs):
+        print(attrs["quantity"], attrs["marketplaceProduct"].quantity)
         if attrs["quantity"] > attrs["marketplaceProduct"].quantity:
             raise serializers.ValidationError("Not enough items in stock")
         return attrs
@@ -160,6 +161,7 @@ class CreateProductOrderInputSerializer(serializers.ModelSerializer):
                         greenhouseId=item["marketplaceProduct"].greenhouse.id,
                         productName=item["marketplaceProduct"].product.name,
                         productId=item["marketplaceProduct"].product.id,
+                        marketplaceProductId=item["marketplaceProduct"].id,
                     )
                     item["marketplaceProduct"].quantity -= newItem.quantity
                     item["marketplaceProduct"].save()

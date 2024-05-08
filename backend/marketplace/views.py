@@ -1,3 +1,4 @@
+from django.db.models import Q, Sum
 from greenhouse.models import Greenhouse
 from greenhouse.serializers import EmptySerializer, GreenhouseSerializer
 from marketplace.models import MarketplaceProduct, Product, SharedProduct
@@ -23,6 +24,7 @@ from rest_framework.generics import get_object_or_404, mixins
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.views import APIView, Response
 from users.serializers import ProfileSerializer
+import geopy.distance
 
 
 class ProductViewset(viewsets.ModelViewSet):
@@ -31,7 +33,7 @@ class ProductViewset(viewsets.ModelViewSet):
 
     def list(self, request):
         # Only products with existing listings
-        queryset = Product.objects.filter(marketplaceproduct__isnull=False)
+        queryset = Product.objects.filter(marketplaceproduct__isnull=False).distinct()
         serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -280,8 +282,163 @@ class GetPickupOptionsFromCartItemsView(APIView):
             print("Primary greenhouse not found, continuing...")
             primaryGreenhouse = None
 
-        print("Items:", items)
+        # List of pickup options
+        pickupOptions = []
 
+        # Final array of marketplace products
+        finalMarketplaceProducts = []
+
+        # Items which have a Greenhouse selected
+        lockedLocationProducts = []
+
+        # Items that need to find a correct greenhouse
+        products = []
+                                  
+        # Separate items into lockedLocationProducts and products
+        for item in items:
+            if item.get("marketplaceProduct"):
+                lockedLocationProducts.append(item)
+            else:
+                products.append(item)
+
+        # Check quantity of lockedLocationProducts
+        for item in lockedLocationProducts:
+            listing = MarketplaceProduct.objects.get(pk=item["marketplaceProduct"])
+            if listing.quantity < item.get("quantity"):
+                return JsonResponse(
+                    {"error": f"Item {listing.product.name} has not enough quantity"},
+                    status=400,
+                )
+
+        # Check quantity of products
+        for item in products:
+            # Get listings of product
+            product = Product.objects.get(pk=item["product"])
+            total_quantity = MarketplaceProduct.objects.filter(product=product).aggregate(
+                total_quantity=Sum("quantity")
+            ).get("total_quantity")
+            if total_quantity < item.get("quantity"):
+                return JsonResponse(
+                    {"error": f"Item {product.name} has not enough quantity through all greenhouses"},
+                    status=400,
+                )
+
+        # Add lockedLocationProducts to finalMarketplaceProducts
+        finalMarketplaceProducts.extend(lockedLocationProducts)
+
+        # Greenhouses that have lockedLocationProducts and will be visited
+        lockedGreenhouses = []
+        for item in lockedLocationProducts:
+            listing = MarketplaceProduct.objects.get(pk=item["marketplaceProduct"])
+            if listing.greenhouse not in lockedGreenhouses:
+                lockedGreenhouses.append(listing.greenhouse)
+
+        # Preferred Greenhouse also counts as a lockedGreenhouse if it exists
+        if primaryGreenhouse:
+            if primaryGreenhouse not in lockedGreenhouses:
+                lockedGreenhouses.append(primaryGreenhouse)
+                
+        # Products with quantity not available in lockedGreenhouses
+        remainingProducts = []
+
+        # Find which products are available and have enough quantity in lockedGreenhouses
+        productsInLockedGreenhouses = []
+
+        for item in products:
+            product = Product.objects.get(pk=item["product"])
+            listings = MarketplaceProduct.objects.filter(Q(product=product) & Q(greenhouse__id__in=[gh.id for gh in lockedGreenhouses]))
+
+            # Sort listings by price
+            sortedListings = sorted(listings, key=lambda x: x.price)
+
+            remainingQuantity = item.get("quantity")
+            # Try to add as much as possible from lockedGreenhouses
+            for listing in sortedListings:
+                if listing.quantity >= remainingQuantity:
+                    productsInLockedGreenhouses.append({"marketplaceProduct": listing.id, "quantity": remainingQuantity})
+                    remainingQuantity = 0
+                    print("everything is in ", listing.greenhouse.title, listing.quantity, "x", listing.price)
+                    break
+                else:
+                    takenQuantity = 0
+                    if listing.quantity >= remainingQuantity:
+                        takenQuantity = remainingQuantity
+                        remainingQuantity = 0
+                    else:
+                        takenQuantity = listing.quantity
+                        remainingQuantity -= listing.quantity
+                        
+                    productsInLockedGreenhouses.append(
+                        {
+                            "marketplaceProduct": listing.id,
+                            "quantity": takenQuantity
+                        }
+                    )
+                    
+
+            # The rest of the quantity is not available in lockedGreenhouses
+            if remainingQuantity > 0:
+                remainingProducts.append({"product": product.id, "quantity": remainingQuantity})
+        
+
+        # Find closest greenhouse to preferred greenhouse
+        if primaryGreenhouse:
+            # If longitude and latitude are set
+            if primaryGreenhouse.greenhouse_address and primaryGreenhouse.greenhouse_address.latitude and primaryGreenhouse.greenhouse_address.longitude:
+                primaryGreenhouseLatitude = primaryGreenhouse.greenhouse_address.latitude
+                primaryGreenhouseLongitude = primaryGreenhouse.greenhouse_address.longitude
+                
+                # Exclude lockedGreenhouses and primaryGreenhouse
+                possibleGreenhouses = Greenhouse.objects.exclude(id__in=[gh.id for gh in lockedGreenhouses]).exclude(id=primaryGreenhouse.id).all()
+
+                # List of Greenhousese with distance
+                greenhousesWithDistance = []
+
+                # Get distance from primaryGreenhouse to all possibleGreenhouses
+                for greenhouse in possibleGreenhouses:
+                    if greenhouse.greenhouse_address and greenhouse.greenhouse_address.latitude and greenhouse.greenhouse_address.longitude:
+                        distance = geopy.distance.geodesic((primaryGreenhouseLatitude, primaryGreenhouseLongitude), (greenhouse.greenhouse_address.latitude, greenhouse.greenhouse_address.longitude)).km
+                        greenhousesWithDistance.append([greenhouse.id, distance])
+
+                sortedGreenhousesWithDistance = sorted(greenhousesWithDistance, key=lambda x: x[1])
+
+                # Go through closest greenhouses
+                for greenhouse in sortedGreenhousesWithDistance:
+
+                    # Go through remainingProducts
+                    for product in remainingProducts:
+                        # Check if product is available in greenhouse
+                        listing = MarketplaceProduct.objects.filter(Q(product=product["product"]) & Q(greenhouse=greenhouse[0])).first()
+                        if listing:
+                            # Take all quantity if available
+                            if listing.quantity >= product["quantity"]:
+                                productsInLockedGreenhouses.append({"marketplaceProduct": listing.id, "quantity": product["quantity"]})
+                                remainingProducts.remove(product)
+                                break
+                            # Take as much as possible
+                            else:
+                                if listing.quantity > 0:
+                                    takenQuantity = listing.quantity
+                                    remainingQuantity = product["quantity"] - takenQuantity
+                                    productsInLockedGreenhouses.append({"marketplaceProduct": listing.id, "quantity": takenQuantity})
+                                    # Subtract taken quantity from product quantity
+                                    product["quantity"] = remainingQuantity
+                                        
+        # Merge found products to finalMarketplaceProducts
+        finalMarketplaceProducts.extend(productsInLockedGreenhouses)
+
+        # If there are still remainingProducts, stop and exclude Ideal Pickup
+        if len(remainingProducts) == 0:
+            idealPickupOption = {
+                "title": "Ideal Pickup",
+                "items": finalMarketplaceProducts,
+                "sum": sum([MarketplaceProduct.objects.get(pk=item["marketplaceProduct"]).price * item["quantity"] for item in finalMarketplaceProducts])
+            }
+            pickupOptions.append(idealPickupOption)
+
+        
+
+        # Cheapest pickup option
         lockedLocationProducts = []
         products = []
         for item in items:
@@ -290,132 +447,68 @@ class GetPickupOptionsFromCartItemsView(APIView):
             else:
                 products.append(item)
 
-        print("Locked Location Products:", lockedLocationProducts)
-        print("Products:", products)
+        cheapestPickupOptionItems = []
+        cheapestItemsSum = 0
 
-        # Get greenhouses from lockedLocationProducts
-        lockedGreenhouses = []
-        for item in lockedLocationProducts:
-            print(item)
-            product = MarketplaceProduct.objects.get(id=item["marketplaceProduct"])
-            if product:
-                if product.greenhouse not in lockedGreenhouses:
-                    print("Greenhoise id:", product.greenhouse.id)
-                    lockedGreenhouses.append(product.greenhouse)
-
-        print("Locked greenhouses", lockedGreenhouses)
-        for item in lockedGreenhouses:
-            print(item.id)
-
-        # Get greenhouses for each product
-        # greenhousesPerProduct = []
-        # for item in products:
-        #     product = Product.objects.get(pk=item["product"])
-        #     listings = MarketplaceProduct.objects.filter(product=product)
-        #     tempGreenhouses = []
-        #     for listing in listings:
-        #         tempGreenhouses.append(listing.greenhouse)
-        #     greenhousesPerProduct.append(tempGreenhouses)
-
-        # Find which products are available in lockedGreenhouses
-        productsInLockedGreenhouses = []
-        productsNotInLockedGreenhouses = []
-        convertedProductsToMarketplaceProducts = []
+        # Return early if no products to check
+        if len(products) == 0:
+            return JsonResponse(pickupOptions, status=200, safe=False)
+        
+        # Go through every product
         for item in products:
             product = Product.objects.get(pk=item["product"])
             listings = MarketplaceProduct.objects.filter(product=product)
-            appended = False
+
+            # Sort listings by price
+            listings = sorted(listings, key=lambda x: x.price)
+
+            remainingQuantity = item.get("quantity")
+
             for listing in listings:
-                if listing.greenhouse in lockedGreenhouses:
-                    productsInLockedGreenhouses.append(product)
-                    convertedProductsToMarketplaceProducts.append([item, listing])
-                    appended = True
-                    break
-
-            # Check primaryGreenhouse
-            if appended == False:
-                if primaryGreenhouse:
-                    print("Checking primaryGreenhouse")
-                    if primaryGreenhouse not in lockedGreenhouses:
-                        for listing in listings:
-                            if listing.greenhouse == primaryGreenhouse:
-                                print("Picked primary greenhouse")
-                                productsInLockedGreenhouses.append(product)
-                                print("Adding Primary greenhouse to locked greenhouses")
-                                lockedGreenhouses.append(primaryGreenhouse)
-                                convertedProductsToMarketplaceProducts.append(
-                                    [item, listing]
-                                )
-                                appended = True
-                                break
-            if not appended:
-                print("Product not available in locked greenhouses")
-                productsNotInLockedGreenhouses.append([item, product])
-
-        print("PRODUCTSLOCKED", productsInLockedGreenhouses)
-        print("PRODUCSTS", products)
-
-        allProductsInLockedGreenhouses = False
-
-        if len(productsInLockedGreenhouses) == len(products):
-            print("All products available in locked greenhouses or primaryGreenhouse")
-            allProductsInLockedGreenhouses = True
-
-        if not allProductsInLockedGreenhouses:
-            print("Not all products available in locked greenhouses")
-            for [item, product] in productsNotInLockedGreenhouses:
-                print(item)
-                print(product.name, f"{item.get('quantity')}x")
-                listings = MarketplaceProduct.objects.filter(product=product)
-
-                # TODO Find nearest greenhouse
-                # TODO Find cheapest greenhouse
-
-                foundListing = False
-                for listing in listings:
-                    if listing.quantity >= item.get("quantity"):
-                        print("Available at", listing.greenhouse.title)
-                        print("Price:", listing.price)
-                        print("Quantity:", listing.quantity)
-                        convertedProductsToMarketplaceProducts.append([item, listing])
-                        foundListing = True
-                        break
-
-                if not foundListing:
-                    print("Not available in any greenhouse")
-                    return JsonResponse(
-                        {"error": f"Item {product.name} has nowhere enough quantity"},
-                        status=400,
+                # Get all listings with enough quantity
+                if listing.quantity >= remainingQuantity:
+                    cheapestPickupOptionItems.append(
+                        {"marketplaceProduct": listing.id, "quantity": remainingQuantity}
                     )
+                    cheapestItemsSum += listing.price * remainingQuantity
+                    remainingQuantity = 0
+                    break
+                # If not available in this listing, get as much as possible
+                else:
+                    takenquantity = 0
+                    if listing.quantity >= remainingQuantity:
+                        takenquantity = remainingQuantity
+                        remainingQuantity = 0
+                    else:
+                        takenquantity = listing.quantity
+                        remainingQuantity -= listing.quantity
+                        
+                    cheapestPickupOptionItems.append(
+                        {
+                            "marketplaceProduct": listing.id,
+                            "quantity": takenquantity
+                        }
+                    )
+                    cheapestItemsSum += takenquantity * listing.price
 
-        # Handle convertedProductsToMarketplaceProducts
-        print("Converted products to marketplace products")
-        nextMarketplaceProducts = []
-        for [item, listing] in convertedProductsToMarketplaceProducts:
-            print(item)
-            print(listing)
-            print(listing.greenhouse.title)
-            print("-----")
-            nextMarketplaceProducts.append(
-                {"marketplaceProduct": listing.id, "quantity": item.get("quantity")}
-            )
 
-        pickupOptions = []
-        idealPickupOptionItems = []
-        idealPickupOptionItems.extend(lockedLocationProducts)
-        idealPickupOptionItems.extend(nextMarketplaceProducts)
-        print("Ideal pickup option items", idealPickupOptionItems)
 
-        sum = 0
-        for item in idealPickupOptionItems:
+        # Calculate sum of locked items
+        for item in lockedLocationProducts:
             product = MarketplaceProduct.objects.get(pk=item["marketplaceProduct"])
-            sum += product.price * item["quantity"]
+            cheapestItemsSum += product.price * item["quantity"]
+            cheapestPickupOptionItems.append(item)
 
-        currentPickupOption = {
-            "title": "Ideal pickup",
-            "items": idealPickupOptionItems,
-            "sum": sum,
+        cheapestPickupOption = {
+            "title": "Cheapest pickup",
+            "items": cheapestPickupOptionItems,
+            "sum": cheapestItemsSum,
         }
-        pickupOptions.append(currentPickupOption)
-
+        
+        if len(pickupOptions) == 0:
+            pickupOptions.append(cheapestPickupOption)
+        else:
+            if pickupOptions[0]["sum"] > cheapestItemsSum:
+                pickupOptions.append(cheapestPickupOption)
+            
         return JsonResponse(pickupOptions, status=200, safe=False)

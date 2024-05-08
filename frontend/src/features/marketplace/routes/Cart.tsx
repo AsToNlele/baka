@@ -128,7 +128,7 @@ const CartStep = () => {
                     )
                 })}
             </div>
-            <div>Celkem: {sum}</div>
+            <div>Total: ~{sum}</div>
             <div className="flex gap-4">
                 <Button
                     color={items.length > 0 ? "secondary" : "default"}
@@ -304,7 +304,7 @@ export const RentFlowerbed = () => {
 const Step2 = () => {
     const { items, setCurrentStep } = useShoppingCartStore()
     const { data: profile } = useProfile()
-    const { mutate, data: pickupOptions } = useGetPickupOptions()
+    const { mutate, data: pickupOptions, isError } = useGetPickupOptions()
     const [selected, setSelected] = useState<string>("")
     const [discount, setDiscount] = useState<LocalDiscount | null>(null)
 
@@ -329,6 +329,12 @@ const Step2 = () => {
         const items = finalPickupOption!.items!
         createOrder({ data: { items } })
     }
+
+    useEffect(() => {
+        if (isError) {
+            setCurrentStep("step1")
+        }
+    }, [isError])
 
     useEffect(() => {
         mutate({
