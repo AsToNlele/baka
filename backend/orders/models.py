@@ -7,20 +7,16 @@ from flowerbed.models import Rent
 from users.models import Profile
 
 
-class Discounts(models.Model):
+class Discount(models.Model):
     code = models.CharField(blank=True, null=True, unique=True)
     valid_from = models.DateTimeField(blank=True, null=True)
     valid_to = models.DateTimeField(blank=True, null=True)
-    type = models.CharField(blank=True, null=True)
-    percentage = models.DecimalField(
-        max_digits=10, decimal_places=2, blank=True, null=True
-    )  # max_digits and decimal_places have been guessed, as this database handles decimal fields as float
-    sum = models.DecimalField(
-        max_digits=10, decimal_places=2, blank=True, null=True
-    )  # max_digits and decimal_places have been guessed, as this database handles decimal fields as float
+    discount_value = models.DecimalField(
+        max_digits=10, decimal_places=2, blank=False, null=False, default=0
+    )
 
     class Meta:
-        db_table = "discounts"
+        db_table = "discount"
 
 
 class Order(models.Model):
@@ -30,7 +26,9 @@ class Order(models.Model):
     final_price = models.DecimalField(
         max_digits=10, decimal_places=2, blank=True, null=True
     )
-    discounts = models.ManyToManyField(Discounts, blank=True)
+    discount = models.ForeignKey(
+        Discount, models.DO_NOTHING, blank=True, null=True
+    )
 
     class Meta:
         db_table = "orders"

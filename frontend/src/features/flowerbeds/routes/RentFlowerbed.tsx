@@ -1,6 +1,6 @@
 import { useFlowerbedDetail } from "@/features/flowerbeds/hooks/useFlowerbedDetail"
 import { useMultistepFormStore } from "@/features/flowerbeds/stores/useRentMultistepFormStore"
-import { Button, Divider } from "@nextui-org/react"
+import { Button, Divider, Input } from "@nextui-org/react"
 import { useNavigate, useParams } from "react-router-dom"
 import { DaySingleRangePickerWithInput } from "@/features/flowerbeds/components/DayRangePicker"
 import { DateRange } from "react-day-picker"
@@ -10,6 +10,7 @@ import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
 import * as z from "zod"
+import { FaX } from "react-icons/fa6"
 import { useFlowerbedStatus } from "@/features/flowerbeds/hooks/useFlowerbedStatus"
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { useRentFlowerbed } from "@/features/flowerbeds/hooks/useRentFlowerbed"
@@ -17,6 +18,9 @@ import { Loading } from "@/components/Loading"
 import { QRPaymentStandalone } from "@/features/orders/components/QRPayment"
 import { AwaitPayment } from "@/features/orders/components/AwaitPayment"
 import { GreenhouseImage } from "@/features/greenhouses/components/GreenhouseImage"
+import { useCheckDiscountCode } from "@/features/orders/hooks/useCheckDiscountCode"
+import { LocalDiscount } from "@/utils/types"
+import { DiscountField } from "@/features/orders/components/DiscountField"
 
 const RentFlowerbedHeader = () => {
     const { id } = useParams()
@@ -117,6 +121,10 @@ const Step1 = () => {
         refetchDetail()
     }, [])
 
+    console.log("RANGEEE", dateRange)
+    console.log("NEW DATE", new Date())
+    console.log("START OF DAY", startOfDay(new Date()))
+
     useEffect(() => {
         if (data) {
             setDateRange({
@@ -173,7 +181,7 @@ const Step1 = () => {
                 <p className="text-xl text-secondary">
                     {data &&
                         Number.parseFloat(data?.pricePerDay ?? "0") *
-                            daysInBetween!}
+                        daysInBetween!}
                 </p>
             </div>
             <div className="flex justify-between">
@@ -194,12 +202,37 @@ const Step2 = () => {
     const dateFormat = "dd.MM.yyyy"
     const { mutate } = useRentFlowerbed()
 
+    const [discount, setDiscount] = useState<LocalDiscount | null>(null)
+
+    const calculateDaysInBetween = (range: DateRange | undefined) => {
+        if (!range) return 0
+        const val =
+            differenceInDays(
+                dateRange?.to || new Date(),
+                dateRange?.from || new Date(),
+            ) + 1
+        console.log(val)
+        return val
+    }
+
+    const almostTotalPrice =
+        Number.parseFloat(data?.pricePerDay ?? "0") *
+        calculateDaysInBetween(dateRange)
+    let totalPrice =
+        almostTotalPrice - (discount ? discount?.discount_value : 0)
+    if (totalPrice < 0) {
+        totalPrice = 0
+    }
+
+    console.log("DISCOUNT", discount)
+
     const goToNext = () => {
         mutate({
             id: flowerbedId!,
             data: {
                 rented_from: dateRange!.from!.toISOString(),
                 rented_to: dateRange!.to!.toISOString(),
+                discount_code: discount?.code,
             },
         })
     }
@@ -213,17 +246,6 @@ const Step2 = () => {
 
     const { data: profileData } = useProfile()
     console.log(profileData)
-
-    const calculateDaysInBetween = (range: DateRange | undefined) => {
-        if (!range) return 0
-        const val =
-            differenceInDays(
-                dateRange?.to || new Date(),
-                dateRange?.from || new Date(),
-            ) + 1
-        console.log(val)
-        return val
-    }
 
     return (
         <>
@@ -264,13 +286,29 @@ const Step2 = () => {
                 </div>
                 <Divider />
                 <div className="grid grid-cols-2 gap-4">
-                    <div></div>
+                    <div className="flex flex-col gap-2">
+                        <DiscountField
+                            discount={discount}
+                            setDiscount={setDiscount}
+                        />
+                    </div>
                     <div className="flex flex-col">
                         <h2 className="text-lg font-bold">Total:</h2>
                         <p className="text-xl text-secondary">
-                            {data &&
-                                Number.parseFloat(data?.pricePerDay ?? "0") *
-                                    calculateDaysInBetween(dateRange)}
+                            {data && almostTotalPrice}
+                            {data && discount && (
+                                <span>
+                                    {" "}
+                                    -{" "}
+                                    <span className="text-success">
+                                        {discount.discount_value ?? 0}
+                                    </span>
+                                    ={" "}
+                                    <span className="text-primary">
+                                        {totalPrice}
+                                    </span>
+                                </span>
+                            )}
                         </p>
                     </div>
                 </div>
@@ -302,7 +340,8 @@ const Step3 = () => {
 const MultistepForm = () => {
     const { id } = useParams()
     const flowerbedId = id ? parseInt(id) : null
-    const { currentStep } = useMultistepFormStore()
+    const { currentStep, setOrderId, setCurrentStep, setDateRange } =
+        useMultistepFormStore()
     const { data } = useFlowerbedDetail(flowerbedId)
     const { data: statusData } = useFlowerbedStatus(flowerbedId)
     const navigate = useNavigate()
@@ -320,27 +359,34 @@ const MultistepForm = () => {
             }
         }
     }, [statusData])
+
+    useEffect(() => {
+        return () => {
+            // Reset form on unmount
+            console.log("reseting form")
+            setOrderId(null)
+            setCurrentStep("step1")
+            setDateRange(undefined)
+        }
+    }, [])
     return (
         <div>
             <div className="mb-2 flex justify-center gap-4">
                 <div
-                    className={`${
-                        currentStep === "step1" ? "text-black" : "text-gray-300"
-                    }`}
+                    className={`${currentStep === "step1" ? "text-black" : "text-gray-300"
+                        }`}
                 >
                     Rent length
                 </div>
                 <div
-                    className={`${
-                        currentStep === "step2" ? "text-black" : "text-gray-500"
-                    }`}
+                    className={`${currentStep === "step2" ? "text-black" : "text-gray-500"
+                        }`}
                 >
                     Summary
                 </div>
                 <div
-                    className={`${
-                        currentStep === "step3" ? "text-black" : "text-gray-500"
-                    }`}
+                    className={`${currentStep === "step3" ? "text-black" : "text-gray-500"
+                        }`}
                 >
                     Payment
                 </div>

@@ -16,7 +16,7 @@ export const useCancelOrder = () => {
         mutationFn: cancelOrder,
         onSuccess: (data) => {
             queryClient.invalidateQueries({
-                queryKey: ["orderDetail", data.data.id],
+                queryKey: ["OrderList", data.data.id],
             })
         },
     })

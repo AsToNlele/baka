@@ -3,7 +3,7 @@ from django.urls import include, path
 from badges.views import BadgeStatsView, BadgeViewSet, UserStatsView
 from flowerbed.views import FlowerbedViewSet
 from greenhouse.views import GreenhouseUploadImageView, GreenhouseViewSet, TimesheetViewSet
-from orders.views import OrderViewSet
+from orders.views import DiscountCodeAvailabilityView, OrderViewSet
 from rest_framework import routers
 from socialposts.views import SocialPostViewSet
 from users import views
@@ -37,5 +37,6 @@ urlpatterns = [
     path("edit-self/", views.EditSelfUserView.as_view(), name="edit-self"),
     path("greenhouse-upload/", GreenhouseUploadImageView.as_view(), name="greenhouse-upload"),
     path("user-stats/", UserStatsView.as_view(), name="user-stats"),
-    path("badge-rarity/", BadgeStatsView.as_view(), name="badge-rarity")
+    path("badge-rarity/", BadgeStatsView.as_view(), name="badge-rarity"),
+    path("discount-code-availability/", DiscountCodeAvailabilityView.as_view(), name="discount-code-availability"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

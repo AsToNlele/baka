@@ -1580,6 +1580,21 @@ paths:
           description: ''
       tags:
       - api
+  /api/discount-code-availability/:
+    get:
+      operationId: listDiscountCodeAvailabilitys
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - api
   /api/greenhouses/create_greenhouse/:
     post:
       operationId: createGreenhouseGreenhouse
@@ -3178,10 +3193,9 @@ components:
         user:
           type: integer
           nullable: true
-        discounts:
-          type: array
-          items:
-            type: integer
+        discount:
+          type: integer
+          nullable: true
     Payment:
       type: object
       properties:
@@ -4325,6 +4339,8 @@ components:
           type: string
           format: date-time
           nullable: true
+        discount_code:
+          type: string
       required:
       - rented_from
       - rented_to

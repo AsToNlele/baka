@@ -12,7 +12,6 @@ from users.tasks import send_activation_email
 from .serializers import (
     EditSelfUserSerializer,
     EditUserSerializer,
-    GroupSerializer,
     RegisterUserWithEmailSerializer,
     SetUserActivitySerializer,
     UserDetailedSerializer,

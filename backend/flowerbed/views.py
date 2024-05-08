@@ -17,7 +17,7 @@ from flowerbed.serializers import (
 )
 from greenhouse.models import Greenhouse
 from greenhouse.serializers import EmptySerializer
-from orders.models import FlowerbedOrders
+from orders.models import Discount, FlowerbedOrders
 from rest_framework import viewsets
 from rest_framework.decorators import action, permission_classes
 from rest_framework.generics import get_object_or_404
@@ -78,12 +78,6 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         return JsonResponse(serializer.data)
 
-        # return Response(
-        #     {
-        #         "status": "rented" if serializer.data.get("currentRent") else "free",
-        #     }
-        # )
-
     @action(
         methods=["post"],
         detail=True,
@@ -94,16 +88,12 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         flowerbed = self.get_object()
         flowerbedSerializer = FlowerbedSerializer(flowerbed, many=False)
 
-        # if flowerbedSerializer.data.get("currentRent"):
-        #     return Response({"error": "This flowerbed is already rented"}, status=400)
-
         # Check for conflicts
         conflicts = flowerbed.rent_set.filter(
             rented_from__lte=request.data.get("rented_to"),
             rented_to__gte=request.data.get("rented_from"),
         )
 
-        print(conflicts)
         if conflicts:
             return Response(
                 {"error": "This flowerbed is already rented for this period"},
@@ -113,8 +103,6 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
 
         serializer.is_valid(raise_exception=True)
-
-        print(serializer.data.__dict__)
 
         rentItem = flowerbed.rent_set.create(
             user=request.user.profile,
@@ -128,14 +116,31 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         if rentedFrom is None or rentedTo is None:
             return Response({"error": "Invalid date format"}, status=400)
 
+        # Check discount code
+        discount_code = serializer.validated_data.get("discount_code")
+        discount_found = Discount.objects.filter(code=discount_code, valid_to__gte=date.today()).first()
+        discount_value = 0
+        if discount_found:
+            # Check if the discount has been used
+            if discount_found.order_set.all().count() > 0:
+                return Response({"error": "Discount code has already been used"}, status=400)
+            discount_value = discount_found.discount_value
+
+
         orderedDays = (rentedFrom - rentedTo).days + 1
 
-        finalPrice = flowerbed.pricePerDay * orderedDays
+        finalPrice = flowerbed.pricePerDay * orderedDays - discount_value
+        if finalPrice < 0:
+            finalPrice = 0
+
+        finalStatus = "created" if finalPrice > 0 else "paid"
 
         FlowerbedOrders.objects.create(
             rent=rentItem,
             user=request.user.profile,
             final_price=finalPrice,
+            status = finalStatus,
+            discount = discount_found
         )
 
         rentItem.refresh_from_db()
@@ -167,14 +172,10 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
 
         currentRentInstance = flowerbed.rent_set.get(pk=currentRent.get("id"))
 
-        print(currentRentInstance)
-
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         rents = flowerbed.rent_set.all()
-
-        print("RENTS", rents)
 
         if rents[len(rents) - 1] != currentRentInstance:
             return Response({"message": "Rent is already extended"}, status=400)
@@ -191,6 +192,17 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
             return Response(
                 {"message": "'To' date must be after 'From' date"}, status=400
             )
+        
+        # Check discount code
+        discount_code = serializer.validated_data.get("discount_code")
+        discount_found = Discount.objects.filter(code=discount_code, valid_to__gte=date.today()).first()
+        discount_value = 0
+        if discount_found:
+            # Check if the discount has been used
+            if discount_found.order_set.all().count() > 0:
+                return Response({"error": "Discount code has already been used"}, status=400)
+            discount_value = discount_found.discount_value
+
 
         rentItem = flowerbed.rent_set.create(
             user=request.user.profile,
@@ -199,12 +211,16 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         )
 
         orderedDays = (newRentedTo - newRentedFrom).days + 1
-        finalPrice = flowerbed.pricePerDay * orderedDays
+        finalPrice = flowerbed.pricePerDay * orderedDays - discount_value
+        if finalPrice < 0:
+            finalPrice = 0
+        finalStatus = "created" if finalPrice > 0 else "paid"
 
         FlowerbedOrders.objects.create(
             rent=rentItem,
             user=request.user.profile,
             final_price=finalPrice,
+            status = finalStatus,
         )
 
         rentItem.refresh_from_db()

@@ -349,3 +349,8 @@ export type BadgeRarityType = {
 }
 
 export type BadgeRarityListResponse = Array<BadgeRarityType>
+
+export type LocalDiscount = {
+    code: string
+    discount_value: number
+}

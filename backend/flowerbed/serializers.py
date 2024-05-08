@@ -26,6 +26,7 @@ class FlowerbedStatusSerializer(serializers.Serializer):
 
 
 class CreateRentSerializer(serializers.ModelSerializer):
+    discount_code = serializers.CharField(required=False)
     # greenhouse_address = GreenhouseAddressSerializer(required=False)
     # greenhouse_business_hours = GreenhouseBusinessHourSerializer(
     #     source="greenhousebusinesshour_set", many=True, required=False
@@ -36,6 +37,7 @@ class CreateRentSerializer(serializers.ModelSerializer):
         fields = [
             "rented_from",
             "rented_to",
+            "discount_code"
         ]
         extra_kwargs = {
             "rented_from": {"required": True},

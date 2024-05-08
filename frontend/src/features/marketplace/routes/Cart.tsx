@@ -7,6 +7,7 @@ import {
 } from "@/features/marketplace/types"
 import {
     GreenhouseDetailProductType,
+    LocalDiscount,
     PickupOptionType,
     ProductMinMaxPriceType,
 } from "@/utils/types"
@@ -34,6 +35,7 @@ import { useCreateProductOrder } from "@/features/marketplace/hooks/useCreatePro
 import { toast } from "sonner"
 import { useOrderPickup } from "@/features/orders/hooks/useOrderPickup"
 import { OrderPickupItem } from "@/features/orders/components/OrderPickupItem"
+import { DiscountField } from "@/features/orders/components/DiscountField"
 
 export const Cart = () => {
     return (
@@ -142,15 +144,15 @@ const CartStep = () => {
 
 type CartItemProps =
     | {
-        type: "product"
-        item: ShoppingCartProductItem
-        data: ProductMinMaxPriceType | undefined
-    }
+          type: "product"
+          item: ShoppingCartProductItem
+          data: ProductMinMaxPriceType | undefined
+      }
     | {
-        type: "marketplaceProduct"
-        item: ShoppingCartMarketplaceItem
-        data: GreenhouseDetailProductType | undefined
-    }
+          type: "marketplaceProduct"
+          item: ShoppingCartMarketplaceItem
+          data: GreenhouseDetailProductType | undefined
+      }
 
 type CartItemLockedProps = {
     item: ShoppingCartMarketplaceItem
@@ -304,13 +306,18 @@ const Step2 = () => {
     const { data: profile } = useProfile()
     const { mutate, data: pickupOptions } = useGetPickupOptions()
     const [selected, setSelected] = useState<string>("")
+    const [discount, setDiscount] = useState<LocalDiscount | null>(null)
 
     const { mutate: createOrder } = useCreateProductOrder()
 
+    const finalPickupOption = pickupOptions?.find(
+        (option) => option.title === selected,
+    )
+
+    // Calculate totalAfterDiscount in a single line
+    const totalAfterDiscount = () => Math.max(finalPickupOption?.sum ?? 0 - (discount?.discount_value ?? 0), 0)
+
     const goToNext = () => {
-        const finalPickupOption = pickupOptions?.find(
-            (option) => option.title === selected,
-        )
         if (!finalPickupOption) {
             toast.error("Invalid pickup option selected")
             return
@@ -342,12 +349,37 @@ const Step2 = () => {
     }
 
     return (
-        <div className="flex flex-col items-start gap-2">
+        <div className="flex flex-col items-start gap-4">
             <PickupOptions
                 options={pickupOptions}
                 selectedOption={selected}
                 setSelectedOption={setSelected}
             />
+            {finalPickupOption && (
+                <>
+                    <DiscountField discount={discount} setDiscount={setDiscount} buttonRight />
+                    <div className="flex">
+                        <h2 className="text-lg font-bold">Total:</h2>
+                        <p className="text-xl">
+                            <span className="text-secondary">
+                                {finalPickupOption.sum}
+                            </span>
+                            {discount && (
+                                <>
+                                    <span className="text-success">
+                                        {" "}
+                                        - {discount.discount_value}
+                                    </span>
+                                    <span className="text-success">
+                                        {" "}
+                                        <span className="text-secondary">=</span> {totalAfterDiscount()}
+                                    </span>
+                                </>
+                            )}
+                        </p>
+                    </div>
+                </>
+            )}
 
             <div className="flex gap-4">
                 <Button onPress={() => setCurrentStep("step1")}>
@@ -420,10 +452,6 @@ const PickupOptionItems = ({ option }: { option: PickupOptionType }) => {
                         />
                     )
                 })}
-            </div>
-            <div className="flex">
-                <h2 className="text-lg font-bold">Total:</h2>
-                <p className="text-xl text-secondary">{option.sum}</p>
             </div>
         </div>
     )
@@ -539,33 +567,36 @@ const Step4 = () => {
     )
 }
 
-
 const MultistepForm = () => {
     const { currentStep } = useShoppingCartStore()
     return (
         <div>
             <div className="mb-2 flex justify-center gap-4">
                 <div
-                    className={`${currentStep === "step1" ? "text-black" : "text-gray-500"
-                        }`}
+                    className={`${
+                        currentStep === "step1" ? "text-black" : "text-gray-500"
+                    }`}
                 >
                     Cart
                 </div>
                 <div
-                    className={`${currentStep === "step2" ? "text-black" : "text-gray-500"
-                        }`}
+                    className={`${
+                        currentStep === "step2" ? "text-black" : "text-gray-500"
+                    }`}
                 >
                     Pickup options
                 </div>
                 <div
-                    className={`${currentStep === "step3" ? "text-black" : "text-gray-500"
-                        }`}
+                    className={`${
+                        currentStep === "step3" ? "text-black" : "text-gray-500"
+                    }`}
                 >
                     Payment
                 </div>
                 <div
-                    className={`${currentStep === "step4" ? "text-black" : "text-gray-500"
-                        }`}
+                    className={`${
+                        currentStep === "step4" ? "text-black" : "text-gray-500"
+                    }`}
                 >
                     Pickup
                 </div>

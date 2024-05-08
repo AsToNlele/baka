@@ -6,6 +6,7 @@ import { AxiosResponse } from "axios"
 type Inputs = {
     rented_from: string
     rented_to: string
+    discount_code?: string
 }
 
 export type RentFlowerbedResponse = {
@@ -17,7 +18,6 @@ export type RentFlowerbedResponse = {
         final_price: string
         rent: number
         user: number
-        discounts: []
     }
     rented_from: string
     rented_to: string

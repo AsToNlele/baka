@@ -18,6 +18,8 @@ import { QRPaymentStandalone } from "@/features/orders/components/QRPayment"
 import { AwaitPayment } from "@/features/orders/components/AwaitPayment"
 import { useExtendRentFlowerbed } from "@/features/flowerbeds/hooks/useExtendRentFlowerbed"
 import { GreenhouseImage } from "@/features/greenhouses/components/GreenhouseImage"
+import { DiscountField } from "@/features/orders/components/DiscountField"
+import { LocalDiscount } from "@/utils/types"
 
 const ExtendRentFlowerbedHeader = () => {
     const { id } = useParams()
@@ -214,6 +216,7 @@ const Step2 = () => {
     const { dateRange, setCurrentStep } = useMultistepFormStore()
     const dateFormat = "dd.MM.yyyy"
     const { mutate } = useExtendRentFlowerbed()
+    const [discount, setDiscount] = useState<LocalDiscount | null>(null)
 
     const goToNext = () => {
         mutate({
@@ -221,6 +224,7 @@ const Step2 = () => {
             data: {
                 rented_from: dateRange!.from!.toISOString(),
                 rented_to: dateRange!.to!.toISOString(),
+                discount_code: discount?.code,
             },
         })
     }
@@ -244,6 +248,15 @@ const Step2 = () => {
             ) + 1
         console.log(val)
         return val
+    }
+    
+    const almostTotalPrice =
+        Number.parseFloat(data?.pricePerDay ?? "0") *
+        calculateDaysInBetween(dateRange)
+    let totalPrice =
+        almostTotalPrice - (discount ? discount?.discount_value : 0)
+    if (totalPrice < 0) {
+        totalPrice = 0
     }
 
     return (
@@ -285,13 +298,29 @@ const Step2 = () => {
                 </div>
                 <Divider />
                 <div className="grid grid-cols-2 gap-4">
-                    <div></div>
+                    <div className="flex flex-col gap-2">
+                        <DiscountField
+                            discount={discount}
+                            setDiscount={setDiscount}
+                        />
+                    </div>
                     <div className="flex flex-col">
                         <h2 className="text-lg font-bold">Total:</h2>
                         <p className="text-xl text-secondary">
-                            {data &&
-                                Number.parseFloat(data?.pricePerDay ?? "0") *
-                                    calculateDaysInBetween(dateRange)}
+                            {data && almostTotalPrice}
+                            {data && discount && (
+                                <span>
+                                    {" "}
+                                    -{" "}
+                                    <span className="text-success">
+                                        {discount.discount_value ?? 0}
+                                    </span>
+                                    ={" "}
+                                    <span className="text-primary">
+                                        {totalPrice}
+                                    </span>
+                                </span>
+                            )}
                         </p>
                     </div>
                 </div>

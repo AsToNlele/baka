@@ -4,7 +4,7 @@ from django.utils import timezone
 from greenhouse.models import Greenhouse
 from greenhouse.serializers import EmptySerializer
 from marketplace.models import MarketplaceProduct
-from orders.models import FlowerbedOrders, Order, ProductOrders
+from orders.models import Discount, FlowerbedOrders, Order, ProductOrders
 from orders.serializers import (
     EditOrderSerializer,
     FlowerbedOrderSerializer,
@@ -17,7 +17,7 @@ from rest_framework import permissions, viewsets
 from rest_framework.decorators import action, permission_classes
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from rest_framework.views import Response
+from rest_framework.views import APIView, Response
 
 
 class IsOrderOwner(permissions.BasePermission):
@@ -25,6 +25,24 @@ class IsOrderOwner(permissions.BasePermission):
         return request.user.is_authenticated
     def has_object_permission(self, request, view, obj):
         return obj.user == request.user.profile or request.user.is_staff or request.user.is_superuser
+
+class DiscountCodeAvailabilityView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        code = request.data.get("code") or None
+        if not code:
+            return JsonResponse({"error": "Discount code not provided"}, status=400)
+        discount = Discount.objects.filter(code=code).first()
+        if not discount:
+            return JsonResponse({"error": "Discount code not found"}, status=404)
+        if discount.valid_from > timezone.now():
+            return JsonResponse({"error": "Discount code not valid yet"}, status=400)
+        if discount.valid_to < timezone.now():
+            return JsonResponse({"error": "Discount code expired"}, status=400)
+        if discount.order_set.all().count() > 0:
+            return JsonResponse({"error": "Discount code already used"}, status=400)
+        return JsonResponse({"discount_value": discount.discount_value, "code": discount.code})
 
 
 class OrderViewSet(viewsets.ModelViewSet):

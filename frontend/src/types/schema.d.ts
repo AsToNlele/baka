@@ -163,6 +163,9 @@ export interface paths {
   "/api/badge-rarity/": {
     get: operations["listBadgeStats"];
   };
+  "/api/discount-code-availability/": {
+    get: operations["listDiscountCodeAvailabilitys"];
+  };
   "/api/greenhouses/create_greenhouse/": {
     post: operations["createGreenhouseGreenhouse"];
   };
@@ -478,7 +481,7 @@ export interface components {
       /** Format: decimal */
       final_price?: string | null;
       user?: number | null;
-      discounts?: number[];
+      discount?: number | null;
     };
     Payment: {
       receiver: string;
@@ -892,6 +895,7 @@ export interface components {
       rented_from: string | null;
       /** Format: date-time */
       rented_to: string | null;
+      discount_code?: string;
     };
     EditUser: {
       first_name?: string;
@@ -2218,6 +2222,15 @@ export interface operations {
     };
   };
   listBadgeStats: {
+    responses: {
+      200: {
+        content: {
+          "application/json": unknown[];
+        };
+      };
+    };
+  };
+  listDiscountCodeAvailabilitys: {
     responses: {
       200: {
         content: {

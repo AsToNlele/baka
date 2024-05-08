@@ -48,6 +48,8 @@ export const OrderDetail = () => {
         onOpenChange: onCancelOpenChange,
     } = useDisclosure()
 
+    console.log(isAdmin || isLessThanAnHour)
+
     return (
         <div className="flex flex-col gap-4">
             <div className="flex gap-2">
@@ -71,8 +73,7 @@ export const OrderDetail = () => {
                     <div className="flex items-baseline gap-4">
                         <h2 className="flex items-center gap-4 text-lg">
                             {upperCaseFirstLetter(data.status ?? "")}
-                            {isAdmin ||
-                                (isLessThanAnHour && (
+                            {(isAdmin || isLessThanAnHour) && data.status !== "cancelled" && (
                                     <>
                                         <Button
                                             color="danger"
@@ -88,7 +89,7 @@ export const OrderDetail = () => {
                                             orderId={orderId}
                                         />
                                     </>
-                                ))}
+                                )}
                         </h2>
                         <p className="text-sm">
                             Ordered on: {parseIsoAndFormat(data.created_at!)}
