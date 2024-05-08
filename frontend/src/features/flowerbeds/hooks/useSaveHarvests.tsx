@@ -28,6 +28,9 @@ export const useSaveHarvests = () => {
             queryClient.invalidateQueries({
                 queryKey: ["userFlowerbed", data.data.id],
             })
+            queryClient.invalidateQueries({
+                queryKey: ["userFlowerbedStats", data.data.id],
+            })
         },
     })
     return mutation
