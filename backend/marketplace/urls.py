@@ -25,6 +25,11 @@ urlpatterns = [
         name="delete-marketplace-product",
     ),
     path(
+        "marketplace-products/<pk>/delete-image/",
+        views.RemoveMarketplaceProductImageView.as_view(),
+        name="delete-marketplace-product-image",
+    ),
+    path(
         "greenhouses/<pk>/products/from-shared/",
         views.CreateGreenhouseProductFromSharedProductView.as_view(),
         name="create-greenhouse-product-from-shared",

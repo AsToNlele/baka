@@ -7,7 +7,7 @@ from rest_framework import serializers
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField(use_url=False, required=False)
+    image = serializers.ImageField(use_url=False, required=False, allow_empty_file=True)
     class Meta:
         model = Product
         fields = "__all__"
@@ -45,7 +45,7 @@ class MarketplaceProductSerializer(serializers.ModelSerializer):
 
 
 class EditMarketplaceProductSerializer(serializers.ModelSerializer):
-    product = ProductSerializer()
+    product = ProductSerializer(required=False)
 
     class Meta:
         model = MarketplaceProduct
@@ -53,10 +53,8 @@ class EditMarketplaceProductSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.__dict__.update(validated_data)
+        print(validated_data["product"])
         instance.product = super().update(instance.product, validated_data["product"])
-        if(not "image" in validated_data["product"]):
-            instance.product.image = None
-        instance.product.save()
             
         instance.save()
         return instance

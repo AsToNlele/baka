@@ -1,4 +1,3 @@
-from rest_framework.parsers import FormParser, MultiPartParser
 from greenhouse.models import Greenhouse
 from greenhouse.serializers import EmptySerializer, GreenhouseSerializer
 from marketplace.models import MarketplaceProduct, Product, SharedProduct
@@ -21,6 +20,7 @@ from rest_framework import generics, permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import JsonResponse
 from rest_framework.generics import get_object_or_404, mixins
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.views import APIView, Response
 from users.serializers import ProfileSerializer
 
@@ -48,7 +48,6 @@ class ProductViewset(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["get"], serializer_class=ProductMinMaxSerializer)
     def minmax(self, request, *args, **kwargs):
-        
         # Add
         product = get_object_or_404(Product, pk=kwargs["pk"])
         listings = MarketplaceProduct.objects.filter(product=product)
@@ -106,6 +105,38 @@ class MarketplaceProductView(generics.RetrieveAPIView):
         return Response(serializer.data)
 
 
+class RemoveMarketplaceProductImageView(generics.DestroyAPIView):
+    queryset = MarketplaceProduct.objects.all()
+    serializer_class = EmptySerializer
+    lookup_field = "pk"
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_destroy(self, instance):
+        print("Removing image from product")
+        instance.product.image = None
+        instance.product.save()
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if (
+            instance.greenhouse.owner != request.user
+            and not request.user.is_staff
+            and not instance.greenhouse.caretaker != request.user
+        ):
+            return JsonResponse(
+                {
+                    "message": f"User {request.user} is not the owner of greenhouse {instance.greenhouse}"
+                },
+                status=400,
+            )
+
+
+        self.perform_destroy(instance)
+        instance.refresh_from_db()
+        responseSerializer = MarketplaceProductSerializer(instance)
+        return Response(responseSerializer.data)
+
+
 class EditMarketplaceProductView(generics.UpdateAPIView):
     queryset = MarketplaceProduct.objects.all()
     serializer_class = EditMarketplaceProductSerializer
@@ -133,6 +164,7 @@ class EditMarketplaceProductView(generics.UpdateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
+
 
 class DeleteMarketplaceProductView(generics.DestroyAPIView):
     queryset = MarketplaceProduct.objects.all()
@@ -167,7 +199,7 @@ class SharedProductViewset(viewsets.ModelViewSet):
     serializer_class = SharedProductSerializer
     parser_classes = (MultiPartParser, FormParser)
     permission_classes = [permissions.IsAdminUser]
-    
+
 
 class CreateGreenhouseProductFromSharedProductView(generics.CreateAPIView):
     queryset = MarketplaceProduct.objects.all()

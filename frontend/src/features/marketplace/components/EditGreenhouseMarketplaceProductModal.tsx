@@ -20,6 +20,7 @@ import { GreenhouseProductListResponse } from "@/utils/types"
 import { ChangeEvent, useEffect, useRef, useState } from "react"
 import { useDeleteGreenhouseMarketplaceProduct } from "@/features/marketplace/hooks/useDeleteGreenhouseMarketplaceProduct"
 import { imageUrl } from "@/utils/utils"
+import { useDeleteGreenhouseMarketplaceProductImage } from "@/features/marketplace/hooks/useDeleteGreenhouseMarketplaceProductImage"
 
 type EditGreenhouseMarketplaceProductModalProps = {
     isOpen: boolean
@@ -64,6 +65,13 @@ export const EditGreenhouseMarketplaceProductModal = ({
             defaultValues: convertedProduct,
         })
 
+    const { mutate: removeProductImage } =
+        useDeleteGreenhouseMarketplaceProductImage()
+
+    const removeImage = () => {
+        removeProductImage({ id: marketplaceProductId! }, { onSuccess: onClose })
+    }
+
     const submit = () => {
         handleSubmit(onSubmit)()
     }
@@ -71,6 +79,7 @@ export const EditGreenhouseMarketplaceProductModal = ({
     const onSubmit: SubmitHandler<
         EditGreenhouseMarketplaceProductRequestValidationType
     > = (data) => {
+        console.log(image)
         mutate(
             {
                 id: marketplaceProductId ?? 0,
@@ -200,7 +209,7 @@ export const EditGreenhouseMarketplaceProductModal = ({
                                         <Button
                                             variant="flat"
                                             color="warning"
-                                            onPress={() => setImage(null)}
+                                            onPress={removeImage}
                                         >
                                             Remove Image
                                         </Button>
@@ -211,10 +220,10 @@ export const EditGreenhouseMarketplaceProductModal = ({
                                                 typeof image === "string"
                                                     ? imageUrl(image) ?? ""
                                                     : image
-                                                        ? URL.createObjectURL(
+                                                      ? URL.createObjectURL(
                                                             image,
                                                         )
-                                                        : ""
+                                                      : ""
                                             }
                                             alt="product image"
                                         />
