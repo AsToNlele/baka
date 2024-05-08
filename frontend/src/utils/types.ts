@@ -339,7 +339,7 @@ export type UserStatsResponse = {
     badges: Array<BadgeType>
     xp_sum: number
     current_level: LevelType
-    next_level: LevelType
+    next_level: LevelType | null
 }
 
 export type BadgeRarityType = {

@@ -55,12 +55,18 @@ const LevelStats = ({
 }: {
     userStatsData: UserStatsResponse
 }) => {
-    const diff = userStatsData.next_level.xp_required - userStatsData.xp_sum
+    const diff =
+        userStatsData.next_level !== null
+            ? userStatsData.next_level.xp_required - userStatsData.xp_sum
+            : 0
     const percentage =
-        ((userStatsData.xp_sum - userStatsData.current_level.xp_required) /
-            (userStatsData.next_level.xp_required -
-                userStatsData.current_level.xp_required)) *
-        100
+        userStatsData.next_level !== null
+            ? ((userStatsData.xp_sum -
+                userStatsData.current_level.xp_required) /
+                (userStatsData.next_level.xp_required -
+                    userStatsData.current_level.xp_required)) *
+            100
+            : 100
     return (
         <div className="flex flex-col items-center justify-center gap-4">
             <h1 className="text-xl">
@@ -70,9 +76,13 @@ const LevelStats = ({
                 </span>
             </h1>
             <Progress value={percentage} />
-            <p className="text-lg">
-                {diff} XP needed to reach {userStatsData.next_level.name}
-            </p>
+            {userStatsData.next_level === null ? (
+                <p className="text-lg">You have reached the highest level!</p>
+            ) : (
+                <p className="text-lg">
+                    {diff} XP needed to reach {userStatsData.next_level.name}
+                </p>
+            )}
         </div>
     )
 }
@@ -220,7 +230,7 @@ const MarketplaceBadges = ({
 }) => {
     return (
         <section className="flex flex-col items-center justify-center gap-2">
-            <h2 className="text-center text-2xl">Marketplace</h2>
+            <h2 className="text-center text-2xl">Product shopping</h2>
             <BadgeSectionList
                 badgeList={marketplace_badges}
                 inputBadges={inputBadges}

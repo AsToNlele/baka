@@ -14,22 +14,22 @@ user_levels = [
     },
     {
         "name": "Advanced",
-        "xp_required": 20,
+        "xp_required": 30,
         "reward": 20,
     },
     {
         "name": "Expert",
-        "xp_required": 30,
+        "xp_required": 50,
         "reward": 30,
     },
     {
         "name": "Master",
-        "xp_required": 40,
+        "xp_required": 70,
         "reward": 40,
     },
     {
         "name": "Legend",
-        "xp_required": 50,
+        "xp_required": 100,
         "reward": 50,
     },
 ]
@@ -264,7 +264,6 @@ def get_user_stats(profile):
 
 def add_badge(profile, badge_type, badge_level):
     # Check if badge already exists
-    badges[badge_type][badge_level - 1]
     found_badge_type = badges.get(badge_type, None)
     if found_badge_type is None:
         return None

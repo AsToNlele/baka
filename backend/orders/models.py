@@ -1,5 +1,8 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from rest_framework.fields import timezone
+from badges.service import add_badge
 from flowerbed.models import Rent
 from users.models import Profile
 
@@ -64,3 +67,42 @@ class ProductOrderItems(models.Model):
     class Meta:
         db_table = "product_order_items"
         db_table_comment = 'There"s flowerbed orders and product_orders'
+
+
+@receiver(post_save, sender=Order)
+def check_badges(sender, instance, **kwargs):
+    if instance.status == "paid":
+        # Check flowerbed orders
+        if hasattr(instance, "flowerbedorders"):
+            # Check flowerbed order count
+            order_count = FlowerbedOrders.objects.filter(user=instance.user, status="paid").count()
+
+            # Gradually add every badge
+            if order_count == 1:
+                add_badge(instance.user, "flowerbed", 1)
+            if order_count == 2:
+                add_badge(instance.user, "flowerbed", 2)
+            if order_count == 3:
+                add_badge(instance.user, "flowerbed", 3)
+            if order_count == 4:
+                add_badge(instance.user, "flowerbed", 4)
+            if order_count == 5:
+                add_badge(instance.user, "flowerbed", 5)
+            
+        # Check product orders
+        elif hasattr(instance, "productorders"):
+            sum = ProductOrders.objects.filter(user=instance.user, status="paid").aggregate(models.Sum("final_price"))["final_price__sum"] or 0
+            print("SUUM", sum)
+
+            # Gradually add every badge
+            if sum >= 100:
+                add_badge(instance.user, "marketplace", 1)
+            if sum >= 500:
+                add_badge(instance.user, "marketplace", 2)
+            if sum >= 1000:
+                add_badge(instance.user, "marketplace", 3)
+            if sum >= 5000:
+                add_badge(instance.user, "marketplace", 4)
+            if sum >= 10000:
+                add_badge(instance.user, "marketplace", 5)
+

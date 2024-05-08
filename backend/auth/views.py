@@ -1,4 +1,5 @@
 # Create your views here.
+from datetime import datetime
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.db import IntegrityError
@@ -6,6 +7,7 @@ from django.template import context
 from rest_framework import permissions, status
 from rest_framework import views, serializers
 from rest_framework.response import Response
+from badges.service import add_badge
 
 from users.serializers import UserSerializer
 
@@ -23,6 +25,11 @@ class LoginView(views.APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
         login(request, user)
+
+        # Add 2024 badge if the year is 2024
+        if datetime.now().year == 2024:
+            add_badge(request.user.profile, "special", 2)
+        
         return Response(None, status=status.HTTP_202_ACCEPTED)
 
 
