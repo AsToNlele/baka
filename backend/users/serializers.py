@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from django.contrib.auth.models import Group, User
 from greenhouse.models import Greenhouse
 from greenhouse.serializers import GreenhouseSerializer
@@ -72,7 +73,6 @@ class UserDetailedSerializer(serializers.ModelSerializer):
 
     def get_orders(self, obj):
         serializer = OrderSerializer(obj.profile.order_set, many=True)
-        print(serializer.data)
         orders = []
         for order in serializer.data:
             if order["type"] == "flowerbed":
@@ -125,7 +125,6 @@ class EditSelfUserSerializer(serializers.ModelSerializer):
     profile = EditProfileSerializer(required=False)
 
     def update(self, instance, validated_data):
-        print("UPDATINGG")
         if "profile" in validated_data:
             profile_data = validated_data.pop("profile")
             profile = instance.profile

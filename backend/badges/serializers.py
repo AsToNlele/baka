@@ -1,4 +1,4 @@
-
+# Author: Alexandr Celakovsky - xcelak00
 from rest_framework import serializers
 
 from badges.models import Badge

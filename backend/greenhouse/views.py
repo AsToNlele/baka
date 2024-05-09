@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from datetime import datetime
 
 from django.db.models import Q
@@ -14,8 +15,6 @@ from greenhouse.serializers import (
     EmptySerializer,
     GreenhouseAddressSerializer,
     GreenhouseSerializer,
-    GreenhouseStatisticsSerializer,
-    GreenhouseUploadImageSerializer,
     SetCaretakerSerializer,
     SetOwnerSerializer,
     TimesheetSerializer,
@@ -121,11 +120,6 @@ class GreenhouseViewSet(viewsets.ModelViewSet):
     )
     def set_caretaker(self, request, pk=None):
         greenhouse = self.get_object()
-        # If not admin or caretaker
-        # if not request.user.is_superuser and greenhouse.owner != request.user.profile:
-        #     return Response(
-        #         {"message": "You are not allowed to set a caretaker"}, status=403
-        #     )
 
         serializer = SetCaretakerSerializer(data=request.data)
         if not serializer.is_valid():
@@ -146,15 +140,6 @@ class GreenhouseViewSet(viewsets.ModelViewSet):
     )
     def unset_caretaker(self, request, pk=None):
         greenhouse = self.get_object()
-        # If not admin or caretaker
-        # if (
-        #     not request.user.is_superuser
-        #     and greenhouse.owner != request.user.profile
-        #     and greenhouse.caretaker != request.user.profile
-        # ):
-        #     return Response(
-        #         {"message": "You are not allowed to unset a caretaker"}, status=403
-        #     )
 
         greenhouse.caretaker = None
         greenhouse.save()
@@ -196,11 +181,6 @@ class GreenhouseViewSet(viewsets.ModelViewSet):
     )
     def unset_owner(self, request, pk=None):
         greenhouse = self.get_object()
-        # If not admin or caretaker
-        # if not request.user.is_superuser and greenhouse.owner != request.user.profile:
-        #     return Response(
-        #         {"message": "You are not allowed to unset an owner"}, status=403
-        #     )
 
         greenhouse.owner = None
         greenhouse.save()
@@ -218,18 +198,8 @@ class GreenhouseViewSet(viewsets.ModelViewSet):
     )
     def get_timesheets(self, request, pk=None):
         greenhouse = self.get_object()
-        # If admin, caretaker or owner
-        # if (
-        #     not request.user.is_superuser
-        #     and greenhouse.owner != request.user.profile
-        #     and greenhouse.caretaker != request.user.profile
-        # ):
-        #     return Response(
-        #         {"message": "You are not allowed to view timesheets"}, status=403
-        #     )
 
         timesheets = Timesheet.objects.filter(greenhouse=greenhouse)
-        print(timesheets)
         serializer = TimesheetSerializer(timesheets, many=True)
         return Response(serializer.data, status=200)
 

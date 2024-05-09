@@ -44,7 +44,6 @@ export const useRentFlowerbed = () => {
         mutationFn: rent,
         onSuccess: (resp) => {
             setCurrentStep("step3")
-            console.log("RESPONSE", resp.data)
             queryClient.invalidateQueries({
                 queryKey: ["flowerbedStatus", resp.data.flowerbed!.toString()],
             })

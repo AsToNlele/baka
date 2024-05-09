@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from django.urls import path
 from rest_framework import urlpatterns
 

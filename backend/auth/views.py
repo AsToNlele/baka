@@ -1,4 +1,4 @@
-# Create your views here.
+# Author: Alexandr Celakovsky - xcelak00
 from datetime import datetime
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User

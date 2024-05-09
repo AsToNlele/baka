@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from django.shortcuts import render
 from kombu.utils.functional import random
 from rest_framework import permissions, viewsets

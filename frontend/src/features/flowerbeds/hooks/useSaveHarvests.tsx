@@ -26,8 +26,6 @@ export const useSaveHarvests = () => {
     const mutation = useMutation({
         mutationFn: saveHarvests,
         onSuccess: (data) => {
-            console.log(data.data.id)
-            console.log(data.data)
             queryClient.invalidateQueries({
                 queryKey: ["userFlowerbed", data.data.flowerbed],
             })

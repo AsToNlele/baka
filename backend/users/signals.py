@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.db.models.signals import post_save

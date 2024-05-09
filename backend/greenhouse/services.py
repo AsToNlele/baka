@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from datetime import date
 
 from django.db.models import Count, F, Sum
@@ -15,9 +16,6 @@ def get_monthly_report(greenhouse, month, year):
             status="paid",
             productorderitems__greenhouseId=greenhouse.id,
         ).distinct().count()
-
-    print("productOrderCount", productOrderCount)
-    
 
     # Get comparison between statuses
     productOrderStatusComparison = productOrders = (
@@ -89,9 +87,6 @@ def get_monthly_report(greenhouse, month, year):
         ).first()
         if currentRent:
             occupiedFlowerbedsCount += 1
-
-    print("currentflowerbedscount", currentFlowerbedsCount)
-    print("occupiedflowerbedscount", occupiedFlowerbedsCount)
 
     flowerbedSerializer = FlowerbedStatisticsSerializer(data={
         "total_spend": flowerbedOrderTotal,

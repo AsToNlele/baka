@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from django.db.models import Q, Sum
 from greenhouse.models import Greenhouse
 from greenhouse.serializers import EmptySerializer, GreenhouseSerializer
@@ -7,7 +8,6 @@ from marketplace.serializers import (
     CreateGreenhouseProductFromSharedProductSerializer,
     CreateProductOrderInputSerializer,
     CreateProductOrderOutputSerializer,
-    EditGreenhouseProductInventorySerializer,
     EditMarketplaceProductSerializer,
     MarketplaceDetailProductSerializer,
     MarketplaceProductSerializer,
@@ -114,7 +114,6 @@ class RemoveMarketplaceProductImageView(generics.DestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_destroy(self, instance):
-        print("Removing image from product")
         instance.product.image = None
         instance.product.save()
 
@@ -276,10 +275,7 @@ class GetPickupOptionsFromCartItemsView(APIView):
         primaryGreenhouse = None
         try:
             primaryGreenhouse = Greenhouse.objects.get(pk=primaryGreenhouseId)
-            print("Primary Greenhouse:", primaryGreenhouse.title)
-            print("Primary Greenhouse ID:", primaryGreenhouseId)
         except Greenhouse.DoesNotExist:
-            print("Primary greenhouse not found, continuing...")
             primaryGreenhouse = None
 
         # List of pickup options
@@ -357,7 +353,6 @@ class GetPickupOptionsFromCartItemsView(APIView):
                 if listing.quantity >= remainingQuantity:
                     productsInLockedGreenhouses.append({"marketplaceProduct": listing.id, "quantity": remainingQuantity})
                     remainingQuantity = 0
-                    print("everything is in ", listing.greenhouse.title, listing.quantity, "x", listing.price)
                     break
                 else:
                     takenQuantity = 0

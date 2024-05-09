@@ -49,8 +49,6 @@ export const OrderDetail = () => {
         onOpenChange: onCancelOpenChange,
     } = useDisclosure()
 
-    console.log(isAdmin || isLessThanAnHour)
-
     return (
         <div className="flex flex-col gap-4">
             <div className="flex gap-2">

@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 import os
 
 from celery import Celery

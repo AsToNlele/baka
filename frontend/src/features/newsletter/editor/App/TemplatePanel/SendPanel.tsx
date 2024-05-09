@@ -60,8 +60,6 @@ export default function SendPanel() {
         })
 
     const onSubmit: SubmitHandler<SendNewsletterValidationType> = (data) => {
-        console.log("mutating")
-        console.log(data)
         mutate(
             { data: { title: data.title, html: code, json:jsonCode } },
             {

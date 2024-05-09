@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from django.db import models
 from rest_framework.fields import timezone
 

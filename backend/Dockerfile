@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 # backend/Dockerfile
 
 # pull official base image

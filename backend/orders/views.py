@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 import os
 from datetime import datetime
 from django.http.response import JsonResponse
@@ -52,7 +53,6 @@ class DiscountCodeAvailabilityView(APIView):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    # permission_classes = [IsAuthenticated]
 
     def get_permissions(self):
         if self.action == "create":
@@ -73,7 +73,6 @@ class OrderViewSet(viewsets.ModelViewSet):
         else:
             queryset = Order.objects.filter(user=request.user.profile).order_by("-created_at")
         serializer = OrderSerializer(queryset, many=True)
-        print(serializer.data)
         orders = []
         for order in serializer.data:
             if order["type"] == "flowerbed":
@@ -166,10 +165,6 @@ class OrderViewSet(viewsets.ModelViewSet):
                 greenhouseWithItems.add_item(item)
                 greenhousesWithItems.append(greenhouseWithItems)
 
-        for greenhouseWithItems in greenhousesWithItems:
-            print(len(greenhousesWithItems))
-            print(greenhouseWithItems)
-
         serializer = GetPickupLocationsSerializer(data=greenhousesWithItems, many=True)
         serializer.is_valid()
 
@@ -206,28 +201,17 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         # Flowerbed order = cancel rent
         if hasattr(order, "flowerbedorders"):
-            print("FLOWERBEDORDER")
             flowerbedOrder = FlowerbedOrders.objects.get(id=pk)
-            print(flowerbedOrder)
-            print(flowerbedOrder.rent)
             if flowerbedOrder.rent:
                 deletedRent = flowerbedOrder.rent.delete()
-                print(deletedRent)
-                print("DELETED RENT")
             order.refresh_from_db()
             order.status = "cancelled"
             order.save()
 
         # Product order = cancel order and try to restore stock
         else:
-            print("PRODUCTORDER")
             productOrder = ProductOrders.objects.get(id=pk)
-            print(productOrder)
-            print(productOrder.__dict__)
             for item in productOrder.productorderitems_set.all():
-                print(item)
-                print(item.productId)
-                print(item.__dict__)
                 if item.marketplaceProductId:
                     product = None
                     try:
@@ -235,7 +219,6 @@ class OrderViewSet(viewsets.ModelViewSet):
                         product.quantity += item.quantity
                         product.save()
                     except MarketplaceProduct.DoesNotExist:
-                        print("Product not found")
                         product = None
             order.refresh_from_db()
             order.status = "cancelled"

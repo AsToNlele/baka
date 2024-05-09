@@ -79,7 +79,6 @@ export const EditGreenhouseMarketplaceProductModal = ({
     const onSubmit: SubmitHandler<
         EditGreenhouseMarketplaceProductRequestValidationType
     > = (data) => {
-        console.log(image)
         mutate(
             {
                 id: marketplaceProductId ?? 0,

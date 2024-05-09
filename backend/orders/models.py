@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -67,7 +68,6 @@ class ProductOrderItems(models.Model):
 @receiver(post_save, sender=Order)
 def add_badges(sender, instance, **kwargs):
 
-    print("Handling order changes...")
     if instance.status == "paid":
         # Check flowerbed orders
         if hasattr(instance, "flowerbedorders"):
@@ -89,7 +89,6 @@ def add_badges(sender, instance, **kwargs):
         # Check product orders
         elif hasattr(instance, "productorders"):
             sum = ProductOrders.objects.filter(user=instance.user, status="paid").aggregate(models.Sum("final_price"))["final_price__sum"] or 0
-            print("SUUM", sum)
 
             # Gradually add every badge
             if sum >= 100:

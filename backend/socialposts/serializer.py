@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from rest_framework import serializers
 from socialposts.models import SocialPost
 from users.serializers import SmallProfileSerializer

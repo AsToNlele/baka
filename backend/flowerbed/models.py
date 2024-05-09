@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from datetime import datetime
 
 from django.db import models
@@ -6,21 +7,6 @@ from django.dispatch import receiver
 
 from flowerbed.service import get_emission_stats, get_savings_stats
 from badges.service import add_badge
-
-# class FlowerbedIdealPlants(models.Model):
-#     flowerbed = models.ForeignKey("Flowerbed", models.DO_NOTHING, blank=True, null=True)
-#     name = models.CharField(blank=True, null=True)
-#
-#     class Meta:
-#         db_table = "flowerbed_ideal_plants"
-#
-# class FlowerbedTools(models.Model):
-#     flowerbed = models.ForeignKey("Flowerbed", models.DO_NOTHING, blank=True, null=True)
-#     name = models.CharField(blank=True, null=True)
-#
-#     class Meta:
-#         db_table = "flowerbed_tools"
-
 
 # Create your models here.
 class Flowerbed(models.Model):
@@ -117,8 +103,6 @@ class Rent(models.Model):
 
 def create_userflowerbed(sender, instance, created, **kwargs):
     # if created:
-    print("CREATING USERFLOWERBED IF NOT EXISTING")
-    print(instance)
     UserFlowerbed.objects.get_or_create(
         user=instance.user, flowerbed=instance.flowerbed
     )

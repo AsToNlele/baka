@@ -179,7 +179,6 @@ const SocialPost = ({ post, edit, statusChange, trash }: SocialPostProps) => {
 
     const canDelete = isAdmin || isAuthor
     const canEdit = isAdmin
-    console.log(canDelete, canEdit)
 
     return (
         <Card>

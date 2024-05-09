@@ -40,7 +40,7 @@ export const EditGreenhouseProductInventoryModal = ({
     const greenhouseId = id ? parseInt(id) : null
     const { mutate } = useEditGreenhouseProductInventory()
 
-    const { register, control, handleSubmit, formState, getValues } =
+    const { register, control, handleSubmit } =
         useForm<EditGreenhouseProductInventoryRequestValidationType>({
             resolver: zodResolver(EditGreenhouseProductInventoryRequestSchema),
             defaultValues: {
@@ -52,8 +52,6 @@ export const EditGreenhouseProductInventoryModal = ({
             },
         })
 
-    console.log(formState.errors)
-    console.log(getValues())
 
     const submit = () => {
         handleSubmit(onSubmit)()
@@ -62,13 +60,10 @@ export const EditGreenhouseProductInventoryModal = ({
     const onSubmit: SubmitHandler<
         EditGreenhouseProductInventoryRequestValidationType
     > = (data) => {
-        console.log("mutating")
-        console.log(data)
         mutate(
             { id: greenhouseId!, data },
             {
-                onSuccess: (res) => {
-                    console.log("SUCCESS", res)
+                onSuccess: () => {
                     onClose()
                 },
             },

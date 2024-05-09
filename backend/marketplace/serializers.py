@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from django.db import transaction
 from greenhouse.models import Greenhouse
 from marketplace.models import MarketplaceProduct, Product, SharedProduct
@@ -53,7 +54,6 @@ class EditMarketplaceProductSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.__dict__.update(validated_data)
-        print(validated_data["product"])
         instance.product = super().update(instance.product, validated_data["product"])
             
         instance.save()
@@ -89,8 +89,6 @@ class CreateGreenhouseProductFromSharedProductSerializer(serializers.ModelSerial
     def create(self, validated_data):
         greenhouse = Greenhouse.objects.get(pk=self.context["view"].kwargs["pk"])
         product = validated_data["product"]
-        print(product.__dict__)
-        print(validated_data)
         # product = Product.objects.get(id=product["id"])
         return MarketplaceProduct.objects.create(
             product=product,
@@ -131,7 +129,6 @@ class ProductOrderItemInputSerializer(serializers.Serializer):
     quantity = serializers.IntegerField()
 
     def validate(self, attrs):
-        print(attrs["quantity"], attrs["marketplaceProduct"].quantity)
         if attrs["quantity"] > attrs["marketplaceProduct"].quantity:
             raise serializers.ValidationError("Not enough items in stock")
         return attrs

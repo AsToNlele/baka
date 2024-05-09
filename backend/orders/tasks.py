@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 import json
 import os
 from datetime import datetime, timedelta
@@ -33,8 +34,6 @@ def get_bank_statement():
     # f = open("orders/responseExample.json", "r")
     # response= json.load(f)
 
-    print(response.get("accountStatement").get("info"))
-    print("Successfully got bank statement")
 
     transactions = (
         response.get("accountStatement").get("transactionList").get("transaction")
@@ -42,8 +41,6 @@ def get_bank_statement():
 
     # Process every transaction
     for transaction in transactions:
-        print(f"VS: {transaction.get('column5')}")
-        print(f"Amount: {transaction.get('column1')}")
         variableSymbol = transaction.get("column5")
         amount = transaction.get("column1")
         if amount:
@@ -60,7 +57,6 @@ def get_bank_statement():
                     amountString = "{:.2f}".format(amount)
                     if amountString == finalPriceConverted:
                         order.status = "paid"
-                        print(f"Order with id {variableSymbol} paid")
                         order.save()
                     else:
                         print(

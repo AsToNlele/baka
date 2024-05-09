@@ -1,9 +1,9 @@
+# Author: Alexandr Celakovsky - xcelak00
 from django.db import models
 from rest_framework.fields import timezone
 
 def upload_to(instance, filename):
     return f"newsletter-images/{filename}"
-# Create your models here.
 class NewsletterImage(models.Model):
     image = models.ImageField(upload_to=upload_to, blank=True, null=True, width_field=
 "image_width", height_field="image_height")

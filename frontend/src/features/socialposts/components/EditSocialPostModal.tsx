@@ -34,7 +34,7 @@ export const EditSocialPostModal = ({
 }: EditSocialPostModalProps) => {
     const { mutate } = useEditSocialPost()
 
-    const { control, handleSubmit, formState, getValues, reset } =
+    const { control, handleSubmit, formState, reset } =
         useForm<EditSocialPostValidation>({
             resolver: zodResolver(EditSocialPostSchema),
             defaultValues: {},
@@ -47,21 +47,15 @@ export const EditSocialPostModal = ({
         })
     }, [onOpenChange, reset, socialPost])
 
-    console.log(formState.errors)
-    console.log(getValues())
-
     const submit = () => { 
         handleSubmit(onSubmit)()
     }
 
     const onSubmit: SubmitHandler<EditSocialPostValidation> = (data) => {
-        console.log("mutating")
-        console.log(data)
         mutate(
             { id: socialPost?.id ?? 0, data },
             {
-                onSuccess: (res) => {
-                    console.log("SUCCESS", res)
+                onSuccess: () => {
                     onClose()
                 },
             },

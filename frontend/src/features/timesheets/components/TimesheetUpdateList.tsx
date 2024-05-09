@@ -8,7 +8,6 @@ type TimesheetUpdateListProps = {
     data: Array<TimesheetUpdateType>
 }
 export const TimesheetUpdateList = ({ data }: TimesheetUpdateListProps) => {
-    console.log(data)
     return (
         <div>
             <h4 className="mb-2 mt-4 text-center text-xl">History</h4>

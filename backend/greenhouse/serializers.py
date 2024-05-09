@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from datetime import date, datetime
 
 from django.db import transaction
@@ -136,56 +137,6 @@ class CreateGreenhouseSerializer(serializers.ModelSerializer):
             print(e)
             raise serializers.ValidationError("Error creating greenhouse, rollback")
 
-    # def create(self, instance, validated_data):
-    #     instance.title = validated_data.get("title", instance.title)
-    #     instance.description = validated_data.get("description", instance.description)
-    #     instance.published = validated_data.get("published", instance.published)
-    #     instance.greenhouse_address = GreenhouseAddress.objects.get_or_create(
-    #         **validated_data["greenhouse_address"]
-    #     )[0]
-    #
-    #     instance.greenhousebusinesshour_set.all().delete()
-    #     if "greenhousebusinesshour_set" in validated_data:
-    #         print("NEMAM")
-    #         businessHours = validated_data.get("greenhousebusinesshour_set")
-    #         print(businessHours)
-    #
-    #         # TODO: put this above the if later
-    #
-    #         for businessHour in businessHours:
-    #             businessHourInstance = GreenhouseBusinessHour.objects.get_or_create(
-    #                 greenhouse=instance, day=businessHour.get("day")
-    #             )
-    #             businessHourInstance[0].save()
-    #             businessHourInstance[0].greenhousebusinesshourperiod_set.all().delete()
-    #             for period in businessHour.get("greenhousebusinesshourperiod_set"):
-    #                 periodInstance = GreenhouseBusinessHourPeriod.objects.get_or_create(
-    #                     business_hour=businessHourInstance[0],
-    #                     open=period.get("open"),
-    #                     close=period.get("close"),
-    #                 )
-    #                 periodInstance[0].save()
-    #         businessHours = validated_data["greenhousebusinesshour_set"]
-    #
-    #         instance.greenhousebusinesshour_set.all().delete()
-    #
-    #         for businessHour in businessHours:
-    #             businessHourInstance = GreenhouseBusinessHour.objects.get_or_create(
-    #                 greenhouse=instance, day=businessHour.get("day")
-    #             )
-    #             businessHourInstance[0].save()
-    #             businessHourInstance[0].greenhousebusinesshourperiod_set.all().delete()
-    #             for period in businessHour.get("greenhousebusinesshourperiod_set"):
-    #                 periodInstance = GreenhouseBusinessHourPeriod.objects.get_or_create(
-    #                     business_hour=businessHourInstance[0],
-    #                     open=period.get("open"),
-    #                     close=period.get("close"),
-    #                 )
-    #                 periodInstance[0].save()
-    #
-    #     instance.save()
-    #     return instance
-
 class EditGreenhouseSerializer(serializers.ModelSerializer):
     greenhouse_address = GreenhouseAddressSerializer(required=False)
     greenhouse_business_hours = GreenhouseBusinessHourSerializer(
@@ -221,9 +172,7 @@ class EditGreenhouseSerializer(serializers.ModelSerializer):
 
         instance.greenhousebusinesshour_set.all().delete()
         if "greenhousebusinesshour_set" in validated_data:
-            print("NEMAM")
             businessHours = validated_data.get("greenhousebusinesshour_set")
-            print(businessHours)
 
             # TODO: put this above the if later
 
@@ -272,9 +221,6 @@ class SetOwnerSerializer(serializers.Serializer):
 
 class TimesheetWorkingHourSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
-        print("HELLO")
-        print(self.fields)
-        print(attrs.keys())
         # Check if start is before end
         if attrs["start"] >= attrs["end"]:
             raise serializers.ValidationError("Start time must be before end time")
@@ -336,7 +282,6 @@ class CreateTimesheetSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         try:
             with transaction.atomic():
-                print("CREATING")
                 items = validated_data.get("items")
                 working_hours = validated_data.get("working_hours")
                 status = "submitted"

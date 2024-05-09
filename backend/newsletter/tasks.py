@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 import os
 from hashlib import sha256
 
@@ -46,6 +47,7 @@ def send_single_email(title, html, email):
 
 
 def addUnsubscribeLink(email):
+    # Combine email and token
     mixed = EMAIL_UNSUBSCRIBE_TOKEN + email
     token = sha256(mixed.encode()).hexdigest()
     return f"<a href='{DEPLOYED_URL}/api/unsubscribe?email={email}&token={token}' style='color: red;'>Unsubscribe from newsletter</a>"

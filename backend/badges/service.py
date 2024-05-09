@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from datetime import timedelta
 from django.utils.crypto import get_random_string
 from rest_framework.fields import timezone
@@ -272,8 +273,6 @@ def get_user_stats(profile):
 
 
 def add_badge(profile, badge_type, badge_level):
-    print("ADDING BADGEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
-    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     # Check if badge already exists
     found_badge_type = badges.get(badge_type, None)
     if found_badge_type is None:
@@ -298,14 +297,11 @@ def add_badge(profile, badge_type, badge_level):
     result = check_if_level_up(user_stats["xp_sum"], badge["xp"])
     if result is not False:
         # Give reward
-        print("Level up!, new level is " + result["name"])
-
         exists = True
         newDiscountCode = get_random_string(length=6).upper()
         
         from orders.models import Discount
         while exists:
-            print("NEW DISCOUNT CODE", newDiscountCode)
             exists = Discount.objects.filter(code=newDiscountCode).exists()
             newDiscountCode = get_random_string(length=6).upper()
         discountObj = Discount.objects.create(

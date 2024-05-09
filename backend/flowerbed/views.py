@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from datetime import date
 
 from django.http import JsonResponse
@@ -165,8 +166,6 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         flowerbedSerializer = FlowerbedSerializer(flowerbed, many=False)
 
         currentRent = flowerbedSerializer.data.get("currentRent")
-        print(currentRent)
-        print(flowerbedSerializer.data)
         if not currentRent:
             return Response({"message": "This flowerbed is not rented"}, status=400)
         currentRentUser = Profile.objects.get(pk=currentRent.get("user"))
@@ -352,12 +351,8 @@ class FlowerbedViewSet(viewsets.ModelViewSet):
         # Calculate emissions
 
         (emissionSum, comparisonSentence) = get_emission_stats(userFlowerbed)
-        print("Emission sum: ", emissionSum)
-        print("Comparison sentence: ", comparisonSentence)
 
         savingsSum = get_savings_stats(userFlowerbed)
-        print("Savings sum: ", savingsSum)
-
 
         serializer = UserFlowerbedStatsSerializer(
             data={

@@ -48,7 +48,6 @@ export default function ImageSidebarPanel({
                 {
                     onSuccess: (res) => {
                         const url = imageUrl(res.data.image)
-                        console.log(url)
                         updateData({
                             ...data,
                             props: { ...data.props, url: url },

@@ -50,12 +50,10 @@ export const GreenhouseProducts = () => {
     const hasAccess = isCaretaker || isOwner || isSuperuser
 
     const handleEditMarketplaceProduct = (id: number) => {
-        console.log(id)
         setSelectedMarketplaceProduct(id)
         onOpenEdit()
     }
 
-    console.log(isOpenInventory)
 
     return (
         <div className="flex flex-col gap-4">

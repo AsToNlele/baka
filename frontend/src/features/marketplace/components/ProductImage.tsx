@@ -25,7 +25,6 @@ const getProductImageUrl = (
 }
 
 export const ProductImage = ({ image, id, title }: ProductImageProps) => {
-    console.log({ image, id, title })
     return (
         <div className="max-h-[300px] max-w-[400px]">
             <Image

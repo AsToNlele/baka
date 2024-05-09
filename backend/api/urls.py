@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from django.conf import settings
 from django.urls import include, path
 from badges.views import BadgeStatsView, BadgeViewSet, UserStatsView
@@ -11,8 +12,6 @@ from django_rest_passwordreset.urls import add_reset_password_urls_to_router
 from django.conf.urls.static import static
 
 router = routers.DefaultRouter()
-# router.register(r"profiles", views.ProfileViewSet)
-# router.register(r"groups", views.GroupViewSet)
 router.register(r"greenhouses", GreenhouseViewSet)
 router.register(r"flowerbeds", FlowerbedViewSet)
 router.register(r"orders", OrderViewSet)
@@ -20,7 +19,6 @@ router.register(r"users", views.UserViewSet)
 router.register(r"timesheets", TimesheetViewSet)
 router.register(r"socialposts", SocialPostViewSet)
 router.register(r"badges", BadgeViewSet)
-# router.register(r"marketplace", MarketplaceView)
 add_reset_password_urls_to_router(router, base_path='password-reset')
 
 urlpatterns = [

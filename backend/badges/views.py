@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from badges import models
 from badges.serializers import (
     BadgeRaritySerializer,

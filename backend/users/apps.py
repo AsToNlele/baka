@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from django.apps import AppConfig
 from django_rest_passwordreset.signals import reset_password_token_created
 

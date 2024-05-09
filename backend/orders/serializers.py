@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from django.db.models import Choices
 from flowerbed.models import Flowerbed, Rent
 from greenhouse.models import Greenhouse, GreenhouseAddress, GreenhouseBusinessHour, GreenhouseBusinessHourPeriod

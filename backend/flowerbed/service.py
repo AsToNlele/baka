@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 import json
 from greenhouse.models import GreenhousePlantEmission
 
@@ -25,9 +26,6 @@ def get_emission_stats(user_flowerbed):
         found = False
         for plantEmission in plantEmissions:
             if harvest.name in plantEmission.plant_names:
-                print(
-                    f"Matched {harvest.name} with {plantEmission.plant_names}, quantity: {harvest.quantity}, emissionPerPiece: {plantEmission.co2grams_per_piece}, totalEmission: {plantEmission.co2grams_per_piece * harvest.quantity}"
-                )
                 found = True
                 emissionSum += plantEmission.co2grams_per_piece * harvest.quantity
 
@@ -63,8 +61,6 @@ def get_emission_stats(user_flowerbed):
         if comparedTo > biggestComparison["comparedTo"]:
             biggestComparison = comparison
 
-    print(comparisons)
-
     finalComparison = None
 
     # First find comparisons in range 1-4
@@ -82,8 +78,6 @@ def get_emission_stats(user_flowerbed):
 
         # Finally, find the highest comparison
         finalComparison = biggestComparison
-
-    print(finalComparison)
 
     # Convert to kg
     emissionSum = emissionSum / 1000

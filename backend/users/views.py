@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 import os
 from hashlib import sha256
 
@@ -109,13 +110,9 @@ class ActivateUserView(APIView):
         email = request.GET.get("email")
         token = request.GET.get("token")
 
-        print("ACTIVATION")
-        print(email, token)
 
         mixed = USER_ACTIVATION_TOKEN + email
         original = sha256(mixed.encode()).hexdigest()
-        print("ORIGINAL", original)
-        print("TOKEN", token)
 
         if sha256(mixed.encode()).hexdigest() == token:
             try:

@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 from datetime import date, datetime
 
 from flowerbed.models import (
@@ -27,10 +28,6 @@ class FlowerbedStatusSerializer(serializers.Serializer):
 
 class CreateRentSerializer(serializers.ModelSerializer):
     discount_code = serializers.CharField(required=False)
-    # greenhouse_address = GreenhouseAddressSerializer(required=False)
-    # greenhouse_business_hours = GreenhouseBusinessHourSerializer(
-    #     source="greenhousebusinesshour_set", many=True, required=False
-    # )
 
     class Meta:
         model = Rent
@@ -46,56 +43,6 @@ class CreateRentSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         return attrs
-
-    # def update(self, instance, validated_data):
-    #     instance.title = validated_data.get("title", instance.title)
-    #     instance.description = validated_data.get("description", instance.description)
-    #     instance.published = validated_data.get("published", instance.published)
-    #     instance.greenhouse_address = GreenhouseAddress.objects.get_or_create(
-    #         **validated_data["greenhouse_address"]
-    #     )[0]
-    #
-    #     instance.greenhousebusinesshour_set.all().delete()
-    #     if "greenhousebusinesshour_set" in validated_data:
-    #         print("NEMAM")
-    #         businessHours = validated_data.get("greenhousebusinesshour_set")
-    #         print(businessHours)
-    #
-    #         # TODO: put this above the if later
-    #
-    #         for businessHour in businessHours:
-    #             businessHourInstance = GreenhouseBusinessHour.objects.get_or_create(
-    #                 greenhouse=instance, day=businessHour.get("day")
-    #             )
-    #             businessHourInstance[0].save()
-    #             businessHourInstance[0].greenhousebusinesshourperiod_set.all().delete()
-    #             for period in businessHour.get("greenhousebusinesshourperiod_set"):
-    #                 periodInstance = GreenhouseBusinessHourPeriod.objects.get_or_create(
-    #                     business_hour=businessHourInstance[0],
-    #                     open=period.get("open"),
-    #                     close=period.get("close"),
-    #                 )
-    #                 periodInstance[0].save()
-    #         businessHours = validated_data["greenhousebusinesshour_set"]
-    #
-    #         instance.greenhousebusinesshour_set.all().delete()
-    #
-    #         for businessHour in businessHours:
-    #             businessHourInstance = GreenhouseBusinessHour.objects.get_or_create(
-    #                 greenhouse=instance, day=businessHour.get("day")
-    #             )
-    #             businessHourInstance[0].save()
-    #             businessHourInstance[0].greenhousebusinesshourperiod_set.all().delete()
-    #             for period in businessHour.get("greenhousebusinesshourperiod_set"):
-    #                 periodInstance = GreenhouseBusinessHourPeriod.objects.get_or_create(
-    #                     business_hour=businessHourInstance[0],
-    #                     open=period.get("open"),
-    #                     close=period.get("close"),
-    #                 )
-    #                 periodInstance[0].save()
-    #
-    #     instance.save()
-    #     return instance
 
 
 class RentSerializer(serializers.ModelSerializer):
@@ -207,7 +154,6 @@ class EditFlowerbedNoteSerializer(serializers.ModelSerializer):
                 noteInstance = FlowerbedNote.objects.create(
                     **note, user_flowerbed=instance
                 )
-                print(noteInstance)
                 noteInstance.save()
         instance.refresh_from_db()
 
