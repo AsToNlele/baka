@@ -46,7 +46,16 @@ export const GreenhouseStats = ({ greenhouseId }: { greenhouseId: number }) => {
         }
     }
 
-    const { data, isLoading, isError } = useGreenhouseStats(greenhouseId, month, year)
+    const { data, isLoading, isError } = useGreenhouseStats(
+        greenhouseId,
+        month,
+        year,
+    )
+
+    const freeFlowerbeds = data
+        ? data?.flowerbed_stats.total_flowerbeds -
+        data?.flowerbed_stats.occupied_flowerbeds
+        : 0
 
     return (
         <div className="p-2">
@@ -62,13 +71,13 @@ export const GreenhouseStats = ({ greenhouseId }: { greenhouseId: number }) => {
                     <FaArrowRight />
                 </Button>
             </div>
-            {!isLoading && !isError? (
+            {!isLoading && !isError ? (
                 <div className="mx-2 mt-4 flex flex-col justify-center gap-6">
                     <div className="flex flex-col gap-2">
                         <h2 className="text-center text-lg font-bold">
                             Turnover
                         </h2>
-                        <div className="flex justify-center gap-5 flex-wrap">
+                        <div className="flex flex-wrap justify-center gap-5">
                             <div className="rounded bg-gray-100 px-6 py-4 text-center shadow">
                                 <h3 className="flex gap-4 text-lg">
                                     Total turnover{" "}
@@ -103,7 +112,7 @@ export const GreenhouseStats = ({ greenhouseId }: { greenhouseId: number }) => {
                         <h2 className="text-center text-lg font-bold">
                             Marketplace
                         </h2>
-                        <div className="flex justify-center gap-5 flex-wrap">
+                        <div className="flex flex-wrap justify-center gap-5">
                             <div className="rounded bg-gray-100 px-6 py-4 text-center shadow">
                                 <h3 className="flex gap-4 text-lg">
                                     Orders <FaCube size={32} />
@@ -125,7 +134,7 @@ export const GreenhouseStats = ({ greenhouseId }: { greenhouseId: number }) => {
                                     Popular products
                                     <FaFire color="red" size={32} />
                                 </h3>
-                                <p className="text-md font-bold">
+                                <p className="font-bold">
                                     {data?.product_stats.popular_products
                                         .slice(0, 5)
                                         .map((product, index) => (
@@ -144,7 +153,7 @@ export const GreenhouseStats = ({ greenhouseId }: { greenhouseId: number }) => {
                         <h2 className="text-center text-lg font-bold">
                             Flowerbeds
                         </h2>
-                        <div className="flex justify-center gap-5 flex-wrap">
+                        <div className="flex flex-wrap justify-center gap-5">
                             <div className="rounded bg-gray-100 px-6 py-4 text-center shadow">
                                 <h3 className="flex gap-4 text-lg">
                                     Occupied flowerbeds{" "}
@@ -160,8 +169,7 @@ export const GreenhouseStats = ({ greenhouseId }: { greenhouseId: number }) => {
                                     <TbPlant color="blue" size={32} />
                                 </h3>
                                 <p className="text-xl font-bold">
-                                    {data?.flowerbed_stats.occupied_flowerbeds -
-                                        data?.flowerbed_stats.total_flowerbeds}
+                                    {freeFlowerbeds}
                                 </p>
                             </div>
                             <div className="rounded bg-gray-100 px-6 py-4 text-center shadow">

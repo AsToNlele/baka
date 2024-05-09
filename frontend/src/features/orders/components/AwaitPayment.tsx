@@ -47,6 +47,16 @@ export const AwaitPayment = ({ orderId }: AwaitPaymentProps) => {
                     <h3 className="mt-4 text-center text-lg font-semibold">
                         Awaiting payment
                     </h3>
+                    {data?.type === "flowerbed" ? (
+                        <Button
+                            className="self-center mt-4"
+                            as={Link}
+                            color="primary"
+                            to={`/app/flowerbeds/${data?.rent?.flowerbed?.id}`}
+                        >
+                            Go to flowerbed
+                        </Button>
+                    ) : null}
                 </div>
             )}
         </div>

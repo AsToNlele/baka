@@ -1,6 +1,6 @@
 import { useFlowerbedDetail } from "@/features/flowerbeds/hooks/useFlowerbedDetail"
 import { useMultistepFormStore } from "@/features/flowerbeds/stores/useRentMultistepFormStore"
-import { Button, Divider, Input } from "@nextui-org/react"
+import { Button, Divider } from "@nextui-org/react"
 import { useNavigate, useParams } from "react-router-dom"
 import { DaySingleRangePickerWithInput } from "@/features/flowerbeds/components/DayRangePicker"
 import { DateRange } from "react-day-picker"
@@ -10,7 +10,6 @@ import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
 import * as z from "zod"
-import { FaX } from "react-icons/fa6"
 import { useFlowerbedStatus } from "@/features/flowerbeds/hooks/useFlowerbedStatus"
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { useRentFlowerbed } from "@/features/flowerbeds/hooks/useRentFlowerbed"
@@ -18,7 +17,6 @@ import { Loading } from "@/components/Loading"
 import { QRPaymentStandalone } from "@/features/orders/components/QRPayment"
 import { AwaitPayment } from "@/features/orders/components/AwaitPayment"
 import { GreenhouseImage } from "@/features/greenhouses/components/GreenhouseImage"
-import { useCheckDiscountCode } from "@/features/orders/hooks/useCheckDiscountCode"
 import { LocalDiscount } from "@/utils/types"
 import { DiscountField } from "@/features/orders/components/DiscountField"
 
@@ -64,12 +62,6 @@ const RentFlowerbedHeader = () => {
                                 )}{" "}
                             CZK/day
                         </p>
-                    </div>
-                    <div>
-                        <h3 className="text-lg font-semibold">
-                            Minimal rent length
-                        </h3>
-                        <p>30 days</p>
                     </div>
                 </div>
             </div>
