@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 export const BrandLogo = () => (
     <svg
         width={36}
@@ -35,10 +37,12 @@ export const BrandLogo = () => (
 
 export const Brand = () => (
     <div className="flex items-center justify-center">
-        <BrandLogo />
-        <h1 className="font-bold text-foreground">
-            <span className="text-primary">Grow</span>
-            <span className="text-secondary">Hub</span>
-        </h1>
+        <Link className="flex items-center justify-center" to={"/"}>
+            <BrandLogo />
+            <h1 className="font-bold text-foreground">
+                <span className="text-primary">Grow</span>
+                <span className="text-secondary">Hub</span>
+            </h1>
+        </Link>
     </div>
 )

@@ -12,10 +12,11 @@ export const WorkingHoursCustomFields = ({
     onChange: (data: any) => void
     value: Array<WorkingHourType>
 }) => {
+    const getNow = () => new Date().toISOString().slice(0, 16)
     const addEmptyWorkingItem = () => {
         onChange([
             ...(value ?? []),
-            { start: "2024-04-07T14:40", end: "2024-04-07T14:40" },
+            { start: getNow(), end: getNow() },
         ])
     }
 

@@ -79,9 +79,14 @@ const LevelStats = ({
             {userStatsData.next_level === null ? (
                 <p className="text-lg">You have reached the highest level!</p>
             ) : (
-                <p className="text-lg">
-                    {diff} XP needed to reach {userStatsData.next_level.name}
-                </p>
+                    <>
+                        <p className="text-lg">
+                            {diff} XP needed to reach {userStatsData.next_level.name}
+                        </p>
+                        <p>
+                            Your next reward is a {userStatsData.next_level.reward} discount
+                        </p>
+                    </>
             )}
         </div>
     )

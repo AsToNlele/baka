@@ -15,8 +15,6 @@ import { Brand } from "../../../components/Brand"
 export default function LandingNavbar() {
     const [isMenuOpen, setIsMenuOpen] = React.useState(false)
 
-    const menuItems = ["Features", "Customers", "Integrations"]
-
     return (
         <Navbar
             isBordered
@@ -45,31 +43,13 @@ export default function LandingNavbar() {
                     <Brand />
                 </NavbarBrand>
             </NavbarContent>
-            <NavbarContent className="hidden gap-4 sm:flex" justify="center">
-                <NavbarItem>
-                    <Link href="#" color="foreground">
-                        Features
-                    </Link>
-                </NavbarItem>
-                <NavbarItem isActive>
-                    <Link
-                        href="#"
-                        color="foreground"
-                        // aria-current="page"
-                        // className='text-inherit'
-                    >
-                        Customers
-                    </Link>
-                </NavbarItem>
-                <NavbarItem>
-                    <Link color="foreground" href="#">
-                        Integrations
-                    </Link>
-                </NavbarItem>
-            </NavbarContent>
+            <NavbarContent
+                className="hidden gap-4 sm:flex"
+                justify="center"
+            ></NavbarContent>
 
             <NavbarContent justify="end">
-                <NavbarItem className="hidden lg:flex">
+                <NavbarItem>
                     <Link href="/signin" className="text-secondary">
                         Sign In
                     </Link>
@@ -82,24 +62,26 @@ export default function LandingNavbar() {
             </NavbarContent>
 
             <NavbarMenu>
-                {menuItems.map((item, index) => (
-                    <NavbarMenuItem key={`${item}-${index}`}>
-                        <Link
-                            className="w-full"
-                            color={
-                                index === 2
-                                    ? "warning"
-                                    : index === menuItems.length - 1
-                                    ? "danger"
-                                    : "foreground"
-                            }
-                            href="#"
-                            size="lg"
-                        >
-                            {item}
-                        </Link>
-                    </NavbarMenuItem>
-                ))}
+                <NavbarMenuItem key={`signup`}>
+                    <Link
+                        className="w-full"
+                        color={"foreground"}
+                        href="/signup"
+                        size="lg"
+                    >
+                        Sign Up
+                    </Link>
+                </NavbarMenuItem>
+                <NavbarMenuItem key={`signin`}>
+                    <Link
+                        className="w-full"
+                        color={"foreground"}
+                        href="/signin"
+                        size="lg"
+                    >
+                        Sign In
+                    </Link>
+                </NavbarMenuItem>
             </NavbarMenu>
         </Navbar>
     )
