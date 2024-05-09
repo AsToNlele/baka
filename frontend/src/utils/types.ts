@@ -361,3 +361,34 @@ export type UserFlowerbedStatsType = {
     emission_sentence: string
     savings_sum: number
 }
+
+export interface GreenhouseStatsType {
+  total_spend: number
+  flowerbed_stats: FlowerbedStats
+  product_stats: ProductStats
+  total_status_comparison: TotalStatusComparison[]
+}
+
+export interface FlowerbedStats {
+  total_spend: number
+  occupied_flowerbeds: number
+  total_flowerbeds: number
+}
+
+export interface ProductStats {
+  total_spend: number
+  total_orders: number
+  total_customers: number
+  popular_products: PopularProduct[]
+  total_products: number
+}
+
+export interface PopularProduct {
+  productName: string
+  total_quantity: number
+}
+
+export interface TotalStatusComparison {
+  status: string
+  count: number
+}

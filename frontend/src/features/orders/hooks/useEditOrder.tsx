@@ -18,7 +18,7 @@ export const useEditOrder = () => {
         mutationFn: editOrder,
         onSuccess: (data) => {
             queryClient.invalidateQueries({
-                queryKey: ["orderDetail", data.data.id],
+                queryKey: ["OrderList", data.data.id],
             })
         },
     })

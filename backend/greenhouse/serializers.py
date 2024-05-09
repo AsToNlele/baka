@@ -526,3 +526,28 @@ class TimesheetWithGreenhouseSerializer(serializers.ModelSerializer):
 
 class EmptySerializer(serializers.Serializer):
     pass
+
+class FlowerbedStatisticsSerializer(serializers.Serializer):
+    count = serializers.IntegerField()
+    total_spend = serializers.FloatField()
+    occupied_flowerbeds = serializers.IntegerField()
+    total_flowerbeds = serializers.IntegerField()
+
+class ProductStatisticsSerializer(serializers.Serializer):
+    total_spend = serializers.FloatField()
+    total_orders = serializers.IntegerField()
+    total_customers = serializers.IntegerField()
+    popular_products = serializers.ListField()
+    total_products = serializers.IntegerField()
+
+class StatusComparisonSerializer(serializers.Serializer):
+    status = serializers.CharField()
+    count = serializers.IntegerField()
+
+class GreenhouseStatisticsSerializer(serializers.Serializer):
+    total_spend = serializers.FloatField()
+    flowerbed_stats = FlowerbedStatisticsSerializer()
+    product_stats = ProductStatisticsSerializer()
+    total_status_comparison = StatusComparisonSerializer(many=True)
+
+    

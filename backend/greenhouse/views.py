@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db.models import Q
 from greenhouse.models import Greenhouse, GreenhouseAddress, Timesheet
 from greenhouse.permissions.isOwner import IsOwner
@@ -12,6 +14,7 @@ from greenhouse.serializers import (
     EmptySerializer,
     GreenhouseAddressSerializer,
     GreenhouseSerializer,
+    GreenhouseStatisticsSerializer,
     GreenhouseUploadImageSerializer,
     SetCaretakerSerializer,
     SetOwnerSerializer,
@@ -19,6 +22,7 @@ from greenhouse.serializers import (
     TimesheetWithGreenhouseSerializer,
     UpdateTimesheetSerializer,
 )
+from greenhouse.services import get_monthly_report
 from rest_framework import viewsets
 from rest_framework.decorators import action, permission_classes
 from rest_framework.generics import get_object_or_404
@@ -243,6 +247,42 @@ class GreenhouseViewSet(viewsets.ModelViewSet):
         )
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    @action(
+        detail=True,
+        methods=["get"],
+        name="Get statistics",
+        serializer_class=EmptySerializer,
+        permission_classes=[IsAuthenticated],
+    )
+    def get_statistics(self, request, pk=None):
+        greenhouse = self.get_object()
+
+        # Only admin or owner can see statistics
+        if not request.user.is_superuser and greenhouse.owner != request.user.profile:
+            return Response(
+                {"message": "You are not allowed to view statistics"}, status=403
+            )
+
+        # Get month and year from query params
+        month = request.GET.get("month")
+        year = request.GET.get("year")
+
+        if not month or not year:
+            month = datetime.now().month
+            year = datetime.now().year
+
+        month = int(month)
+        year = int(year)
+
+        if month < 1 or month > 12:
+            return Response({"message": "Invalid month"}, status=400)
+        if year < 1970:
+            return Response({"message": "Invalid year"}, status=400)
+
+        stats = get_monthly_report(greenhouse, month, year)
+
+        return Response(stats.data, status=200)
 
 
 class GreenhouseUploadImageView(APIView):

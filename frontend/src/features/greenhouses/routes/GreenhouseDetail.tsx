@@ -21,6 +21,7 @@ import { FlowerbedTab } from "@/features/flowerbeds/components/FlowerbedTab"
 import { GreenhouseImage } from "@/features/greenhouses/components/GreenhouseImage"
 import { GreenhouseImageUploadModal } from "@/features/greenhouses/components/GreenhouseImageUploadModal"
 import { Map } from "@/features/greenhouses/components/Map"
+import { GreenhouseStats } from "@/features/greenhouses/components/GreenhouseStats"
 
 export const GreenhouseDetail = () => {
     const { id } = useParams()
@@ -70,6 +71,9 @@ export const GreenhouseDetail = () => {
         user?.superuser ||
         user?.profile?.id === data.owner ||
         user?.profile?.id === data.caretaker
+
+    const userIsAdminOrOwner = () =>
+        user?.superuser || user?.profile?.id === data.owner
 
     const mapPosition = [
         parseFloat(data?.greenhouse_address?.latitude + "") ?? 0,
@@ -208,6 +212,15 @@ export const GreenhouseDetail = () => {
                         </CardBody>
                     </Card>
                 </Tab>
+                {userIsAdminOrOwner() && (
+                    <Tab key="stats" title="Stats">
+                        <Card>
+                            <GreenhouseStats
+                                greenhouseId={greenhouseId!}
+                            />
+                        </Card>
+                    </Tab>
+                )}
             </Tabs>
         </>
     )
