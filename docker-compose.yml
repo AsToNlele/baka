@@ -38,6 +38,7 @@ services:
         - celerybeat
     environment:
       - PROD='True'
+      - DB_HOST=db
 
   frontend:
     # stdin_open: true
