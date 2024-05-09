@@ -1,3 +1,5 @@
+// Author: Waypoint (Metaccountant, Inc.)
+// Full license can be found in src/features/newsletter/editor/LICENSE
 import { Button } from "@mui/material"
 
 import { resetDocument } from "../../documents/editor/EditorContext"

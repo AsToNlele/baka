@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { EditUserModal } from "@/features/users/components/EditUserModal"
 import { UserActivity } from "@/features/users/components/UserActivity"
 import { UserResetPassword } from "@/features/users/components/UserResetPassword"

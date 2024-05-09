@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { WorkingHourType } from "@/utils/types"
 import { Button, Card, CardBody } from "@nextui-org/react"
 import { FaPlus, FaTrash } from "react-icons/fa"

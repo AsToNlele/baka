@@ -1,4 +1,4 @@
-# docker-compose.yml
+# Author: Alexandr Celakovsky - xcelak00
 
 services:
   backend:

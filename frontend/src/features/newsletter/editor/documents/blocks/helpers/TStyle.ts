@@ -1,3 +1,5 @@
+// Author: Waypoint (Metaccountant, Inc.)
+// Full license can be found in src/features/newsletter/editor/LICENSE
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export type TStyle = {

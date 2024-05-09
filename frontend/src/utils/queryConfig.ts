@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { MutationCache, QueryCache } from "@tanstack/react-query"
 import axios from "axios"
 import { toast } from "sonner"

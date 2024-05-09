@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { SmallLoading } from "@/components/Loading"
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { useBadgeRarity } from "@/features/badges/hooks/useBadgeRarity"

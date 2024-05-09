@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import {
     Button,
     Modal,
@@ -41,8 +42,6 @@ export const CreateFlowerbedModal = ({
     }
 
     const { mutate } = useCreateFlowerbed()
-
-    console.log(formState.errors)
 
     const onSubmit: SubmitHandler<CreateFlowerbedValidationType> = (data) => {
         mutate(

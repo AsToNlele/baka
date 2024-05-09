@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { SmallLoading } from "@/components/Loading"
 import { useActivateAccount } from "@/features/auth/hooks/useActivateAccount"
 import { Card, CardBody, CardHeader } from "@nextui-org/react"

@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { useFlowerbedDetail } from "@/features/flowerbeds/hooks/useFlowerbedDetail"
 import { Button, Card, CardBody, Link, useDisclosure } from "@nextui-org/react"

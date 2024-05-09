@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import * as z from "zod"
 
 export const EditUserDetailSchema = z.object({

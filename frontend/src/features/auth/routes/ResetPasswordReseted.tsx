@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { Card, CardBody, CardHeader, Link } from "@nextui-org/react"
 
 export const ResetPasswordReseted = () => {

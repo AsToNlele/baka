@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import type { ReactNode } from "react"
 import { AppNavbar } from "./Navbar"
 import { NavBreadcrumbs } from "./NavBreadcrumbs"

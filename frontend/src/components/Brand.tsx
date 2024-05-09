@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { Link } from "react-router-dom"
 
 export const BrandLogo = () => (

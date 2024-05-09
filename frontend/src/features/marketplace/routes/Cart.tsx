@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { useMarketplaceProductDetails } from "@/features/marketplace/hooks/useMarketplaceProductDetail"
 import { useShoppingCartStore } from "@/features/marketplace/stores/useShoppingCartStore"
@@ -159,44 +160,6 @@ type CartItemLockedProps = {
     data: GreenhouseDetailProductType | undefined
 }
 
-// const CartItemLocked = ({ type, item, data }: CartItemProps) => {
-//     if (!data) {
-//         return <Spinner color="primary" />
-//     }
-//     if (type === "product") {
-//         return (
-//             <div className="flex items-center gap-4">
-//                 <div>{data?.name}</div>
-//                 {/* <p className="whitespace-nowrap">{item.quantity}x</p> */}
-//                 {/* <p className="whitespace-nowrap">{data?.price} / piece</p> */}
-//                 <div className="text-lg font-bold text-primary">
-//                     Price: {data?.min} - {data?.max}
-//                 </div>
-//             </div>
-//         )
-//     } else {
-//         return (
-//             <div className="flex items-center gap-4">
-//                 <div>{data?.product?.name}</div>
-//                 <p className="whitespace-nowrap">{item.quantity}x</p>
-//                 <p className="whitespace-nowrap">{data?.price} / piece</p>
-//                 <p>
-//                     From:{" "}
-//                     <Link
-//                         className="text-secondary"
-//                         to={`/app/greenhouses/${data.greenhouse.id}`}
-//                     >
-//                         {data.greenhouse.title}
-//                     </Link>
-//                 </p>
-//                 <div className="text-lg font-bold text-primary">
-//                     {parseFloat(data?.price) * item.quantity}
-//                 </div>
-//             </div>
-//         )
-//     }
-// }
-
 const CartItemLocked = ({ item, data }: CartItemLockedProps) => {
     if (!data) {
         return <Spinner color="primary" />
@@ -301,6 +264,7 @@ export const RentFlowerbed = () => {
     return <div className="flex flex-col gap-4"></div>
 }
 
+// Pickup options
 const Step2 = () => {
     const { items, setCurrentStep } = useShoppingCartStore()
     const { data: profile } = useProfile()
@@ -314,7 +278,6 @@ const Step2 = () => {
         (option) => option.title === selected,
     )
 
-    // Calculate totalAfterDiscount in a single line
     const totalAfterDiscount = () => Math.max(finalPickupOption?.sum ?? 0 - (discount?.discount_value ?? 0), 0)
 
     const goToNext = () => {
@@ -346,6 +309,7 @@ const Step2 = () => {
 
     useEffect(() => {
         if (pickupOptions) {
+            // Select first as default
             setSelected(pickupOptions[0].title)
         }
     }, [pickupOptions])
@@ -463,77 +427,6 @@ const PickupOptionItems = ({ option }: { option: PickupOptionType }) => {
     )
 }
 
-export const StepStep2 = () => {
-    return "Step2"
-    // const { setCurrentStep, items, sum } = useShoppingCartStore()
-    // const { mutate } = useCreateProductOrder()
-    //
-    // const goToNext = () => {
-    //     // setCurrentStep("step3")
-    //     console.log("ITEMS", items)
-    //     mutate({ data: { items } })
-    // }
-    //
-    // const { data: profileData } = useProfile()
-    // console.log(profileData)
-    //
-    // const query = useMarketplaceProductDetails(items)
-    //
-    // return (
-    //     <>
-    //         <div className="mx-auto flex flex-col gap-4 lg:mx-24">
-    //             <div className="grid grid-cols-2 gap-4">
-    //                 <div>
-    //                     <h2 className="text-xl font-bold">Full name: </h2>
-    //                     <p>
-    //                         {profileData?.first_name || "Test"}{" "}
-    //                         {profileData?.last_name || "User"}
-    //                     </p>
-    //                     <h2 className="text-xl font-bold">Email:</h2>
-    //                     <p>{profileData?.email || "test@email.com"}</p>
-    //                 </div>
-    //                 <div></div>
-    //             </div>
-    //             <Divider />
-    //             {/* Price summary */}
-    //             <div className="grid grid-cols-2 gap-4">
-    //                 <div>
-    //                     <h2 className="text-xl font-bold">Items:</h2>
-    //                     {items.map((item, index) => {
-    //                         return (
-    //                             <CartItemLocked
-    //                                 key={item.marketplaceProduct}
-    //                                 item={item}
-    //                                 data={query[index]?.data}
-    //                             />
-    //                         )
-    //                     })}
-    //                 </div>
-    //                 <div>
-    //                     {/* <h2 className="text-xl font-bold">Price per day:</h2> */}
-    //                     {/* <p>{Number.parseFloat(data?.pricePerDay ?? "0")}</p> */}
-    //                 </div>
-    //             </div>
-    //             <Divider />
-    //             <div className="grid grid-cols-2 gap-4">
-    //                 <div></div>
-    //                 <div className="flex flex-col">
-    //                     <h2 className="text-lg font-bold">Total:</h2>
-    //                     <p className="text-xl text-secondary">{sum}</p>
-    //                 </div>
-    //             </div>
-    //             <div className="flex gap-4">
-    //                 <Button onPress={() => setCurrentStep("step1")}>
-    //                     Previous
-    //                 </Button>
-    //                 <Button color="secondary" onPress={goToNext}>
-    //                     Confirm
-    //                 </Button>
-    //             </div>
-    //         </div>
-    //     </>
-    // )
-}
 const Step3 = () => {
     const { orderId, setCurrentStep } = useShoppingCartStore()
     if (!orderId) {

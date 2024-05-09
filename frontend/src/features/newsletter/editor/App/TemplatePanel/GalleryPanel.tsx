@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { SmallLoading } from "@/components/Loading"
 import { useGallery } from "@/features/newsletter/hooks/useGallery"
 import { useUploadNewsletterImage } from "@/features/newsletter/hooks/useUploadNewsletterImage"

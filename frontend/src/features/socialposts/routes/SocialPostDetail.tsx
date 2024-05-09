@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { SmallLoading } from "@/components/Loading"
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { useProfile } from "@/features/auth/hooks/useProfile"

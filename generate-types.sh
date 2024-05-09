@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 #!/bin/bash
 
 cd backend

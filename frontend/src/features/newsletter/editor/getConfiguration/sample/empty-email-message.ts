@@ -1,3 +1,5 @@
+// Author: Waypoint (Metaccountant, Inc.)
+// Full license can be found in src/features/newsletter/editor/LICENSE
 import { TEditorConfiguration } from '../../documents/editor/core';
 
 const EMPTY_EMAIL_MESSAGE: TEditorConfiguration = {

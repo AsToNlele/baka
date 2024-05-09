@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { SmallLoading } from "@/components/Loading"
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { useProfile } from "@/features/auth/hooks/useProfile"
@@ -23,8 +24,6 @@ export const TimesheetDetail = () => {
     const isOwner =
         data?.greenhouse.owner === user?.profile.id || user?.profile.superuser
 
-    console.log({ isAuthor })
-
     return (
         <div className="flex flex-col gap-4">
             {isLoading || !data ? (
@@ -34,8 +33,6 @@ export const TimesheetDetail = () => {
                     <PageTitle title={`Timesheet ${data.title}`} />
                     <div className="flex flex-col gap-4">
                         <div className="flex items-center gap-4">
-                            {/* <div>Status:</div> */}
-                            {/* <div>{upperCaseFirstLetter(data.status ?? "")}</div> */}
                             <TimesheetStatus status={data.status!} />
                             <div className="flex gap-4">
                                 <div>Author:</div>

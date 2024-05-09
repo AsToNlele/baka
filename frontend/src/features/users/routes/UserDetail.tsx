@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { SmallLoading } from "@/components/Loading"
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { UserDetails } from "@/features/users/components/UserDetails"
@@ -9,7 +10,6 @@ export const UserDetail = () => {
     const userId = id ? parseInt(id) : null
     const { data, isLoading } = useUserDetail(userId)
     
-    console.log(data)
     return (
         <div>
             {isLoading || !data ? (
@@ -19,12 +19,6 @@ export const UserDetail = () => {
                     <PageTitle title={data.username} />
 
                     <UserDetails data={data} />
-
-                    {/* # Orders, Flowerbeds, Rents */}
-
-                    {/* # Owned Greenhouses */}
-
-                    {/* # Caretaker of Greenhouses */}
                 </div>
             )}
         </div>

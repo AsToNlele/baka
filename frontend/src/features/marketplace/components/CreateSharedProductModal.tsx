@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useCreateSharedProduct } from "@/features/marketplace/hooks/useCreateSharedProduct"
 import {
     Button,

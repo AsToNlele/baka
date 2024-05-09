@@ -1,3 +1,8 @@
+// Author: Waypoint (Metaccountant, Inc.)
+// Full license can be found in src/features/newsletter/editor/LICENSE
+// 
+// Edited by: Alexandr Celakovsky - xcelak00
+
 import {
     CodeOutlined,
     DataObjectOutlined,

@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { CreateFlowerbedModal } from "@/features/flowerbeds/components/CreateFlowerbedModal"
 import { FlowerbedList } from "@/features/flowerbeds/components/FlowerbedList"

@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { FlowerbedImage } from "@/features/flowerbeds/components/FlowerbedImage"
 import { useMyFlowerbedList } from "@/features/flowerbeds/hooks/useMyFlowerbedList"

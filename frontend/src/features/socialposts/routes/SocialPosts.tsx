@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { EditSocialPostModal } from "@/features/socialposts/components/EditSocialPostModal"
@@ -258,25 +259,20 @@ const SocialPost = ({ post, edit, statusChange, trash }: SocialPostProps) => {
 const CreateSocialPost = ({ setTab }: { setTab: (key: string) => void }) => {
     const { mutate } = useCreateSocialPost()
 
-    const { register, handleSubmit, reset, formState, getValues } =
+    const { register, handleSubmit, reset, formState } =
         useForm<CreateSocialPostValidation>({
             resolver: zodResolver(CreateSocialPostSchema),
         })
 
     const onSubmit: SubmitHandler<CreateSocialPostValidation> = (data) => {
-        console.log("MUTATING")
         mutate(data, {
-            onSuccess: (res) => {
-                console.log(res)
+            onSuccess: () => {
                 toast.success("Post sent for approval")
                 reset()
                 setTab("my-posts")
             },
         })
     }
-
-    console.log(formState.errors)
-    console.log(getValues())
 
     const submit = () => {
         handleSubmit(onSubmit)()

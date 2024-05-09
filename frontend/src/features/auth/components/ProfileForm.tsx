@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import { useProfile } from "../hooks/useProfile"
 import { Button, Input, Switch } from "@nextui-org/react"
@@ -12,7 +13,7 @@ export const ProfileForm = () => {
 
     const { mutate } = useEditSelf()
 
-    const { register, control, handleSubmit, reset, formState, getValues } =
+    const { register, control, handleSubmit, reset, formState } =
         useForm<EditSelfValidationType>({
             resolver: zodResolver(EditSelfSchema),
             defaultValues: {
@@ -27,8 +28,6 @@ export const ProfileForm = () => {
         })
 
     const onSubmit: SubmitHandler<EditSelfValidationType> = (data) => {
-        console.log("mutating")
-        console.log(data)
         mutate(data, {
             onSuccess: (res) => {
                 const data = res.data
@@ -44,9 +43,6 @@ export const ProfileForm = () => {
             },
         })
     }
-
-    console.log(formState.errors)
-    console.log(getValues())
 
     const submit = () => {
         handleSubmit(onSubmit)()

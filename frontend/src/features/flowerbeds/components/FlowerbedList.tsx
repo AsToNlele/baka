@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { FlowerbedImage } from "@/features/flowerbeds/components/FlowerbedImage"
 import { FlowerbedType, GreenhouseType } from "@/utils/types"
@@ -20,7 +21,6 @@ const FlowerbedStatus = ({ flowerbed }: { flowerbed: FlowerbedType }) => {
 }
 
 const Flowerbed = ({ flowerbed }: { flowerbed: FlowerbedType }) => {
-    // const isRenter = flowerbed.currentRent
     return (
         <Card
             shadow="sm"

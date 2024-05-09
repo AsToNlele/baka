@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import {
     Button,
     Modal,
@@ -50,7 +51,6 @@ export const EditGreenhouseMarketplaceProductModal = ({
         product: {
             name: foundProduct?.product.name ?? "",
             description: foundProduct?.product.description ?? "",
-            // image: foundProduct?.product.image ?? undefined,
             shared: foundProduct?.product.shared ?? false,
         },
         quantity: foundProduct?.quantity,
@@ -101,7 +101,6 @@ export const EditGreenhouseMarketplaceProductModal = ({
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newUploadData = e?.target?.files?.[0]
-        console.log(newUploadData)
         if (newUploadData) {
             setImage(newUploadData)
         }

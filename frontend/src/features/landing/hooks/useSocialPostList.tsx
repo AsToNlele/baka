@@ -1,4 +1,4 @@
-
+// Author: Alexandr Celakovsky - xcelak00
 import { api } from "@/utils/api"
 import { useQuery } from "@tanstack/react-query"
 import { SocialPostListResponse } from "utils/types"

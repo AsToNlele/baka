@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { TimesheetItemType } from "@/utils/types"
 import { Card, CardBody, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@nextui-org/react"
 

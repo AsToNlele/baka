@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { SubmitHandler, useForm } from "react-hook-form"
 import { Button, Input } from "@nextui-org/react"
 import { useResetPasswordConfirm } from "@/features/auth/hooks/useResetPasswordConfirm"

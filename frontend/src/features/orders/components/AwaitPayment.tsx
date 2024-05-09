@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useOrderDetail } from "@/features/orders/hooks/useOrderDetail"
 import { Button, Spinner } from "@nextui-org/react"
 import { useEffect } from "react"
@@ -10,10 +11,7 @@ type AwaitPaymentProps = {
 export const AwaitPayment = ({ orderId }: AwaitPaymentProps) => {
     const { data, refetch } = useOrderDetail(orderId)
 
-    // if (!data) {
-    //     return <div>Loading...</div>;
-    // }
-    //
+    // Check order status every 5 seconds
     useEffect(() => {
         const interval = setInterval(() => {
             refetch()

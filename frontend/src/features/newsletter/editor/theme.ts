@@ -1,3 +1,6 @@
+// Author: Waypoint (Metaccountant, Inc.)
+// Full license can be found in src/features/newsletter/editor/LICENSE
+
 import { alpha, createTheme, darken, lighten } from '@mui/material/styles';
 
 const BRAND_NAVY = '#212443';

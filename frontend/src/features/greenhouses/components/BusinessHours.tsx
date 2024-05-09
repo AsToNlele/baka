@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { BusinessHoursType } from "@/utils/types"
 import { Button, Input, Switch } from "@nextui-org/react"
 import { FaPlus, FaTrash } from "react-icons/fa"

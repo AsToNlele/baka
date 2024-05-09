@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { Button } from "@nextui-org/react"
 import { useSignOut } from "../hooks/useSignOut"
 

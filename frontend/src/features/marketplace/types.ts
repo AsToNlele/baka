@@ -1,9 +1,9 @@
+// Author: Alexandr Celakovsky - xcelak00
 import * as z from "zod"
 
 export const CreateSharedProductSchema = z.object({
     name: z.string().min(3),
     description: z.string().min(3),
-    // image: z.string().optional(),
 })
 
 export type CreateSharedProductValidationType = z.infer<
@@ -24,7 +24,6 @@ export const CreateGreenhouseProductFromCustomProductSchema = z.object({
     product: z.object({
         name: z.string().min(3),
         description: z.string().min(3),
-        // image: z.string().optional(),
     }),
     price: z.coerce.number().gt(0),
     quantity: z.coerce.number().int().gt(0),
@@ -62,7 +61,6 @@ export const EditGreenhouseMarketplaceProductRequestSchema = z.object({
     product: z.object({
         name: z.string().min(3),
         description: z.string().min(3),
-        // image: z.string().optional(),
         shared: z.boolean(),
     }),
     price: z.string(),

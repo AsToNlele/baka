@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useFlowerbedDetail } from "@/features/flowerbeds/hooks/useFlowerbedDetail"
 import { useMultistepFormStore } from "@/features/flowerbeds/stores/useRentMultistepFormStore"
 import { Button, Divider } from "@nextui-org/react"
@@ -76,7 +77,6 @@ const ExtendRentFlowerbedHeader = () => {
     )
 }
 
-// TODO: add min length of rent
 const schema = z
     .object({
         from: z.coerce.date(),
@@ -129,14 +129,11 @@ const Step1 = () => {
         }
     }
 
-    console.log(dateRange)
-
     useEffect(() => {
     }, [])
 
     useEffect(() => {
         if (data && data?.currentRent) {
-            console.log("RESET")
             setSingleDateRange({
                 from: new Date(data?.currentRent.rented_to),
                 to: new Date(data?.currentRent.rented_to),
@@ -146,7 +143,6 @@ const Step1 = () => {
 
     useEffect(() => {
         const calculateDaysInBetween = (range: DateRange | undefined) => {
-            console.log(range)
             if (!range) return undefined
             const val =
                 differenceInDays(
@@ -160,7 +156,6 @@ const Step1 = () => {
 
     const goToNext = () => {
         const result = schema.safeParse(dateRange)
-        console.log(result)
         if (!result.success) {
             result.error.errors.map((error) => {
                 toast.error(error.message)
@@ -237,7 +232,6 @@ const Step2 = () => {
     }, [dateRange])
 
     const { data: profileData } = useProfile()
-    console.log(profileData)
 
     const calculateDaysInBetween = (range: DateRange | undefined) => {
         if (!range) return 0
@@ -246,7 +240,6 @@ const Step2 = () => {
                 dateRange?.to || new Date(),
                 dateRange?.from || new Date(),
             ) + 1
-        console.log(val)
         return val
     }
     

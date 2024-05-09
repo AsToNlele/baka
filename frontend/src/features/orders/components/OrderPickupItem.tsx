@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { ProductImage } from "@/features/marketplace/components/ProductImage"
 import { GetPickupLocationsType } from "@/utils/types"
 import { dayNumberToDay, formatTime } from "@/utils/utils"
@@ -16,7 +17,6 @@ export const OrderPickupItem = ({ pickup }: { pickup: GetPickupLocationsType }) 
                             <h2 className="mb-2 flex-1 text-lg font-semibold">
                                 Opening hours
                             </h2>
-                            {/* <p>Open</p> */}
                             <div className="mt-2 flex flex-col gap-2">
                                 {pickup.greenhouse?.greenhouse_business_hours?.map(
                                     (day) => (

@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { PageTitle } from "@/features/app/components/PageTitle"
 import Editor from "@/features/newsletter/editor/App"
 import THEME from "@/features/newsletter/editor/theme"

@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { Button, Input } from "@nextui-org/react"
 import { ChangeEvent, useRef } from "react"
 
@@ -43,11 +44,6 @@ export const GreenhouseProductCustomFields = ({
                 {...register("quantity")}
                 errorMessage={errors.quantity?.message}
             />
-            {/* <Input */}
-            {/*     label="Image" */}
-            {/*     {...register("product.image")} */}
-            {/*     errorMessage={errors?.image?.message} */}
-            {/* /> */}
 
             <Button
                 onPress={() => imageInputRef?.current?.click()}

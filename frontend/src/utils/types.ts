@@ -1,4 +1,5 @@
-// Import schema.d.ts file
+// Author: Alexandr Celakovsky - xcelak00
+
 import {
     ShoppingCartMarketplaceItem,
     ShoppingCartProductItem,

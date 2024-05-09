@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useFlowerbedDetail } from "@/features/flowerbeds/hooks/useFlowerbedDetail"
 import { useMultistepFormStore } from "@/features/flowerbeds/stores/useRentMultistepFormStore"
 import { Button, Divider } from "@nextui-org/react"
@@ -69,7 +70,6 @@ const RentFlowerbedHeader = () => {
     )
 }
 
-// TODO: add min length of rent
 const schema = z
     .object({
         from: z.coerce.date(),
@@ -113,10 +113,6 @@ const Step1 = () => {
         refetchDetail()
     }, [])
 
-    console.log("RANGEEE", dateRange)
-    console.log("NEW DATE", new Date())
-    console.log("START OF DAY", startOfDay(new Date()))
-
     useEffect(() => {
         if (data) {
             setDateRange({
@@ -128,7 +124,6 @@ const Step1 = () => {
 
     useEffect(() => {
         const calculateDaysInBetween = (range: DateRange | undefined) => {
-            console.log(range)
             if (!range) return undefined
             const val =
                 differenceInDays(
@@ -142,7 +137,6 @@ const Step1 = () => {
 
     const goToNext = () => {
         const result = schema.safeParse(dateRange)
-        console.log(result)
         if (!result.success) {
             result.error.errors.map((error) => {
                 toast.error(error.message)
@@ -203,7 +197,6 @@ const Step2 = () => {
                 dateRange?.to || new Date(),
                 dateRange?.from || new Date(),
             ) + 1
-        console.log(val)
         return val
     }
 
@@ -215,8 +208,6 @@ const Step2 = () => {
     if (totalPrice < 0) {
         totalPrice = 0
     }
-
-    console.log("DISCOUNT", discount)
 
     const goToNext = () => {
         mutate({
@@ -237,7 +228,6 @@ const Step2 = () => {
     }, [dateRange])
 
     const { data: profileData } = useProfile()
-    console.log(profileData)
 
     return (
         <>
@@ -355,7 +345,6 @@ const MultistepForm = () => {
     useEffect(() => {
         return () => {
             // Reset form on unmount
-            console.log("reseting form")
             setOrderId(null)
             setCurrentStep("step1")
             setDateRange(undefined)

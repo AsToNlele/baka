@@ -1,3 +1,5 @@
+// Author: Waypoint (Metaccountant, Inc.)
+// Full license can be found in src/features/newsletter/editor/LICENSE
 import hljs from 'highlight.js';
 import jsonHighlighter from 'highlight.js/lib/languages/json';
 import xmlHighlighter from 'highlight.js/lib/languages/xml';

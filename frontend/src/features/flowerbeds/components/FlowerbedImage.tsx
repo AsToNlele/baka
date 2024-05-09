@@ -1,4 +1,4 @@
-
+// Author: Alexandr Celakovsky - xcelak00
 import { imageUrl } from "@/utils/utils"
 import { Image } from "@nextui-org/react"
 

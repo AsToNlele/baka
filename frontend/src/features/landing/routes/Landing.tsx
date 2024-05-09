@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { Button, Image, Link } from "@nextui-org/react"
 import Navbar from "../components/Navbar"
 import { SocialMediaPosts } from "@/features/landing/components/SocialMediaPosts"

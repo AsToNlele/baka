@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { ProfileForm } from "../components/ProfileForm"
 
 export const Profile = () => {

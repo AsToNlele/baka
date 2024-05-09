@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useMultistepFormStore } from "@/features/flowerbeds/stores/useRentMultistepFormStore"
 import { api } from "@/utils/api"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
@@ -44,7 +45,6 @@ export const useExtendRentFlowerbed = () => {
         mutationFn: rent,
         onSuccess: (resp) => {
             setCurrentStep("step3")
-            console.log("RESPONSE", resp.data)
             queryClient.invalidateQueries({
                 queryKey: ["flowerbedStatus", resp.data.flowerbed!.toString()],
             })

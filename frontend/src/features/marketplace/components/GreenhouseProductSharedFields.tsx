@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useSharedProductList } from "@/features/marketplace/hooks/useSharedProductList"
 import { Input, Select, SelectItem } from "@nextui-org/react"
 import { Controller } from "react-hook-form"

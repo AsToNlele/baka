@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { Diary } from "@/features/flowerbeds/components/Diary"
 import { Harvest } from "@/features/flowerbeds/components/Harvest"
 import { Stats } from "@/features/flowerbeds/components/Stats"

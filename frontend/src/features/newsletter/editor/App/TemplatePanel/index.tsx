@@ -1,3 +1,7 @@
+// Author: Waypoint (Metaccountant, Inc.)
+// Full license can be found in src/features/newsletter/editor/LICENSE
+//
+// Edited by: Alexandr Celakovsky - xcelak00
 import { MonitorOutlined, PhoneIphoneOutlined } from "@mui/icons-material"
 import {
     Box,

@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { format, isValid, parseISO } from "date-fns"
 
 export const dateFormat = "dd.MM.yyyy"
@@ -50,8 +51,6 @@ export const formatTime = (timeString: string) => {
         parseInt(timeString.split(":")[1]),
     )
     return format(date, "HH:mm")
-    // const [hours, minutes] = timeString.split(":")
-    // return new Date(0, 0, 0, parseInt(hours), parseInt(minutes))
 }
 
 export const inSameTimePeriod = (date1: string, date2: string) => {

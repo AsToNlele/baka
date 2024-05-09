@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { Outlet, useNavigate } from "react-router-dom"
 import { useProfile } from "../features/auth/hooks/useProfile"
 import { toast } from "sonner"

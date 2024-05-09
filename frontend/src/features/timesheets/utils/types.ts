@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import * as z from "zod"
 import { fromZonedTime, toZonedTime } from "date-fns-tz"
 

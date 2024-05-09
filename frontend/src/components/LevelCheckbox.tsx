@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { Checkbox, CheckboxGroup } from "@nextui-org/react"
 import { useEffect, useState } from "react"
 

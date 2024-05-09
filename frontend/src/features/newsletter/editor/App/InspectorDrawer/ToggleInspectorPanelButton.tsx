@@ -1,3 +1,5 @@
+// Author: Waypoint (Metaccountant, Inc.)
+// Full license can be found in src/features/newsletter/editor/LICENSE
 import { AppRegistrationOutlined, LastPageOutlined } from "@mui/icons-material"
 import { IconButton } from "@mui/material"
 

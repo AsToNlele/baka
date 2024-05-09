@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { GreenhouseImage } from "@/features/greenhouses/components/GreenhouseImage"
 import { ProductImage } from "@/features/marketplace/components/ProductImage"

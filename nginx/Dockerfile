@@ -1,3 +1,4 @@
+# Author: Alexandr Celakovsky - xcelak00
 # nginx/Dockerfile
 
 FROM nginx:latest

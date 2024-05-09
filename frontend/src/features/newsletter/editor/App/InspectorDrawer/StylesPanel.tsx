@@ -1,3 +1,5 @@
+// Author: Waypoint (Metaccountant, Inc.)
+// Full license can be found in src/features/newsletter/editor/LICENSE
 import { setDocument, useDocument } from "../../documents/editor/EditorContext"
 
 import EmailLayoutSidebarPanel from "./ConfigurationPanel/input-panels/EmailLayoutSidebarPanel"

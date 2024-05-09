@@ -1,3 +1,5 @@
+// Author: Waypoint (Metaccountant, Inc.)
+// Full license can be found in src/features/newsletter/editor/LICENSE
 export const FONT_FAMILIES = [
   {
     key: 'MODERN_SANS',

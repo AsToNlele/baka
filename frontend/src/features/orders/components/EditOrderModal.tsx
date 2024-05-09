@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import {
     Modal,
     ModalHeader,
@@ -35,7 +36,7 @@ export const EditOrderModal = ({
 }: EditOrderModalProps) => {
     const { mutate } = useEditOrder()
 
-    const { register, control, handleSubmit, reset, formState, getValues } =
+    const { register, control, handleSubmit, reset, formState } =
         useForm<EditOrderValidationType>({
             resolver: zodResolver(EditOrderSchema),
             defaultValues: {
@@ -45,8 +46,6 @@ export const EditOrderModal = ({
         })
 
     const onSubmit: SubmitHandler<EditOrderValidationType> = (data) => {
-        console.log("mutating")
-        console.log(data)
         mutate(
             { id: order.id!, data: data },
             {
@@ -56,9 +55,6 @@ export const EditOrderModal = ({
             },
         )
     }
-
-    console.log(formState.errors)
-    console.log(getValues())
 
     const submit = () => {
         handleSubmit(onSubmit)()

@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { Spinner } from "@nextui-org/react"
 
 export const Loading = () => (

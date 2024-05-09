@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useMutation } from "@tanstack/react-query"
 import { api } from "../../../utils/api"
 import { CreateProductOrderType } from "@/utils/types"
@@ -18,7 +19,6 @@ export const useCreateProductOrder = () => {
         mutationFn: createProductOrder,
         onSuccess: (resp) => {
             setCurrentStep("step3")
-            console.log("RESPONSE", resp.data)
             setOrderId(resp.data.id)
         },
         onError: (error) => {

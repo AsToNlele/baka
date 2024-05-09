@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { api } from "@/utils/api"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
@@ -9,6 +10,7 @@ const uploadNewsletterImage = ({ data }: { data: NewsletterImageType }) => {
     const form_data = new FormData()
     if (data.image) form_data.append("image", data.image, data.image.name)
 
+    // Upload image to gallery
     return api.post(`/newsletter/gallery/`, form_data, {
         headers: {
             "Content-Type": "multipart/form-data",

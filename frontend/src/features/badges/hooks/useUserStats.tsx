@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { api } from "@/utils/api"
 import { UserStatsResponse } from "@/utils/types"
 import { useQuery } from "@tanstack/react-query"

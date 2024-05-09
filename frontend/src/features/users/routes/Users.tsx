@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { SmallLoading } from "@/components/Loading"
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { useUserList } from "@/features/users/hooks/useUserList"
@@ -8,6 +9,7 @@ import { Link } from "react-router-dom"
 
 export const Users = () => {
     const { data, isLoading } = useUserList()
+    // List users
     return (
         <div>
             <PageTitle title="Users" />
@@ -24,42 +26,9 @@ export const Users = () => {
     )
 }
 
-// type ProductOrderProps = {
-//     order: ProductOrderType
-// }
-//
-// export const ProductOrder = ({ order }: ProductOrderProps) => {
-//     return (
-//         <Link to={`/app/orders/${order.id}`}>
-//             <Card>
-//                 <CardHeader className="flex gap-8">
-//                     <h2 className="text-lg">
-//                         {upperCaseFirstLetter(order.status ?? "")}
-//                     </h2>
-//                     <p className="text-sm">
-//                         Ordered on: {parseIsoAndFormat(order.created_at!)}
-//                     </p>
-//                     <p className="text-sm">Order ID: {order.id}</p>
-//                 </CardHeader>
-//                 <Divider />
-//                 <CardBody>
-//                     <div className="flex gap-4">
-//                         <div className="flex-col">
-//                             <p>Products: {order?.items.length}</p>
-//                         </div>
-//                         <div className="flex-col">
-//                             <p>Price: {order.final_price}</p>
-//                         </div>
-//                     </div>
-//                 </CardBody>
-//             </Card>
-//         </Link>
-//     )
-// }
-//
 
 const User = ({ user }: { user: UserType }) => {
-    // Make it similar to the ProductOrder component, use card
+    // User card
     return (
         <Link to={`/app/users/${user.profile.user}`}>
             <Card>

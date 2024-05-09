@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { BreadcrumbItem, Breadcrumbs } from "@nextui-org/react"
 import { useLocation } from "react-router-dom"
 

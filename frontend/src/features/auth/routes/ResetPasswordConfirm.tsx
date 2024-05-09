@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { Card, CardBody, CardHeader } from "@nextui-org/react"
 import { useParams } from "react-router-dom"
 import { ResetPasswordConfirmForm } from "@/features/auth/components/ResetPasswordConfirmForm"

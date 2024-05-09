@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useEffect, useMemo } from "react"
 
 import { Reader, renderToStaticMarkup } from "@usewaypoint/email-builder"
@@ -53,7 +54,7 @@ export default function SendPanel() {
 
     const { mutate, isPending } = useSendNewsletter()
 
-    const { register, handleSubmit, reset, formState, getValues } =
+    const { register, handleSubmit, reset, formState } =
         useForm<SendNewsletterValidationType>({
             resolver: zodResolver(SendNewsletterSchema),
         })
@@ -71,15 +72,10 @@ export default function SendPanel() {
         )
     }
 
-    console.log(formState.errors)
-    console.log(getValues())
-
     const submit = () => {
         handleSubmit(onSubmit)()
     }
 
-    console.log(document)
-    console.log(code)
     useEffect(() => {
         reset()
     }, [])

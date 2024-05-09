@@ -1,5 +1,4 @@
-// import { useHarvestStore } from "@/features/flowerbeds/stores/useHarvestStore"
-
+// Author: Alexandr Celakovsky - xcelak00
 import { useUserFlowerbedStats } from "@/features/flowerbeds/hooks/useUserFlowerbedStats"
 
 export const Stats = ({ flowerbedId }: { flowerbedId: number }) => {

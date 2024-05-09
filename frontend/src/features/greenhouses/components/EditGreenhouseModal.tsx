@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { AddressFields } from "@/features/greenhouses/components/AddressFields"
 import { BusinessHours } from "@/features/greenhouses/components/BusinessHours"
 import { useEditGreenhouse } from "@/features/greenhouses/hooks/useEditGreenhouse"
@@ -61,7 +62,6 @@ export const EditGreenhouseModal = ({
                 },
                 greenhouse_business_hours:
                     data?.greenhouse_business_hours ?? [],
-                // caretaker: data?.caretaker ?? null,
             },
         })
 
@@ -74,7 +74,6 @@ export const EditGreenhouseModal = ({
                 published: data.published,
                 greenhouse_address: data.greenhouse_address,
                 greenhouse_business_hours: data.greenhouse_business_hours,
-                // caretaker: data.caretaker,
             })
         }
     }, [data, reset])

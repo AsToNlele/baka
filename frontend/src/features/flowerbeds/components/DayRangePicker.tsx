@@ -1,3 +1,5 @@
+// Author: Alexandr Celakovsky - xcelak00
+// Used examples from https://react-day-picker.js.org/advanced-guides/custom-selections
 import "react-day-picker/dist/style.css"
 import "./DayPicker.css"
 import { ChangeEventHandler, useEffect, useState, useRef } from "react"
@@ -19,17 +21,12 @@ export const DaySingleFromFixedRangePickerWithInput = ({
     range,
     onRangeChange,
 }: DaySingleRangePickerWithInputProps) => {
-    console.log("RANGE", range)
-
-    console.log(range && range?.from && isValid(range.from), range?.from)
     const fromValue = range && range.from ? format(range.from, dateFormat) : ""
     const [toValue, setToValue] = useState<string>(
         range && range?.to && isValid(range.to)
             ? format(range.to, dateFormat)
             : "",
     )
-    console.log("INSIDE", range)
-    console.log("INSIDE VALUE", fromValue)
 
     const handleToValueChange: ChangeEventHandler<HTMLInputElement> = (e) => {
         setToValue(e.target.value)

@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { PageTitle } from "@/features/app/components/PageTitle"
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { CreateTimesheetModal } from "@/features/timesheets/components/CreateTimesheetModal"

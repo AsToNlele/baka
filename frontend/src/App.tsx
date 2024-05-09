@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { NextUIProvider } from "@nextui-org/react"
 import {
     Navigate,

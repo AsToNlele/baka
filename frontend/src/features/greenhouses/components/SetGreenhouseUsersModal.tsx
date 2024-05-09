@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useProfile } from "@/features/auth/hooks/useProfile"
 import { useGreenhouseDetail } from "@/features/greenhouses/hooks/useGreenhouseDetail"
 import { useSetGreenhouseCaretaker } from "@/features/greenhouses/hooks/useSetGreenhouseCaretaker"
@@ -38,8 +39,6 @@ export const SetGreenhouseUsersModal = ({
     const setCaretaker = useSetGreenhouseCaretaker()
     const unsetCaretaker = useUnsetGreenhouseCaretaker()
 
-    console.log({ data })
-    
     const isCaretaker = () => user?.profile?.id === data?.caretaker
     const isOwner = () => user?.profile?.id === data?.owner
     const isAdmin = () => user?.superuser
@@ -99,9 +98,7 @@ export const SetGreenhouseUsersModal = ({
 
     // Reset modal on open
     useEffect(() => {
-        console.log(data)
         if (isOpen) {
-            console.log("UPDATING")
             setOwnerId(data?.owner ?? null)
             setCaretakerId(data?.caretaker ?? null)
         }

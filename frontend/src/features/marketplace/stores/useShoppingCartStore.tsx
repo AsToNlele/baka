@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import {
     ShoppingCartMarketplaceItem,
     ShoppingCartProductItem,
@@ -32,14 +33,6 @@ type ShoppingCartStore = {
 export const useShoppingCartStore = create<ShoppingCartStore>()(
     devtools((set) => ({
         items: [
-            // {
-            //     marketplaceProduct: 13,
-            //     quantity: 4,
-            // },
-            // {
-            //     marketplaceProduct: 15,
-            //     quantity: 10,
-            // },
         ],
         sum: 0,
         addItem: (
@@ -91,6 +84,7 @@ export const useShoppingCartStore = create<ShoppingCartStore>()(
             set((state) => ({
                 ...state,
                 items: state.items.map((item) => {
+                    // Change quantity differently based on product type
                     if (type === "product") {
                         if ("product" in item && item.product === id) {
                             return { ...item, quantity }

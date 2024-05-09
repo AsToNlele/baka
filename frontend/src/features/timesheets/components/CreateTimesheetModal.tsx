@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useCreateTimesheet } from "@/features/timesheets/hooks/useCreateTimesheet"
 import {
     Modal,
@@ -38,30 +39,23 @@ export const CreateTimesheetModal = ({
     const { mutate } = useCreateTimesheet()
     const navigate = useNavigate()
 
-    const { register, control, handleSubmit, reset, formState, getValues } =
+    const { register, control, handleSubmit, reset, formState } =
         useForm<CreateTimesheetValidationType>({
             resolver: zodResolver(CreateTimesheetSchema),
         })
 
     const onSubmit: SubmitHandler<CreateTimesheetValidationType> = (data) => {
-        console.log("mutating")
-        console.log(data)
         mutate(
             { data: data },
             {
                 onSuccess: (res) => {
-                    console.log("SUCCESS")
                     navigate(`/app/timesheets/${res.data.id}`)
                 },
             },
         )
     }
 
-    console.log(formState.errors)
-    console.log(getValues())
-
     const submit = () => {
-        console.log("SUBMITTING")
         handleSubmit(onSubmit)()
     }
 
@@ -73,7 +67,6 @@ export const CreateTimesheetModal = ({
             title: greenhouse.title,
         }))) || [{ id: -1, title: "Loading..." }]
 
-    console.log(greenhouses)
 
     useEffect(() => {
         reset()

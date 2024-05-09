@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { TimesheetItemType } from "@/utils/types"
 import {
     Button,
@@ -23,6 +24,7 @@ export const TimesheetItemsCustomFields = ({
     value: Array<TimesheetItemType>
 }) => {
     const addItem = (key: Key) => {
+        // Prefilled items for ux
         switch (key) {
             case "refill":
                 onChange([

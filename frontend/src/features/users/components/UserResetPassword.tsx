@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useResetPassword } from "@/features/auth/hooks/useResetPassword"
 import { Button } from "@nextui-org/react"
 import { toast } from "sonner"

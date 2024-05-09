@@ -1,4 +1,4 @@
-
+// Author: Alexandr Celakovsky - xcelak00
 import { ShoppingCartProductItem} from "@/features/marketplace/types"
 import { api } from "@/utils/api"
 import { ProductMinMaxPriceType } from "@/utils/types"

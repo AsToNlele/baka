@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { SmallLoading } from "@/components/Loading"
 import { useNewsletterPostList } from "@/features/newsletter/hooks/useNewsletterPostList"
 import { NewsletterPostType } from "@/utils/types"

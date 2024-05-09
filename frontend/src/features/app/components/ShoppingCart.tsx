@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useMarketplaceProductDetails } from "@/features/marketplace/hooks/useMarketplaceProductDetail"
 import { useProductMinMaxDetails } from "@/features/marketplace/hooks/useProductMinMaxDetails"
 import { useShoppingCartStore } from "@/features/marketplace/stores/useShoppingCartStore"

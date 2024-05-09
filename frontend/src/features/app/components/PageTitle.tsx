@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { FaArrowLeft } from "react-icons/fa"
 import { useNavigate } from "react-router-dom"
 

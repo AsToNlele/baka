@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { upperCaseFirstLetter } from "@/utils/utils"
 import { Chip } from "@nextui-org/react"
 

@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { api } from "../../../utils/api"
 import { useNavigate } from "react-router-dom"
@@ -16,7 +17,6 @@ export const useSignOut = () => {
             navigate("/")
             queryClient.invalidateQueries({ queryKey: ["profile"] })
             Cookies.remove("csrftoken")
-            // toast.success("Signed out successfully")
         },
     })
     return mutation

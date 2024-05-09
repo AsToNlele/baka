@@ -1,3 +1,5 @@
+// Author: Waypoint (Metaccountant, Inc.)
+// Full license can be found in src/features/newsletter/editor/LICENSE
 import { Container as BaseContainer } from "@usewaypoint/block-container"
 
 import { useCurrentBlockId } from "../../editor/EditorBlock"

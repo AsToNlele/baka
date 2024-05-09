@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import * as zod from "zod"
 
 // url must start with http or https

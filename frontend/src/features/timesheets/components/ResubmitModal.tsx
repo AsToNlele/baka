@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useResubmitTimesheet } from "@/features/timesheets/hooks/useResubmitTimesheet"
 import {
     Modal,
@@ -9,8 +10,6 @@ import {
     CardBody,
     Button,
     Input,
-    // Select,
-    // SelectItem,
     Divider,
 } from "@nextui-org/react"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
@@ -82,7 +81,7 @@ export const ResubmitModal = ({
         items: [],
     }
 
-    const { register, control, handleSubmit, reset, formState, getValues } =
+    const { register, control, handleSubmit, reset, formState } =
         useForm<CreateTimesheetValidationType>({
             resolver: zodResolver(CreateTimesheetSchema),
             defaultValues: {
@@ -94,36 +93,19 @@ export const ResubmitModal = ({
         })
 
     const onSubmit: SubmitHandler<ResubmitTimesheetValidationType> = (data) => {
-        console.log("mutating")
-        console.log(data)
         mutate(
             { id: timesheetId!, data },
             {
                 onSuccess: (res) => {
-                    console.log("SUCCESS")
                     navigate(`/app/timesheets/${res.data.id}`)
                 },
             },
         )
     }
 
-    console.log(formState.errors)
-    console.log(getValues())
-
     const submit = () => {
-        console.log("SUBMITTING")
         handleSubmit(onSubmit)()
     }
-
-    // const { data } = useProfile()
-
-    // const greenhouses = (data &&
-    //     data?.caretaker_greenhouses.map((greenhouse) => ({
-    //         id: `${greenhouse?.id}`,
-    //         title: `${greenhouse?.title}`,
-    //     }))) || []
-
-    // console.log(greenhouses)
 
     useEffect(() => {
         reset()
@@ -160,38 +142,6 @@ export const ResubmitModal = ({
                                             ""
                                         }
                                     />
-                                    {/* <Controller */}
-                                    {/*     control={control} */}
-                                    {/*     name="greenhouse" */}
-                                    {/*     render={({ field: { onChange } }) => ( */}
-                                    {/*         <Select */}
-                                    {/*             items={greenhouses} */}
-                                    {/*             label="Greenhouse" */}
-                                    {/*             onChange={onChange} */}
-                                    {/*             errorMessage={ */}
-                                    {/*                 formState.errors.greenhouse */}
-                                    {/*                     ?.message */}
-                                    {/*             } */}
-                                    {/*             defaultSelectedKeys={[ */}
-                                    {/*                 `${convertedTimesheetData.greenhouse}`, */}
-                                    {/*             ]} */}
-                                    {/*         > */}
-                                    {/*             {greenhouses.map( */}
-                                    {/*                 (greenhouse) => */}
-                                    {/*                     greenhouse && ( */}
-                                    {/*                         <SelectItem */}
-                                    {/*                             key={`${greenhouse.id!}`} */}
-                                    {/*                             value={`${greenhouse.id!}`} */}
-                                    {/*                         > */}
-                                    {/*                             { */}
-                                    {/*                                 greenhouse.title */}
-                                    {/*                             } */}
-                                    {/*                         </SelectItem> */}
-                                    {/*                     ), */}
-                                    {/*             )} */}
-                                    {/*         </Select> */}
-                                    {/*     )} */}
-                                    {/* /> */}
                                     <Input
                                         type="number"
                                         label="Pay"

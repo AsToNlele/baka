@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import flowerbed1 from "@/features/badges/assets/flowerbed-1.png"
 import flowerbed2 from "@/features/badges/assets/flowerbed-2.png"
 import flowerbed3 from "@/features/badges/assets/flowerbed-3.png"

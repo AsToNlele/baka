@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useState } from "react"
 import {
     Navbar,
@@ -32,10 +33,6 @@ export const AppNavbar = () => {
     const signOut = useSignOut()
 
     const menuLinks = [
-        // {
-        //     name: "Home",
-        //     href: "/app/",
-        // },
         {
             name: "Greenhouses",
             href: "/app/greenhouses",

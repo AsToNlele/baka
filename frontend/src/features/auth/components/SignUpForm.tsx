@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import { Button, Input, Switch } from "@nextui-org/react"
 import { useSignUp } from "../hooks/useSignUp"
@@ -27,8 +28,6 @@ export const SignUpForm = () => {
     const submit = () => {
         handleSubmit(onSubmit)()
     }
-
-    console.log(formState.errors)
 
     return (
         <form

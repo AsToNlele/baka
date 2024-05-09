@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useOrderPayment } from "@/features/orders/hooks/useOrderPayment"
 import { calculateQRString } from "@/features/orders/utils/calculations"
 import QRCode from "react-qr-code"
@@ -16,6 +17,7 @@ export const QRPayment = ({
     amount,
 }: QRPaymentProps) => {
     if (!receiver || !vs || !amount || !receiver_iban) return null
+    // From payment details generatet a QR code
     const qrString = calculateQRString(receiver_iban, vs, amount)
     return <QRCode value={qrString} />
 }

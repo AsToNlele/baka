@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useGreenhouseImageUpload } from "@/features/greenhouses/hooks/useGreenhouseImageUpload"
 import {
     Button,
@@ -27,6 +28,7 @@ export const GreenhouseImageUploadModal = ({
     if (!greenhouseId) return null
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+        // Autoupload image on input
         const newUploadData = e?.target?.files?.[0]
         if (newUploadData) {
             greenhouseImageUpload.mutate(

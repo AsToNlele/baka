@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { create } from "zustand"
 import { devtools } from "zustand/middleware"
 import type { DateRange } from "react-day-picker"

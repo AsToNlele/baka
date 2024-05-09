@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useCheckDiscountCode } from "@/features/orders/hooks/useCheckDiscountCode"
 import { LocalDiscount } from "@/utils/types"
 import { Button, Input } from "@nextui-org/react"

@@ -1,3 +1,5 @@
+// Author: Waypoint (Metaccountant, Inc.)
+// Full license can be found in src/features/newsletter/editor/LICENSE
 import EMPTY_EMAIL_MESSAGE from './sample/empty-email-message';
 
 export default function getConfiguration(template: string) {

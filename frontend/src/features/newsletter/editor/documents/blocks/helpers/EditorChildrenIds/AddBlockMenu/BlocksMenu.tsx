@@ -1,3 +1,5 @@
+// Author: Waypoint (Metaccountant, Inc.)
+// Full license can be found in src/features/newsletter/editor/LICENSE
 import { Box, Menu } from "@mui/material"
 
 import { TEditorBlock } from "../../../../editor/core"

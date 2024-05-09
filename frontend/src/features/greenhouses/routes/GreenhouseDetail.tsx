@@ -1,3 +1,4 @@
+// Author: Alexandr Celakovsky - xcelak00
 import { useParams, useSearchParams } from "react-router-dom"
 import { useGreenhouseDetail } from "../hooks/useGreenhouseDetail"
 import { PageTitle } from "@/features/app/components/PageTitle"
