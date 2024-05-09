@@ -77,6 +77,7 @@ class ProductOrderSerializer(serializers.ModelSerializer):
 
 class PaymentSerializer(serializers.Serializer):
     receiver = serializers.CharField()
+    receiver_iban = serializers.CharField()
     vs = serializers.IntegerField()
     amount = serializers.DecimalField(max_digits=10, decimal_places=2)
     

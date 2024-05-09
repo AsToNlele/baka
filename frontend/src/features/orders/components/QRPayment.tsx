@@ -4,13 +4,19 @@ import QRCode from "react-qr-code"
 
 type QRPaymentProps = {
     receiver: string
+    receiver_iban: string
     vs: number
     amount: number
 }
 
-export const QRPayment = ({ receiver, vs, amount }: QRPaymentProps) => {
-    if (!receiver || !vs || !amount) return null
-    const qrString = calculateQRString(receiver, vs, amount)
+export const QRPayment = ({
+    receiver,
+    receiver_iban,
+    vs,
+    amount,
+}: QRPaymentProps) => {
+    if (!receiver || !vs || !amount || !receiver_iban) return null
+    const qrString = calculateQRString(receiver_iban, vs, amount)
     return <QRCode value={qrString} />
 }
 
@@ -28,13 +34,14 @@ export const QRPaymentStandalone = ({ orderId }: QRPaymentStandaloneProps) => {
             {"error" in data ? null : "receiver" in data ? (
                 <>
                     <QRPayment
+                        receiver_iban={data.receiver_iban}
                         receiver={data.receiver}
                         vs={orderId}
                         amount={parseFloat(data.amount)}
                     />
 
                     <div>
-                        <p>BIC: {data.receiver}</p>
+                        <p>Bank Account: {data.receiver}</p>
                         <p>VS: {data.vs}</p>
                         <p>Amount {data.amount}</p>
                     </div>

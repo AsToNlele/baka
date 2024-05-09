@@ -152,6 +152,26 @@ paths:
           description: ''
       tags:
       - api
+  /api/greenhouses/{id}/get_statistics/:
+    get:
+      operationId: getStatisticsGreenhouse
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this greenhouse.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Empty'
+          description: ''
+      tags:
+      - api
   /api/greenhouses/{id}/get_timesheets/:
     get:
       operationId: getTimesheetsGreenhouse
@@ -338,6 +358,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserFlowerbed'
+          description: ''
+      tags:
+      - api
+  /api/flowerbeds/{id}/get_stats/:
+    get:
+      operationId: getStatsFlowerbed
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this flowerbed.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserFlowerbedStats'
           description: ''
       tags:
       - api
@@ -1580,21 +1620,6 @@ paths:
           description: ''
       tags:
       - api
-  /api/discount-code-availability/:
-    get:
-      operationId: listDiscountCodeAvailabilitys
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items: {}
-          description: ''
-      tags:
-      - api
   /api/greenhouses/create_greenhouse/:
     post:
       operationId: createGreenhouseGreenhouse
@@ -2165,6 +2190,27 @@ paths:
           description: ''
       tags:
       - api
+  /api/discount-code-availability/:
+    post:
+      operationId: createDiscountCodeAvailability
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - api
   /api/greenhouses/{id}/edit_greenhouse/:
     put:
       operationId: editGreenhouseGreenhouse
@@ -2709,6 +2755,22 @@ paths:
           description: ''
       tags:
       - api
+  /api/marketplace/marketplace-products/{id}/delete-image/:
+    delete:
+      operationId: destroyMarketplaceProduct
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this marketplace product.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
 components:
   schemas:
     Greenhouse:
@@ -2931,6 +2993,9 @@ components:
       required:
       - greenhouse_address
       - greenhouse_business_hours
+    Empty:
+      type: object
+      properties: {}
     Timesheet:
       type: object
       properties:
@@ -3158,6 +3223,19 @@ components:
         flowerbed:
           type: integer
           nullable: true
+    UserFlowerbedStats:
+      type: object
+      properties:
+        emission_sum:
+          type: number
+        emission_sentence:
+          type: string
+        savings_sum:
+          type: number
+      required:
+      - emission_sum
+      - emission_sentence
+      - savings_sum
     FlowerbedStatus:
       type: object
       properties:
@@ -3201,6 +3279,8 @@ components:
       properties:
         receiver:
           type: string
+        receiver_iban:
+          type: string
         vs:
           type: integer
         amount:
@@ -3211,6 +3291,7 @@ components:
           minimum: -100000000
       required:
       - receiver
+      - receiver_iban
       - vs
       - amount
     GetPickupLocations:
@@ -3363,6 +3444,11 @@ components:
                 nullable: true
                 maxLength: 255
               productId:
+                type: integer
+                maximum: 2147483647
+                minimum: -2147483648
+                nullable: true
+              marketplaceProductId:
                 type: integer
                 maximum: 2147483647
                 minimum: -2147483648
@@ -4672,9 +4758,6 @@ components:
           type: integer
       required:
       - owner
-    Empty:
-      type: object
-      properties: {}
     EditFlowerbedHarvest:
       type: object
       properties:
@@ -4857,7 +4940,6 @@ components:
           type: integer
           nullable: true
       required:
-      - product
       - price
       - quantity
     EditSelfUser:

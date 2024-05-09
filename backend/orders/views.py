@@ -1,6 +1,8 @@
+import os
 from datetime import datetime
 from django.http.response import JsonResponse
 from django.utils import timezone
+from dotenv import load_dotenv
 from greenhouse.models import Greenhouse
 from greenhouse.serializers import EmptySerializer
 from marketplace.models import MarketplaceProduct
@@ -18,6 +20,8 @@ from rest_framework.decorators import action, permission_classes
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.views import APIView, Response
+
+load_dotenv()
 
 
 class IsOrderOwner(permissions.BasePermission):
@@ -104,11 +108,13 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         if order.status != "created":
             return Response({"error": "Order is already paid"})
-        bankAccountNumber = "2102758516/2010"
+        bankAccountNumber = os.getenv("BANK_ACCOUNT_NUMBER")
+        bankIBAN = os.getenv("BANK_IBAN")
         payment_serializer = PaymentSerializer(
             data={
                 "vs": order.id,
                 "receiver": bankAccountNumber,
+                "receiver_iban": bankIBAN,
                 "amount": order.final_price,
             }
         )

@@ -18,6 +18,9 @@ export interface paths {
     delete: operations["destroyGreenhouse"];
     patch: operations["partialUpdateGreenhouse"];
   };
+  "/api/greenhouses/{id}/get_statistics/": {
+    get: operations["getStatisticsGreenhouse"];
+  };
   "/api/greenhouses/{id}/get_timesheets/": {
     get: operations["getTimesheetsGreenhouse"];
   };
@@ -36,6 +39,9 @@ export interface paths {
   };
   "/api/flowerbeds/{id}/get_current_details/": {
     get: operations["getCurrentDetailsFlowerbed"];
+  };
+  "/api/flowerbeds/{id}/get_stats/": {
+    get: operations["getStatsFlowerbed"];
   };
   "/api/flowerbeds/{id}/status/": {
     get: operations["statusFlowerbed"];
@@ -163,9 +169,6 @@ export interface paths {
   "/api/badge-rarity/": {
     get: operations["listBadgeStats"];
   };
-  "/api/discount-code-availability/": {
-    get: operations["listDiscountCodeAvailabilitys"];
-  };
   "/api/greenhouses/create_greenhouse/": {
     post: operations["createGreenhouseGreenhouse"];
   };
@@ -248,6 +251,9 @@ export interface paths {
   "/api/register/": {
     post: operations["createUser"];
   };
+  "/api/discount-code-availability/": {
+    post: operations["createDiscountCodeAvailability"];
+  };
   "/api/greenhouses/{id}/edit_greenhouse/": {
     put: operations["editGreenhouseGreenhouse"];
   };
@@ -299,6 +305,9 @@ export interface paths {
     put: operations["updateGreenhouseUploadImage"];
   };
   "/api/marketplace/marketplace-products/{id}/delete/": {
+    delete: operations["destroyMarketplaceProduct"];
+  };
+  "/api/marketplace/marketplace-products/{id}/delete-image/": {
     delete: operations["destroyMarketplaceProduct"];
   };
 }
@@ -384,6 +393,7 @@ export interface components {
       owner?: number | null;
       caretaker?: number | null;
     };
+    Empty: Record<string, never>;
     Timesheet: {
       id?: number;
       items: ({
@@ -468,6 +478,11 @@ export interface components {
         })[];
       flowerbed?: number | null;
     };
+    UserFlowerbedStats: {
+      emission_sum: number;
+      emission_sentence: string;
+      savings_sum: number;
+    };
     FlowerbedStatus: {
       /** @enum {string} */
       status: "rented" | "free";
@@ -485,6 +500,7 @@ export interface components {
     };
     Payment: {
       receiver: string;
+      receiver_iban: string;
       vs: number;
       /** Format: decimal */
       amount: string;
@@ -537,6 +553,7 @@ export interface components {
           productName?: string | null;
           productImage?: string | null;
           productId?: number | null;
+          marketplaceProductId?: number | null;
         })[];
     };
     UserDetailed: {
@@ -1018,7 +1035,6 @@ export interface components {
     SetOwner: {
       owner: number;
     };
-    Empty: Record<string, never>;
     EditFlowerbedHarvest: {
       harvests: ({
           id?: number;
@@ -1073,7 +1089,7 @@ export interface components {
     };
     EditMarketplaceProduct: {
       id?: number;
-      product: {
+      product?: {
         id?: number;
         /** Format: binary */
         image?: string;
@@ -1219,6 +1235,21 @@ export interface operations {
       };
     };
   };
+  getStatisticsGreenhouse: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this greenhouse. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["Empty"];
+        };
+      };
+    };
+  };
   getTimesheetsGreenhouse: {
     parameters: {
       path: {
@@ -1351,6 +1382,21 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["UserFlowerbed"];
+        };
+      };
+    };
+  };
+  getStatsFlowerbed: {
+    parameters: {
+      path: {
+        /** @description A unique integer value identifying this flowerbed. */
+        id: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserFlowerbedStats"];
         };
       };
     };
@@ -2230,15 +2276,6 @@ export interface operations {
       };
     };
   };
-  listDiscountCodeAvailabilitys: {
-    responses: {
-      200: {
-        content: {
-          "application/json": unknown[];
-        };
-      };
-    };
-  };
   createGreenhouseGreenhouse: {
     requestBody?: {
       content: {
@@ -2561,6 +2598,22 @@ export interface operations {
       201: {
         content: {
           "application/json": components["schemas"]["RegisterUserWithEmail"];
+        };
+      };
+    };
+  };
+  createDiscountCodeAvailability: {
+    requestBody?: {
+      content: {
+        "application/json": unknown;
+        "application/x-www-form-urlencoded": unknown;
+        "multipart/form-data": unknown;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": unknown;
         };
       };
     };
